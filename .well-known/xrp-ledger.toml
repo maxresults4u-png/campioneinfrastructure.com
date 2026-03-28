@@ -8,3 +8,13 @@ network = "main"
 owner_country = "US"
 server_country = "US"
 unl = "https://vl.ripple.com"
+
+[[ACCOUNTS]]
+# Add your XRPL account address here later if you have one
+```
+
+The file is functional as-is though — the domain association is handled by *where* it's hosted, not inside the file itself.
+
+**Once DNS clears you'll be able to verify it live at:**
+```
+https://campioneinfrastructure.com/.well-known/xrp-ledger.toml
