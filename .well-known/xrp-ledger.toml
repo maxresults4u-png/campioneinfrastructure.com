@@ -1,0 +1,10 @@
+[METADATA]
+modified = "2026-03-28"
+expires = "2027-03-28"
+
+[[VALIDATORS]]
+public_key = "n9LbTCkNpn2X7jGBX4UJCkdVwmXKGaHu1jbcJK6U1GPF2wtES1D8"
+network = "main"
+owner_country = "US"
+server_country = "US"
+unl = "https://vl.ripple.com"
