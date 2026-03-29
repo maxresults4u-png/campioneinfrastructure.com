@@ -795,7 +795,7 @@ async function sendMessage() {
   const message = document.querySelector('textarea').value;
   if (!name || !email || !message) { alert('Please fill in all fields.'); return; }
   try {
-    const res = await fetch('https://formspree.io/f/xgopaddn', {
+    const res = await fetch('https://formspree.io/f/mlgojzyj', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body: JSON.stringify({ name, email, message })
