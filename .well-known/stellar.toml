@@ -1,0 +1,15 @@
+# Campione Infrastructure - Stellar Validator
+
+[DOCUMENTATION]
+ORG_NAME="Campione Infrastructure"
+ORG_URL="https://campioneinfrastructure.com"
+ORG_DESCRIPTION="Independent blockchain infrastructure operator. Stellar validator, XRPL validator, Bitcoin Lightning node, and Chainlink oracle."
+ORG_PHYSICAL_ADDRESS="Land O Lakes, FL, USA"
+ORG_COUNTRY="US"
+
+[[VALIDATORS]]
+ALIAS="campione-validator"
+DISPLAY_NAME="Campione Infrastructure"
+PUBLIC_KEY="GDMAAY42V4XQUYPKRSSQRQHP4YZH6LXDGYSKXKP3OSH5F7MKFNWLVNVH"
+HOST="45.77.113.67:11625"
+HISTORY="https://history.stellar.org/prd/core-live/core_live_001"
