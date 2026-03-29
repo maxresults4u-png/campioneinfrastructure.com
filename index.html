@@ -780,18 +780,39 @@
           <div style="font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px;">Message</div>
           <textarea placeholder="Tell us about your project..." rows="4" style="width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 14px; font-family: var(--mono); font-size: 12px; outline: none; resize: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></textarea>
         </div>
-        <a href="mailto:contact@campioneinfrastructure.com" class="btn-primary" style="display: block; text-align: center;">Send Message</a>
+        <button onclick="sendMessage()" class="btn-primary" style="display:block;width:100%;border:none;cursor:pointer;text-align:center;">Send Message</button>
+        <div id="form-success" style="display:none;font-family:var(--mono);font-size:12px;color:var(--accent);text-align:center;margin-top:15px;">✓ Message sent! We'll be in touch soon.</div>
       </div>
     </div>
   </div>
 </section>
 
+<script>
+async function sendMessage() {
+  const inputs = document.querySelectorAll('input');
+  const name = inputs[0].value;
+  const email = inputs[1].value;
+  const message = document.querySelector('textarea').value;
+  if (!name || !email || !message) { alert('Please fill in all fields.'); return; }
+  try {
+    const res = await fetch('https://formspree.io/f/xpwzgqkd', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ name, email, message })
+    });
+    if (res.ok) {
+      document.getElementById('form-success').style.display = 'block';
+      inputs.forEach(i => i.value = '');
+      document.querySelector('textarea').value = '';
+    } else { throw new Error(); }
+  } catch {
+    window.location.href = `mailto:maxresults4u@gmail.com?subject=Inquiry from ${name}&body=${message}`;
+  }
+}
+</script>
+
 <!-- FOOTER -->
 <footer>
   <p>© 2026 <strong>Campione Infrastructure</strong> — Land O Lakes, FL</p>
   <p>XRPL · Stellar · Chainlink · Bitcoin Lightning</p>
-  <p>Built for the <strong>CLARITY Act</strong> era</p>
-</footer>
-
-</body>
-</html>
+  <p>Built for the <strong
