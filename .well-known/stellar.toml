@@ -1,11 +1,16 @@
 # Campione Infrastructure - Stellar Validator
+# ISO 20022 Compatible Infrastructure
 
 [DOCUMENTATION]
 ORG_NAME="Campione Infrastructure"
 ORG_URL="https://campioneinfrastructure.com"
-ORG_DESCRIPTION="Independent blockchain infrastructure operator. Stellar validator, XRPL validator, Bitcoin Lightning node, and Chainlink oracle."
+ORG_DESCRIPTION="Independent blockchain infrastructure operator. ISO 20022 aligned. XRPL validator, Stellar validator, Bitcoin Lightning node, and Chainlink oracle. CLARITY Act compliant infrastructure."
 ORG_PHYSICAL_ADDRESS="Land O Lakes, FL, USA"
 ORG_COUNTRY="US"
+ORG_OFFICIAL_EMAIL="maxresults4u@gmail.com"
+ORG_TWITTER="CampioneInfra"
+ISO20022_COMPLIANT="true"
+CLARITY_ACT_READY="true"
 
 [[VALIDATORS]]
 ALIAS="campione-validator"
