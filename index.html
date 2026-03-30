@@ -584,21 +584,64 @@
 
 <!-- HERO -->
 <div class="hero">
-  <div class="hero-tag fade-in">Independent Blockchain Infrastructure — Land O Lakes, FL</div>
+  <div class="hero-tag fade-in">Independent Blockchain Infrastructure — Land O Lakes, FL · Est. 2024</div>
   <h1 class="fade-in">
     <span class="line1">TRUSTED</span>
     <span class="line2">RAILS.</span>
   </h1>
   <p class="hero-desc fade-in">
-    Operating validator nodes on <strong>XRP Ledger</strong> and <strong>Stellar</strong>,
-    a <strong>Bitcoin Lightning</strong> routing node, and a <strong>Chainlink oracle</strong>.<br><br>
-    Building compliant, decentralized infrastructure ahead of the CLARITY Act.
+    Operating validator nodes on <strong>XRP Ledger</strong>, <strong>Stellar</strong> and <strong>Cosmos</strong>.
+    Running a <strong>Chainlink oracle</strong>, <strong>Bitcoin Lightning</strong> node,
+    <strong>Stellar Horizon API</strong> and <strong>The Graph</strong> indexer.<br><br>
+    <strong style="color: var(--accent2);">ISO 20022 aligned.</strong> CLARITY Act ready. US-based operator building the compliant rails that global finance will depend on.
   </p>
+
+  <!-- LIVE STATS -->
+  <div class="fade-in" style="display: flex; gap: 30px; flex-wrap: wrap; margin-bottom: 40px;">
+    <div style="text-align: left;">
+      <div style="font-family: var(--sans); font-size: 36px; font-weight: 800; color: var(--accent); line-height: 1;" id="uptimeDays">—</div>
+      <div style="font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 4px;">Days Running</div>
+    </div>
+    <div style="text-align: left;">
+      <div style="font-family: var(--sans); font-size: 36px; font-weight: 800; color: var(--accent); line-height: 1;">7</div>
+      <div style="font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 4px;">Active Nodes</div>
+    </div>
+    <div style="text-align: left;">
+      <div style="font-family: var(--sans); font-size: 36px; font-weight: 800; color: var(--accent2); line-height: 1;">99.9%</div>
+      <div style="font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 4px;">Uptime SLA</div>
+    </div>
+    <div style="text-align: left;">
+      <div style="font-family: var(--sans); font-size: 36px; font-weight: 800; color: var(--accent3); line-height: 1;">4</div>
+      <div style="font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 4px;">Blockchains</div>
+    </div>
+    <div style="text-align: left;">
+      <div style="font-family: var(--sans); font-size: 36px; font-weight: 800; color: var(--accent2); line-height: 1;">ISO</div>
+      <div style="font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 4px;">20022 Aligned</div>
+    </div>
+  </div>
+
+  <!-- CLARITY ACT URGENCY BANNER -->
+  <div class="fade-in" style="background: rgba(255,102,0,0.08); border: 1px solid var(--accent3); padding: 15px 20px; margin-bottom: 40px; display: inline-flex; align-items: center; gap: 12px; max-width: 600px;">
+    <div style="width: 8px; height: 8px; background: var(--accent3); border-radius: 50%; animation: pulse 2s infinite; flex-shrink: 0;"></div>
+    <div style="font-family: var(--mono); font-size: 11px; color: var(--muted); line-height: 1.8;">
+      <strong style="color: var(--accent3);">CLARITY Act incoming</strong> — Enterprises need compliant blockchain infrastructure operators NOW. We're already running. Are you ready?
+    </div>
+  </div>
+
   <div class="hero-cta fade-in">
     <a href="#services" class="btn-primary">Our Services</a>
-    <a href="#contact" class="btn-secondary">Get In Touch</a>
+    <a href="payments.html" class="btn-secondary">Get Started</a>
+    <a href="sla.html" style="font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">View SLA →</a>
   </div>
 </div>
+
+<script>
+// Calculate days running since March 28 2026
+const startDate = new Date('2026-03-28');
+const today = new Date();
+const days = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+document.getElementById('uptimeDays').textContent = days;
+</script>
 
 <!-- LIVE TICKER -->
 <div class="ticker">
@@ -991,7 +1034,44 @@ async function sendMessage() {
     window.location.href = `mailto:maxresults4u@gmail.com?subject=Inquiry from ${name}&body=${message}`;
   }
 }
+
+async function subscribeNewsletter() {
+  const email = document.getElementById('newsletterEmail').value;
+  if (!email) { alert('Please enter your email.'); return; }
+  try {
+    const res = await fetch('https://formspree.io/f/mlgojzyj', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ email, type: 'newsletter_signup' })
+    });
+    if (res.ok) {
+      document.getElementById('newsletter-success').style.display = 'block';
+      document.getElementById('newsletterEmail').value = '';
+    } else { throw new Error(); }
+  } catch {
+    window.location.href = `mailto:maxresults4u@gmail.com?subject=Newsletter Signup&body=${email}`;
+  }
+}
 </script>
+
+<!-- NEWSLETTER -->
+<div style="background: linear-gradient(135deg, rgba(0,255,136,0.05) 0%, rgba(0,136,255,0.05) 100%); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 60px 40px; position: relative; z-index: 1;">
+  <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;">
+    <div>
+      <div style="font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 15px;">Stay Informed</div>
+      <div style="font-family: var(--sans); font-size: 36px; font-weight: 800; letter-spacing: -2px; line-height: 1; margin-bottom: 15px;">CLARITY Act<br>Updates.</div>
+      <p style="font-family: var(--mono); font-size: 12px; color: var(--muted); line-height: 2;">Get notified about CLARITY Act developments, ISO 20022 migration updates, and new infrastructure services. No spam — only signal.</p>
+    </div>
+    <div>
+      <div style="display: flex; gap: 0;">
+        <input type="email" id="newsletterEmail" placeholder="your@email.com" style="flex: 1; background: var(--bg); border: 1px solid var(--border); border-right: none; color: var(--text); padding: 16px; font-family: var(--mono); font-size: 12px; outline: none;">
+        <button onclick="subscribeNewsletter()" style="background: var(--accent); color: var(--bg); border: none; padding: 16px 24px; font-family: var(--mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; white-space: nowrap;">Subscribe</button>
+      </div>
+      <div id="newsletter-success" style="display:none; font-family: var(--mono); font-size: 11px; color: var(--accent); margin-top: 10px;">✓ Subscribed! We'll keep you updated.</div>
+      <p style="font-family: var(--mono); font-size: 10px; color: var(--muted); margin-top: 10px;">No spam. Unsubscribe anytime.</p>
+    </div>
+  </div>
+</div>
 
 <!-- NETWORK LOGOS -->
 <div style="border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 50px 40px; position: relative; z-index: 1; background: var(--panel);">
