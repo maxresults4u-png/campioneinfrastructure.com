@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Service Level Agreement — Campione Infrastructure</title>
+<meta name="description" content="Campione Infrastructure Service Level Agreement. 99.9% uptime guarantee, 4-hour incident response, service credits for breaches.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050508;
+    --panel: #0d0d15;
+    --border: #1a1a2e;
+    --accent: #00ff88;
+    --accent2: #0088ff;
+    --accent3: #ff6600;
+    --text: #e8e8f0;
+    --muted: #555570;
+    --mono: 'Space Mono', monospace;
+    --sans: 'Syne', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(0,136,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,136,255,0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(5,5,8,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    z-index: 50;
+  }
+
+  .logo {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-decoration: none;
+  }
+
+  .logo span { color: var(--muted); }
+
+  nav a {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-left: 30px;
+    transition: color 0.2s;
+  }
+
+  nav a:hover { color: var(--accent); }
+
+  .page-hero {
+    padding: 140px 40px 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .page-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent2);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .page-tag::before {
+    content: '';
+    width: 30px;
+    height: 1px;
+    background: var(--accent2);
+  }
+
+  h1 {
+    font-family: var(--sans);
+    font-size: clamp(48px, 7vw, 90px);
+    font-weight: 800;
+    line-height: 0.9;
+    letter-spacing: -3px;
+    margin-bottom: 30px;
+  }
+
+  h1 span { color: var(--accent2); }
+
+  .page-desc {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 2;
+    max-width: 700px;
+    margin-bottom: 20px;
+  }
+
+  .doc-meta {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+  }
+
+  .doc-meta-item {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .doc-meta-item span { color: var(--accent2); }
+
+  /* SECTIONS */
+  .doc-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 60px 40px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .sla-section {
+    margin-bottom: 60px;
+  }
+
+  .section-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent2);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  h2 {
+    font-family: var(--sans);
+    font-size: clamp(24px, 3vw, 36px);
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  h3 {
+    font-family: var(--sans);
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 15px;
+    margin-top: 30px;
+    color: var(--accent);
+  }
+
+  p {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 2.2;
+    margin-bottom: 15px;
+  }
+
+  p strong { color: var(--text); }
+
+  ul, ol {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 2.2;
+    padding-left: 20px;
+    margin-bottom: 15px;
+  }
+
+  li { margin-bottom: 5px; }
+  li strong { color: var(--text); }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+  /* SLA HIGHLIGHT BOXES */
+  .sla-highlight {
+    background: rgba(0,136,255,0.05);
+    border: 1px solid var(--accent2);
+    padding: 30px;
+    margin: 25px 0;
+    position: relative;
+  }
+
+  .sla-highlight.green {
+    background: rgba(0,255,136,0.05);
+    border-color: var(--accent);
+  }
+
+  .sla-highlight.orange {
+    background: rgba(255,102,0,0.05);
+    border-color: var(--accent3);
+  }
+
+  .highlight-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    color: var(--accent2);
+  }
+
+  .sla-highlight.green .highlight-label { color: var(--accent); }
+  .sla-highlight.orange .highlight-label { color: var(--accent3); }
+
+  .highlight-value {
+    font-family: var(--sans);
+    font-size: 48px;
+    font-weight: 800;
+    color: var(--accent2);
+    line-height: 1;
+    margin-bottom: 5px;
+  }
+
+  .sla-highlight.green .highlight-value { color: var(--accent); }
+  .sla-highlight.orange .highlight-value { color: var(--accent3); }
+
+  .highlight-desc {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* METRICS GRID */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin: 25px 0;
+  }
+
+  .metric-item {
+    background: var(--panel);
+    padding: 25px;
+    text-align: center;
+  }
+
+  .metric-value {
+    font-family: var(--sans);
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .metric-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+
+  th {
+    background: var(--panel);
+    padding: 12px 15px;
+    text-align: left;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 9px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  td {
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  td strong { color: var(--text); }
+  tr:hover td { background: rgba(0,136,255,0.02); }
+
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .badge.green { background: rgba(0,255,136,0.1); color: var(--accent); border: 1px solid var(--accent); }
+  .badge.blue { background: rgba(0,136,255,0.1); color: var(--accent2); border: 1px solid var(--accent2); }
+  .badge.orange { background: rgba(255,102,0,0.1); color: var(--accent3); border: 1px solid var(--accent3); }
+  .badge.red { background: rgba(255,68,68,0.1); color: #ff4444; border: 1px solid #ff4444; }
+
+  /* TOC */
+  .toc {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 30px;
+    margin-bottom: 40px;
+  }
+
+  .toc-title {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 800;
+    margin-bottom: 15px;
+    color: var(--accent2);
+  }
+
+  .toc a {
+    display: block;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border);
+    transition: color 0.2s;
+  }
+
+  .toc a:hover { color: var(--accent); }
+  .toc a:last-child { border-bottom: none; }
+
+  .toc a span {
+    color: var(--accent2);
+    margin-right: 10px;
+  }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  footer p { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  footer strong { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="logo">CAMPIONE<span>/</span>INFRA</a>
+  <div>
+    <a href="/">Home</a>
+    <a href="/#services">Services</a>
+    <a href="/compliance.html">Compliance</a>
+    <a href="/payments.html">Payments</a>
+    <a href="/sla.html" style="color: var(--accent2);">SLA</a>
+    <a href="/#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="page-hero">
+  <div class="page-tag">Legal Documentation</div>
+  <h1>SERVICE LEVEL<br><span>AGREEMENT</span></h1>
+  <p class="page-desc">
+    This Service Level Agreement ("SLA") between Campione Infrastructure, a division of 
+    MaxResults4U Business Solutions ("Provider"), and the subscribing client ("Client") 
+    defines the standards of service delivery, uptime commitments, incident response 
+    procedures, and remedies for service failures.
+  </p>
+  <div class="doc-meta">
+    <div class="doc-meta-item">Version: <span>1.0</span></div>
+    <div class="doc-meta-item">Effective Date: <span>March 30, 2026</span></div>
+    <div class="doc-meta-item">Last Updated: <span>March 30, 2026</span></div>
+    <div class="doc-meta-item">Jurisdiction: <span>Florida, USA</span></div>
+  </div>
+</div>
+
+<hr>
+
+<div class="doc-container">
+
+  <!-- KEY COMMITMENTS -->
+  <div class="metrics-grid" style="margin-bottom: 50px;">
+    <div class="metric-item">
+      <div class="metric-value">99.9%</div>
+      <div class="metric-label">Uptime Guarantee</div>
+    </div>
+    <div class="metric-item">
+      <div class="metric-value">4hr</div>
+      <div class="metric-label">Critical Response</div>
+    </div>
+    <div class="metric-item">
+      <div class="metric-value">24/7</div>
+      <div class="metric-label">Monitoring</div>
+    </div>
+    <div class="metric-item">
+      <div class="metric-value">8.7hr</div>
+      <div class="metric-label">Max Downtime/Year</div>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc">
+    <div class="toc-title">Table of Contents</div>
+    <a href="#section1"><span>1.</span> Definitions</a>
+    <a href="#section2"><span>2.</span> Service Coverage</a>
+    <a href="#section3"><span>3.</span> Uptime Commitment</a>
+    <a href="#section4"><span>4.</span> Incident Response</a>
+    <a href="#section5"><span>5.</span> Scheduled Maintenance</a>
+    <a href="#section6"><span>6.</span> SLA Breach Remedies</a>
+    <a href="#section7"><span>7.</span> Exclusions</a>
+    <a href="#section8"><span>8.</span> Security Standards</a>
+    <a href="#section9"><span>9.</span> Data & Privacy</a>
+    <a href="#section10"><span>10.</span> Reporting & Transparency</a>
+    <a href="#section11"><span>11.</span> Termination</a>
+    <a href="#section12"><span>12.</span> Contact & Escalation</a>
+  </div>
+
+  <!-- SECTION 1 -->
+  <div class="sla-section" id="section1">
+    <div class="section-num">Section 01</div>
+    <h2>Definitions</h2>
+    <p>For the purposes of this Agreement, the following terms shall have the meanings set forth below:</p>
+    <ul>
+      <li><strong>"Provider"</strong> means Campione Infrastructure, a division of MaxResults4U Business Solutions, headquartered in Land O Lakes, Florida, USA.</li>
+      <li><strong>"Client"</strong> means the individual, company, or entity that has entered into a service agreement with the Provider.</li>
+      <li><strong>"Service"</strong> means any infrastructure service provided by the Provider, including but not limited to: Stellar Horizon API access, validator node monitoring, node infrastructure setup, Chainlink oracle services, Lightning payment rails, and blockchain consulting.</li>
+      <li><strong>"Downtime"</strong> means any period during which the Service is unavailable or non-functional, excluding Scheduled Maintenance windows.</li>
+      <li><strong>"Monthly Uptime Percentage"</strong> means the total number of minutes in a calendar month minus the number of minutes of Downtime, divided by the total number of minutes in that calendar month.</li>
+      <li><strong>"Incident"</strong> means any unplanned interruption or degradation of Service quality.</li>
+      <li><strong>"Critical Incident"</strong> means complete service unavailability affecting Client operations.</li>
+      <li><strong>"Service Credit"</strong> means a credit applied to Client's account for future billing periods.</li>
+    </ul>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="sla-section" id="section2">
+    <div class="section-num">Section 02</div>
+    <h2>Service Coverage</h2>
+    <p>This SLA applies to the following services offered by Campione Infrastructure:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Service</th>
+          <th>Coverage</th>
+          <th>Network</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Stellar Horizon API</strong></td>
+          <td>Dedicated API endpoint access</td>
+          <td>Stellar Mainnet</td>
+          <td><span class="badge green">Active</span></td>
+        </tr>
+        <tr>
+          <td><strong>XRPL Validator</strong></td>
+          <td>Trusted validator participation</td>
+          <td>XRP Ledger Mainnet</td>
+          <td><span class="badge green">Active</span></td>
+        </tr>
+        <tr>
+          <td><strong>Stellar Validator</strong></td>
+          <td>SCP consensus participation</td>
+          <td>Stellar Mainnet</td>
+          <td><span class="badge green">Active</span></td>
+        </tr>
+        <tr>
+          <td><strong>Chainlink Oracle</strong></td>
+          <td>Data feed delivery</td>
+          <td>Ethereum Mainnet</td>
+          <td><span class="badge blue">Deploying</span></td>
+        </tr>
+        <tr>
+          <td><strong>Bitcoin Lightning</strong></td>
+          <td>Payment routing node</td>
+          <td>Bitcoin Mainnet</td>
+          <td><span class="badge orange">Pending</span></td>
+        </tr>
+        <tr>
+          <td><strong>Node Setup Service</strong></td>
+          <td>End-to-end node deployment</td>
+          <td>Multi-chain</td>
+          <td><span class="badge green">Active</span></td>
+        </tr>
+        <tr>
+          <td><strong>Validator Monitoring</strong></td>
+          <td>24/7 node health monitoring</td>
+          <td>Multi-chain</td>
+          <td><span class="badge green">Active</span></td>
+        </tr>
+        <tr>
+          <td><strong>Infrastructure Consulting</strong></td>
+          <td>Technical advisory services</td>
+          <td>All networks</td>
+          <td><span class="badge green">Active</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="sla-section" id="section3">
+    <div class="section-num">Section 03</div>
+    <h2>Uptime Commitment</h2>
+
+    <div class="sla-highlight green">
+      <div class="highlight-label">Monthly Uptime Guarantee</div>
+      <div class="highlight-value">99.9%</div>
+      <div class="highlight-desc">Maximum allowable downtime: 43.8 minutes per month · 8.7 hours per year</div>
+    </div>
+
+    <p>The Provider commits to maintaining a Monthly Uptime Percentage of <strong>99.9%</strong> for all active Services. This commitment is measured on a calendar month basis and applies to all paid service tiers.</p>
+
+    <h3>Uptime Measurement</h3>
+    <p>Uptime is measured continuously using automated monitoring systems. The Provider monitors:</p>
+    <ul>
+      <li>Service endpoint availability (HTTP response codes)</li>
+      <li>Node synchronization status</li>
+      <li>Network connectivity</li>
+      <li>API response times</li>
+      <li>Validator participation rates</li>
+    </ul>
+
+    <h3>Uptime Tiers</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Monthly Uptime</th>
+          <th>Classification</th>
+          <th>Client Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>≥ 99.9%</strong></td>
+          <td><span class="badge green">SLA Met</span></td>
+          <td>No action required</td>
+        </tr>
+        <tr>
+          <td><strong>99.0% – 99.9%</strong></td>
+          <td><span class="badge blue">Minor Breach</span></td>
+          <td>Eligible for 10% service credit</td>
+        </tr>
+        <tr>
+          <td><strong>95.0% – 99.0%</strong></td>
+          <td><span class="badge orange">Major Breach</span></td>
+          <td>Eligible for 25% service credit</td>
+        </tr>
+        <tr>
+          <td><strong>< 95.0%</strong></td>
+          <td><span class="badge red">Critical Breach</span></td>
+          <td>Eligible for 50% partial refund</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SECTION 4 -->
+  <div class="sla-section" id="section4">
+    <div class="section-num">Section 04</div>
+    <h2>Incident Response</h2>
+
+    <div class="sla-highlight">
+      <div class="highlight-label">Critical Incident Response Time</div>
+      <div class="highlight-value">4 Hours</div>
+      <div class="highlight-desc">From incident detection to active remediation for Priority 1 incidents</div>
+    </div>
+
+    <h3>Incident Priority Levels</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Priority</th>
+          <th>Description</th>
+          <th>Response Time</th>
+          <th>Resolution Target</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge red">P1 Critical</span></td>
+          <td>Complete service unavailability</td>
+          <td><strong>4 hours</strong></td>
+          <td>8 hours</td>
+        </tr>
+        <tr>
+          <td><span class="badge orange">P2 High</span></td>
+          <td>Significant degradation affecting operations</td>
+          <td><strong>8 hours</strong></td>
+          <td>24 hours</td>
+        </tr>
+        <tr>
+          <td><span class="badge blue">P3 Medium</span></td>
+          <td>Partial degradation, workaround available</td>
+          <td><strong>24 hours</strong></td>
+          <td>72 hours</td>
+        </tr>
+        <tr>
+          <td><span class="badge green">P4 Low</span></td>
+          <td>Minor issues, no operational impact</td>
+          <td><strong>48 hours</strong></td>
+          <td>7 days</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Incident Response Procedure</h3>
+    <ol>
+      <li><strong>Detection</strong> — Automated monitoring detects service degradation</li>
+      <li><strong>Notification</strong> — Client notified via email within 30 minutes of detection</li>
+      <li><strong>Assessment</strong> — Provider assesses severity and assigns priority level</li>
+      <li><strong>Remediation</strong> — Active remediation begins within response time window</li>
+      <li><strong>Resolution</strong> — Service restored and Client notified of resolution</li>
+      <li><strong>Post-Incident Report</strong> — Written report delivered within 48 hours of resolution</li>
+    </ol>
+
+    <h3>Reporting an Incident</h3>
+    <p>Clients may report incidents via:</p>
+    <ul>
+      <li><strong>Email:</strong> maxresults4u@gmail.com — Subject: [INCIDENT] Service Name</li>
+      <li><strong>Response guaranteed within 4 hours</strong> for P1 Critical incidents</li>
+    </ul>
+  </div>
+
+  <!-- SECTION 5 -->
+  <div class="sla-section" id="section5">
+    <div class="section-num">Section 05</div>
+    <h2>Scheduled Maintenance</h2>
+
+    <p>The Provider may perform scheduled maintenance that temporarily affects service availability. Scheduled maintenance is <strong>excluded from uptime calculations</strong> provided the following conditions are met:</p>
+
+    <ul>
+      <li>Client receives <strong>48 hours advance notice</strong> via email</li>
+      <li>Maintenance window does not exceed <strong>4 hours</strong> per occurrence</li>
+      <li>Scheduled maintenance occurs no more than <strong>twice per month</strong></li>
+      <li>Maintenance is performed during <strong>off-peak hours</strong> (2:00 AM – 6:00 AM EST)</li>
+    </ul>
+
+    <div class="sla-highlight orange">
+      <div class="highlight-label">Emergency Maintenance</div>
+      <div class="highlight-value" style="font-size: 28px;">Critical Security Updates</div>
+      <div class="highlight-desc">Emergency maintenance for critical security patches may be performed with 2-hour notice. These windows are capped at 2 hours and excluded from uptime calculations.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 6 -->
+  <div class="sla-section" id="section6">
+    <div class="section-num">Section 06</div>
+    <h2>SLA Breach Remedies</h2>
+
+    <p>In the event of an SLA breach, Clients are entitled to the following remedies. Remedies are provided as <strong>Service Credits</strong> or <strong>Partial Refunds</strong> applied to the Client's account.</p>
+
+    <h3>Service Credits</h3>
+    <p>Service Credits are applied to the Client's next billing cycle and calculated as a percentage of the monthly service fee:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Uptime Achieved</th>
+          <th>Credit / Refund</th>
+          <th>Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>99.0% – 99.9%</td>
+          <td><strong>10% of monthly fee</strong></td>
+          <td><span class="badge blue">Service Credit</span></td>
+        </tr>
+        <tr>
+          <td>95.0% – 99.0%</td>
+          <td><strong>25% of monthly fee</strong></td>
+          <td><span class="badge blue">Service Credit</span></td>
+        </tr>
+        <tr>
+          <td>< 95.0%</td>
+          <td><strong>50% of monthly fee</strong></td>
+          <td><span class="badge orange">Partial Refund</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>How to Claim a Remedy</h3>
+    <ol>
+      <li>Submit claim to maxresults4u@gmail.com within <strong>30 days</strong> of the incident</li>
+      <li>Include: Service name, incident dates, and description of impact</li>
+      <li>Provider will verify claim within <strong>5 business days</strong></li>
+      <li>Approved credits applied to next billing cycle</li>
+      <li>Approved refunds processed within <strong>10 business days</strong></li>
+    </ol>
+
+    <p><strong>Maximum remedy</strong> in any calendar month shall not exceed 50% of the monthly service fee for that service.</p>
+  </div>
+
+  <!-- SECTION 7 -->
+  <div class="sla-section" id="section7">
+    <div class="section-num">Section 07</div>
+    <h2>Exclusions</h2>
+    <p>The following circumstances are <strong>excluded</strong> from uptime calculations and SLA breach remedies:</p>
+
+    <ul>
+      <li><strong>Scheduled Maintenance</strong> — as defined in Section 5</li>
+      <li><strong>Force Majeure</strong> — natural disasters, war, government actions, pandemics</li>
+      <li><strong>Blockchain Network Issues</strong> — outages caused by the underlying blockchain network (e.g., XRP Ledger, Stellar network) outside Provider's control</li>
+      <li><strong>Third-Party Infrastructure</strong> — failures of DNS providers, internet service providers, or upstream data centers</li>
+      <li><strong>Client Actions</strong> — downtime caused by Client's misconfiguration or misuse</li>
+      <li><strong>DDoS Attacks</strong> — distributed denial of service attacks targeting Provider infrastructure</li>
+      <li><strong>Beta Services</strong> — services explicitly marked as beta or experimental</li>
+      <li><strong>Free Tier Services</strong> — services provided at no charge</li>
+    </ul>
+  </div>
+
+  <!-- SECTION 8 -->
+  <div class="sla-section" id="section8">
+    <div class="section-num">Section 08</div>
+    <h2>Security Standards</h2>
+    <p>The Provider maintains the following security standards across all infrastructure:</p>
+
+    <h3>Infrastructure Security</h3>
+    <ul>
+      <li><strong>Firewall Protection</strong> — UFW firewall with port-level access controls on all servers</li>
+      <li><strong>Intrusion Prevention</strong> — Fail2ban active on all servers, blocking brute force attacks</li>
+      <li><strong>SSH Security</strong> — Key-based authentication only, password login disabled</li>
+      <li><strong>Regular Updates</strong> — Security patches applied within 48 hours of release</li>
+      <li><strong>Access Control</strong> — Principle of least privilege applied to all system accounts</li>
+    </ul>
+
+    <h3>Validator Key Security</h3>
+    <ul>
+      <li>All validator keys stored with hardware-level protection</li>
+      <li>Keys backed up in encrypted offline storage</li>
+      <li>Key rotation procedures documented and tested</li>
+    </ul>
+
+    <h3>Compliance</h3>
+    <ul>
+      <li><strong>ISO 20022 Aligned</strong> — All networks operated are ISO 20022 registered or compatible</li>
+      <li><strong>CLARITY Act Ready</strong> — Infrastructure designed for post-legislation compliance</li>
+      <li><strong>US Based Operations</strong> — All infrastructure operated from United States jurisdiction</li>
+    </ul>
+  </div>
+
+  <!-- SECTION 9 -->
+  <div class="sla-section" id="section9">
+    <div class="section-num">Section 09</div>
+    <h2>Data & Privacy</h2>
+
+    <ul>
+      <li>The Provider does <strong>not</strong> store, sell, or share Client private keys or wallet credentials</li>
+      <li>API usage logs are retained for <strong>90 days</strong> for debugging and billing purposes</li>
+      <li>Client contact information is used solely for service delivery and incident communication</li>
+      <li>The Provider complies with applicable US data protection regulations</li>
+      <li>Clients retain full ownership of all data transmitted through Provider infrastructure</li>
+    </ul>
+  </div>
+
+  <!-- SECTION 10 -->
+  <div class="sla-section" id="section10">
+    <div class="section-num">Section 10</div>
+    <h2>Reporting & Transparency</h2>
+
+    <h3>Monthly Reports</h3>
+    <p>Clients on monitoring plans receive monthly reports including:</p>
+    <ul>
+      <li>Uptime percentage achieved</li>
+      <li>Number of incidents and resolutions</li>
+      <li>Maintenance windows performed</li>
+      <li>Security events detected and mitigated</li>
+      <li>Performance metrics and trends</li>
+    </ul>
+
+    <h3>Public Status</h3>
+    <p>Infrastructure status is publicly verifiable at:</p>
+    <ul>
+      <li><strong>XRPL:</strong> xrpscan.com/validator/n9LbTCkNpn2X7jGBX4UJCkdVwmXKGaHu1jbcJK6U1GPF2wtES1D8</li>
+      <li><strong>Stellar:</strong> stellar.expert/explorer/public/account/GDMAAY42V4XQUYPKRSSQRQHP4YZH6LXDGYSKXKP3OSH5F7MKFNWLVNVH</li>
+      <li><strong>TOML Files:</strong> campioneinfrastructure.com/.well-known/</li>
+    </ul>
+  </div>
+
+  <!-- SECTION 11 -->
+  <div class="sla-section" id="section11">
+    <div class="section-num">Section 11</div>
+    <h2>Termination</h2>
+
+    <h3>By Client</h3>
+    <ul>
+      <li>Monthly services: Cancel with <strong>30 days written notice</strong></li>
+      <li>Annual services: Cancel with <strong>60 days written notice</strong> — no refund for remaining term</li>
+      <li>One-time services: Non-cancellable once work has commenced</li>
+    </ul>
+
+    <h3>By Provider</h3>
+    <ul>
+      <li>Provider may terminate with <strong>30 days written notice</strong> for any reason</li>
+      <li>Provider may terminate immediately for non-payment, abuse, or illegal activity</li>
+      <li>Pro-rated refund provided for Provider-initiated terminations</li>
+    </ul>
+  </div>
+
+  <!-- SECTION 12 -->
+  <div class="sla-section" id="section12">
+    <div class="section-num">Section 12</div>
+    <h2>Contact & Escalation</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Contact Type</th>
+          <th>Details</th>
+          <th>Response Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>General Inquiries</strong></td>
+          <td>maxresults4u@gmail.com</td>
+          <td>24 hours</td>
+        </tr>
+        <tr>
+          <td><strong>Billing Issues</strong></td>
+          <td>maxresults4u@gmail.com — Subject: [BILLING]</td>
+          <td>24 hours</td>
+        </tr>
+        <tr>
+          <td><strong>P1 Critical Incident</strong></td>
+          <td>maxresults4u@gmail.com — Subject: [INCIDENT P1]</td>
+          <td>4 hours</td>
+        </tr>
+        <tr>
+          <td><strong>SLA Breach Claims</strong></td>
+          <td>maxresults4u@gmail.com — Subject: [SLA CLAIM]</td>
+          <td>5 business days</td>
+        </tr>
+        <tr>
+          <td><strong>Security Issues</strong></td>
+          <td>maxresults4u@gmail.com — Subject: [SECURITY]</td>
+          <td>2 hours</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="sla-highlight" style="margin-top: 30px;">
+      <div class="highlight-label">Governing Law</div>
+      <p style="color: var(--muted); margin: 0; font-size: 12px; line-height: 2;">This Agreement shall be governed by and construed in accordance with the laws of the <strong style="color: var(--text);">State of Florida, United States of America</strong>. Any disputes arising under this Agreement shall be resolved in the courts of Pasco County, Florida.</p>
+    </div>
+
+    <p style="margin-top: 20px; font-size: 11px;">
+      By subscribing to any service offered by Campione Infrastructure, the Client agrees to the terms of this Service Level Agreement. This SLA is effective as of <strong>March 30, 2026</strong> and supersedes all previous agreements.
+    </p>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <p>© 2024–2026 <strong>MaxResults4U Business Solutions</strong> — All Rights Reserved</p>
+    <p style="margin-top: 5px;"><span style="color: var(--accent);">Campione Infrastructure</span> is a division of MaxResults4U Business Solutions · Land O Lakes, FL · USA</p>
+  </div>
+  <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+    <a href="/" style="font-family: var(--mono); font-size: 10px; color: var(--muted); text-decoration: none; letter-spacing: 2px; text-transform: uppercase;">Home</a>
+    <a href="/compliance.html" style="font-family: var(--mono); font-size: 10px; color: var(--muted); text-decoration: none; letter-spacing: 2px; text-transform: uppercase;">Compliance</a>
+    <a href="/payments.html" style="font-family: var(--mono); font-size: 10px; color: var(--muted); text-decoration: none; letter-spacing: 2px; text-transform: uppercase;">Payments</a>
+    <a href="/mission.html" style="font-family: var(--mono); font-size: 10px; color: var(--muted); text-decoration: none; letter-spacing: 2px; text-transform: uppercase;">Mission</a>
+  </div>
+</footer>
+
+</body>
+</html>
