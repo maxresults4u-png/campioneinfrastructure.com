@@ -632,6 +632,16 @@
     position: relative;
     z-index: 1;
   }
+
+  @keyframes orbit1 { from { transform: rotate(0deg) translateX(160px) rotate(0deg); } to { transform: rotate(360deg) translateX(160px) rotate(-360deg); } }
+  @keyframes orbit2 { from { transform: rotate(90deg) translateX(160px) rotate(-90deg); } to { transform: rotate(450deg) translateX(160px) rotate(-450deg); } }
+  @keyframes orbit3 { from { transform: rotate(180deg) translateX(160px) rotate(-180deg); } to { transform: rotate(540deg) translateX(160px) rotate(-540deg); } }
+  @keyframes orbit4 { from { transform: rotate(270deg) translateX(160px) rotate(-270deg); } to { transform: rotate(630deg) translateX(160px) rotate(-630deg); } }
+  @keyframes orbit5 { from { transform: rotate(45deg) translateX(110px) rotate(-45deg); } to { transform: rotate(405deg) translateX(110px) rotate(-405deg); } }
+  @keyframes orbit6 { from { transform: rotate(225deg) translateX(110px) rotate(-225deg); } to { transform: rotate(585deg) translateX(110px) rotate(-585deg); } }
+  @keyframes ringRotate { from { transform: translate(-50%,-50%) rotate(0deg); } to { transform: translate(-50%,-50%) rotate(360deg); } }
+  @keyframes ringRotateR { from { transform: translate(-50%,-50%) rotate(0deg); } to { transform: translate(-50%,-50%) rotate(-360deg); } }
+  @keyframes glowPulse { 0%,100% { box-shadow: 0 0 20px rgba(0,255,136,0.4); } 50% { box-shadow: 0 0 40px rgba(0,255,136,0.8); } }
 </style>
 </head>
 <body>
@@ -722,17 +732,7 @@
 <div style="display: flex; align-items: center; justify-content: center; padding-right: 60px;">
   <div style="position: relative; width: 380px; height: 380px;">
 
-    <style>
-    @keyframes orbit1 { from { transform: rotate(0deg) translateX(160px) rotate(0deg); } to { transform: rotate(360deg) translateX(160px) rotate(-360deg); } }
-    @keyframes orbit2 { from { transform: rotate(90deg) translateX(160px) rotate(-90deg); } to { transform: rotate(450deg) translateX(160px) rotate(-450deg); } }
-    @keyframes orbit3 { from { transform: rotate(180deg) translateX(160px) rotate(-180deg); } to { transform: rotate(540deg) translateX(160px) rotate(-540deg); } }
-    @keyframes orbit4 { from { transform: rotate(270deg) translateX(160px) rotate(-270deg); } to { transform: rotate(630deg) translateX(160px) rotate(-630deg); } }
-    @keyframes orbit5 { from { transform: rotate(45deg) translateX(110px) rotate(-45deg); } to { transform: rotate(405deg) translateX(110px) rotate(-405deg); } }
-    @keyframes orbit6 { from { transform: rotate(225deg) translateX(110px) rotate(-225deg); } to { transform: rotate(585deg) translateX(110px) rotate(-585deg); } }
-    @keyframes ringRotate { from { transform: translate(-50%,-50%) rotate(0deg); } to { transform: translate(-50%,-50%) rotate(360deg); } }
-    @keyframes ringRotateR { from { transform: translate(-50%,-50%) rotate(0deg); } to { transform: translate(-50%,-50%) rotate(-360deg); } }
-    @keyframes glowPulse { 0%,100% { box-shadow: 0 0 20px rgba(0,255,136,0.4); } 50% { box-shadow: 0 0 40px rgba(0,255,136,0.8); } }
-    </style>
+
 
     <!-- OUTER RING -->
     <div style="position: absolute; top: 50%; left: 50%; width: 340px; height: 340px; border-radius: 50%; border: 1px solid rgba(0,255,136,0.2); animation: ringRotate 30s linear infinite;"></div>
@@ -783,6 +783,8 @@
     </div>
 
   </div>
+</div>
+
 </div>
 
 <!-- LIVE TICKER -->
