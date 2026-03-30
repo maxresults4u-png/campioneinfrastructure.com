@@ -708,63 +708,73 @@
 </div>
 
 <!-- STAKING VISUAL -->
-<div style="display: flex; align-items: center; justify-content: center; padding-right: 40px;">
-  <div style="position: relative; width: 320px; height: 320px;">
+<div style="display: flex; align-items: center; justify-content: center; padding-right: 60px;">
+  <div style="position: relative; width: 380px; height: 380px;">
+
+    <style>
+    @keyframes orbit1 { from { transform: rotate(0deg) translateX(160px) rotate(0deg); } to { transform: rotate(360deg) translateX(160px) rotate(-360deg); } }
+    @keyframes orbit2 { from { transform: rotate(90deg) translateX(160px) rotate(-90deg); } to { transform: rotate(450deg) translateX(160px) rotate(-450deg); } }
+    @keyframes orbit3 { from { transform: rotate(180deg) translateX(160px) rotate(-180deg); } to { transform: rotate(540deg) translateX(160px) rotate(-540deg); } }
+    @keyframes orbit4 { from { transform: rotate(270deg) translateX(160px) rotate(-270deg); } to { transform: rotate(630deg) translateX(160px) rotate(-630deg); } }
+    @keyframes orbit5 { from { transform: rotate(45deg) translateX(110px) rotate(-45deg); } to { transform: rotate(405deg) translateX(110px) rotate(-405deg); } }
+    @keyframes orbit6 { from { transform: rotate(225deg) translateX(110px) rotate(-225deg); } to { transform: rotate(585deg) translateX(110px) rotate(-585deg); } }
+    @keyframes ringRotate { from { transform: translate(-50%,-50%) rotate(0deg); } to { transform: translate(-50%,-50%) rotate(360deg); } }
+    @keyframes ringRotateR { from { transform: translate(-50%,-50%) rotate(0deg); } to { transform: translate(-50%,-50%) rotate(-360deg); } }
+    @keyframes glowPulse { 0%,100% { box-shadow: 0 0 20px rgba(0,255,136,0.4); } 50% { box-shadow: 0 0 40px rgba(0,255,136,0.8); } }
+    </style>
 
     <!-- OUTER RING -->
-    <div style="position: absolute; inset: 0; border-radius: 50%; border: 1px solid rgba(0,255,136,0.15); animation: spinSlow 20s linear infinite;"></div>
-    <div style="position: absolute; inset: 20px; border-radius: 50%; border: 1px dashed rgba(0,136,255,0.15); animation: spinSlow 15s linear infinite reverse;"></div>
+    <div style="position: absolute; top: 50%; left: 50%; width: 340px; height: 340px; border-radius: 50%; border: 1px solid rgba(0,255,136,0.2); animation: ringRotate 30s linear infinite;"></div>
 
-    <!-- ORBITING COINS -->
-    <!-- XRP -->
-    <div style="position: absolute; top: 50%; left: 50%; width: 100%; height: 100%; animation: spinSlow 8s linear infinite; transform-origin: 0 0;">
-      <div style="position: absolute; top: -20px; left: -20px; width: 40px; height: 40px; background: #23292F; border-radius: 50%; border: 2px solid rgba(0,136,255,0.5); display: flex; align-items: center; justify-content: center; font-size: 16px; box-shadow: 0 0 15px rgba(0,136,255,0.3);">⬡</div>
+    <!-- MIDDLE RING -->
+    <div style="position: absolute; top: 50%; left: 50%; width: 240px; height: 240px; border-radius: 50%; border: 1px dashed rgba(0,136,255,0.25); animation: ringRotateR 20s linear infinite;"></div>
+
+    <!-- INNER RING -->
+    <div style="position: absolute; top: 50%; left: 50%; width: 140px; height: 140px; border-radius: 50%; border: 1px solid rgba(0,255,136,0.15); animation: ringRotate 15s linear infinite;"></div>
+
+    <!-- ORBITING COINS - OUTER -->
+    <div style="position: absolute; top: 50%; left: 50%; animation: orbit1 10s linear infinite;">
+      <div style="width: 50px; height: 50px; background: #23292F; border-radius: 50%; border: 2px solid #0088ff; display: flex; align-items: center; justify-content: center; font-size: 22px; box-shadow: 0 0 20px rgba(0,136,255,0.6); transform: translate(-25px,-25px);">⬡</div>
     </div>
 
-    <!-- STELLAR -->
-    <div style="position: absolute; top: 50%; left: 50%; width: 100%; height: 100%; animation: spinSlow 8s linear infinite; animation-delay: -2s; transform-origin: 0 0;">
-      <div style="position: absolute; top: -18px; left: -18px; width: 36px; height: 36px; background: #0A0A0A; border-radius: 50%; border: 2px solid rgba(0,255,136,0.5); display: flex; align-items: center; justify-content: center; font-size: 14px; box-shadow: 0 0 15px rgba(0,255,136,0.3);">✦</div>
+    <div style="position: absolute; top: 50%; left: 50%; animation: orbit2 10s linear infinite;">
+      <div style="width: 50px; height: 50px; background: #0A0A0A; border-radius: 50%; border: 2px solid #00ff88; display: flex; align-items: center; justify-content: center; font-size: 22px; box-shadow: 0 0 20px rgba(0,255,136,0.6); transform: translate(-25px,-25px);">✦</div>
     </div>
 
-    <!-- CHAINLINK -->
-    <div style="position: absolute; top: 50%; left: 50%; width: 80%; height: 80%; animation: spinSlow 6s linear infinite reverse; transform-origin: 0 0;">
-      <div style="position: absolute; top: -16px; left: -16px; width: 32px; height: 32px; background: #375BD2; border-radius: 50%; border: 2px solid rgba(55,91,210,0.7); display: flex; align-items: center; justify-content: center; font-size: 12px; box-shadow: 0 0 15px rgba(55,91,210,0.4);">⬡</div>
+    <div style="position: absolute; top: 50%; left: 50%; animation: orbit3 10s linear infinite;">
+      <div style="width: 50px; height: 50px; background: #F7931A; border-radius: 50%; border: 2px solid #F7931A; display: flex; align-items: center; justify-content: center; font-size: 22px; box-shadow: 0 0 20px rgba(247,147,26,0.6); transform: translate(-25px,-25px);">₿</div>
     </div>
 
-    <!-- BITCOIN -->
-    <div style="position: absolute; top: 50%; left: 50%; width: 80%; height: 80%; animation: spinSlow 6s linear infinite reverse; animation-delay: -3s; transform-origin: 0 0;">
-      <div style="position: absolute; top: -16px; left: -16px; width: 32px; height: 32px; background: #F7931A; border-radius: 50%; border: 2px solid rgba(247,147,26,0.7); display: flex; align-items: center; justify-content: center; font-size: 12px; box-shadow: 0 0 15px rgba(247,147,26,0.4);">₿</div>
+    <div style="position: absolute; top: 50%; left: 50%; animation: orbit4 10s linear infinite;">
+      <div style="width: 50px; height: 50px; background: #375BD2; border-radius: 50%; border: 2px solid #375BD2; display: flex; align-items: center; justify-content: center; font-size: 22px; box-shadow: 0 0 20px rgba(55,91,210,0.6); transform: translate(-25px,-25px);">⬡</div>
     </div>
 
-    <!-- COSMOS -->
-    <div style="position: absolute; top: 50%; left: 50%; width: 60%; height: 60%; animation: spinSlow 5s linear infinite; animation-delay: -1s; transform-origin: 0 0;">
-      <div style="position: absolute; top: -14px; left: -14px; width: 28px; height: 28px; background: #2E3148; border-radius: 50%; border: 2px solid rgba(46,49,72,0.9); display: flex; align-items: center; justify-content: center; font-size: 11px; box-shadow: 0 0 12px rgba(100,100,200,0.3);">⚛️</div>
+    <!-- ORBITING COINS - INNER -->
+    <div style="position: absolute; top: 50%; left: 50%; animation: orbit5 7s linear infinite;">
+      <div style="width: 40px; height: 40px; background: #2E3148; border-radius: 50%; border: 2px solid #8B8BFF; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 0 15px rgba(139,139,255,0.5); transform: translate(-20px,-20px);">⚛️</div>
+    </div>
+
+    <div style="position: absolute; top: 50%; left: 50%; animation: orbit6 7s linear infinite;">
+      <div style="width: 40px; height: 40px; background: #6F4CFF; border-radius: 50%; border: 2px solid #6F4CFF; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 0 15px rgba(111,76,255,0.5); transform: translate(-20px,-20px);">📊</div>
     </div>
 
     <!-- CENTER -->
-    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
-      <div style="width: 90px; height: 90px; background: radial-gradient(circle, rgba(0,255,136,0.15) 0%, rgba(0,136,255,0.1) 100%); border-radius: 50%; border: 2px solid rgba(0,255,136,0.4); display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 0 30px rgba(0,255,136,0.2);">
-        <div style="font-family: var(--sans); font-size: 11px; font-weight: 800; color: var(--accent); letter-spacing: 1px;">STAKING</div>
-        <div style="font-family: var(--mono); font-size: 9px; color: var(--muted); margin-top: 3px;">AS A SERVICE</div>
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; z-index: 10;">
+      <div style="width: 100px; height: 100px; background: radial-gradient(circle, rgba(0,255,136,0.2) 0%, rgba(0,0,0,0.8) 100%); border-radius: 50%; border: 2px solid var(--accent); display: flex; flex-direction: column; align-items: center; justify-content: center; animation: glowPulse 3s ease-in-out infinite;">
+        <div style="font-family: var(--sans); font-size: 13px; font-weight: 800; color: var(--accent); letter-spacing: 1px;">STAKING</div>
+        <div style="font-family: var(--mono); font-size: 8px; color: var(--muted); margin-top: 3px; letter-spacing: 1px;">AS A SERVICE</div>
       </div>
     </div>
 
-    <!-- APY LABEL -->
-    <div style="position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%); text-align: center; white-space: nowrap;">
-      <div style="font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 2px;">UP TO <span style="color: var(--accent); font-weight: 700;">15% APY</span> · NON-CUSTODIAL</div>
+    <!-- LABELS -->
+    <div style="position: absolute; bottom: -50px; left: 50%; transform: translateX(-50%); text-align: center; white-space: nowrap;">
+      <div style="font-family: var(--mono); font-size: 11px; color: var(--muted);">UP TO <span style="color: var(--accent); font-weight: 700; font-size: 14px;">15% APY</span> · NON-CUSTODIAL · US BASED</div>
     </div>
 
   </div>
 </div>
 
 </div>
-
-<style>
-@keyframes spinSlow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-</style>
 
 <script>
 // Calculate days running since March 28 2026
