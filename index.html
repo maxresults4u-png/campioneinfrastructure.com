@@ -785,16 +785,6 @@
   </div>
 </div>
 
-</div>
-
-<script>
-// Calculate days running since March 28 2026
-const startDate = new Date('2026-03-28');
-const today = new Date();
-const days = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
-document.getElementById('uptimeDays').textContent = days;
-</script>
-
 <!-- LIVE TICKER -->
 <div class="ticker">
   <div class="ticker-inner">
@@ -1375,5 +1365,52 @@ async function subscribeNewsletter() {
 
 </footer>
 
-<!-- OLD FOOTER REMOVED - keeping script tag structure intact -->
-<div style="display:none"><strong
+<script>
+const startDate = new Date('2026-03-28');
+const today = new Date();
+const days = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+document.getElementById('uptimeDays').textContent = days;
+
+async function sendMessage() {
+  const inputs = document.querySelectorAll('input');
+  const name = inputs[0].value;
+  const email = inputs[1].value;
+  const message = document.querySelector('textarea').value;
+  if (!name || !email || !message) { alert('Please fill in all fields.'); return; }
+  try {
+    const res = await fetch('https://formspree.io/f/mlgojzyj', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ name, email, message })
+    });
+    if (res.ok) {
+      document.getElementById('form-success').style.display = 'block';
+      inputs.forEach(i => i.value = '');
+      document.querySelector('textarea').value = '';
+    } else { throw new Error(); }
+  } catch {
+    window.location.href = `mailto:maxresults4u@gmail.com?subject=Inquiry from ${name}&body=${message}`;
+  }
+}
+
+async function subscribeNewsletter() {
+  const email = document.getElementById('newsletterEmail').value;
+  if (!email) { alert('Please enter your email.'); return; }
+  try {
+    const res = await fetch('https://formspree.io/f/mlgojzyj', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ email, type: 'newsletter_signup' })
+    });
+    if (res.ok) {
+      document.getElementById('newsletter-success').style.display = 'block';
+      document.getElementById('newsletterEmail').value = '';
+    } else { throw new Error(); }
+  } catch {
+    window.location.href = `mailto:maxresults4u@gmail.com?subject=Newsletter Signup&body=${email}`;
+  }
+}
+</script>
+
+</body>
+</html>
