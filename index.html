@@ -605,15 +605,20 @@
     <div class="ticker-item"><div class="dot green"></div> STELLAR VALIDATOR — RUNNING</div>
     <div class="ticker-item"><div class="dot orange"></div> CHAINLINK ORACLE — HEALTHY</div>
     <div class="ticker-item"><div class="dot blue"></div> BITCOIN NODE — SYNCING</div>
-    <div class="ticker-item"><div class="dot green"></div> LIGHTNING NODE — READY</div>
+    <div class="ticker-item"><div class="dot green"></div> HORIZON API — LIVE</div>
+    <div class="ticker-item"><div class="dot green"></div> THE GRAPH — INDEXING</div>
+    <div class="ticker-item"><div class="dot green"></div> COSMOS — SYNCING</div>
+    <div class="ticker-item"><div class="dot green"></div> LIGHTNING — READY</div>
     <div class="ticker-item"><div class="dot green"></div> UPTIME — 99.9%</div>
     <!-- repeat for seamless loop -->
     <div class="ticker-item"><div class="dot green"></div> XRPL VALIDATOR — ACTIVE</div>
     <div class="ticker-item"><div class="dot green"></div> STELLAR VALIDATOR — RUNNING</div>
     <div class="ticker-item"><div class="dot orange"></div> CHAINLINK ORACLE — HEALTHY</div>
     <div class="ticker-item"><div class="dot blue"></div> BITCOIN NODE — SYNCING</div>
-    <div class="ticker-item"><div class="dot green"></div> LIGHTNING NODE — READY</div>
     <div class="ticker-item"><div class="dot green"></div> HORIZON API — LIVE</div>
+    <div class="ticker-item"><div class="dot green"></div> THE GRAPH — INDEXING</div>
+    <div class="ticker-item"><div class="dot green"></div> COSMOS — SYNCING</div>
+    <div class="ticker-item"><div class="dot green"></div> LIGHTNING — READY</div>
     <div class="ticker-item"><div class="dot green"></div> UPTIME — 99.9%</div>
   </div>
 </div>
@@ -657,6 +662,20 @@
       <div class="node-status"><div class="dot green"></div> Live — v25.0.0</div>
       <div class="node-desc">Public Stellar Horizon API endpoint running v25.0.0. Providing developers and applications with reliable, high-performance access to the Stellar network.</div>
       <div class="node-key">45.77.113.67:8000 — REST API — Stellar Mainnet</div>
+    </div>
+    <div class="node-card" style="border-top: 2px solid #6f4cff; background: var(--panel);">
+      <div class="node-icon">📊</div>
+      <div class="node-name">The Graph Node</div>
+      <div class="node-status"><div class="dot green"></div> Indexing — v0.35.1</div>
+      <div class="node-desc">Graph Protocol indexing node connected to Ethereum mainnet via Alchemy. Indexing blockchain data for DeFi protocols and dApp developers. GRT rewards accumulating.</div>
+      <div class="node-key">GraphQL: 8000 · Admin: 8020 · Index: 8030 · Metrics: 8040</div>
+    </div>
+    <div class="node-card" style="border-top: 2px solid #2e3148; background: var(--panel);">
+      <div class="node-icon">⚛️</div>
+      <div class="node-name">Cosmos Validator</div>
+      <div class="node-status"><div class="dot green"></div> Syncing — v18.1.0</div>
+      <div class="node-desc">Cosmos Hub validator node syncing on cosmoshub-4 mainnet. Proof of stake validation. ATOM staking rewards upon full sync and validator registration completion.</div>
+      <div class="node-key">Chain: cosmoshub-4 · Moniker: campione-validator</div>
     </div>
   </div>
 </section>
@@ -711,22 +730,22 @@
 
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
 
-    <!-- THIS WEEK -->
+    <!-- COMPLETED -->
     <div style="border: 1px solid var(--accent); padding: 40px; position: relative;">
-      <div style="position: absolute; top: -12px; left: 20px; background: var(--bg); padding: 0 10px; font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 3px; text-transform: uppercase;">This Week</div>
+      <div style="position: absolute; top: -12px; left: 20px; background: var(--bg); padding: 0 10px; font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 3px; text-transform: uppercase;">✓ Completed This Week</div>
       <div style="margin-bottom: 25px;">
         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-          <div style="width: 8px; height: 8px; background: var(--accent); border-radius: 50; animation: pulse 2s infinite;"></div>
-          <div style="font-family: var(--sans); font-size: 18px; font-weight: 800;">The Graph Node</div>
+          <div style="width: 8px; height: 8px; background: var(--accent); border-radius: 50%;"></div>
+          <div style="font-family: var(--sans); font-size: 18px; font-weight: 800; text-decoration: line-through; opacity: 0.7;">The Graph Node ✓</div>
         </div>
-        <div style="font-family: var(--mono); font-size: 11px; color: var(--muted); line-height: 1.8; padding-left: 18px;">Blockchain data indexing. Earn GRT tokens passively. Serves XRPL, Stellar, and Ethereum data consumers automatically.</div>
+        <div style="font-family: var(--mono); font-size: 11px; color: var(--accent); line-height: 1.8; padding-left: 18px;">LIVE — Indexing Ethereum mainnet. GRT rewards accumulating automatically.</div>
       </div>
       <div>
         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
           <div style="width: 8px; height: 8px; background: var(--accent); border-radius: 50%;"></div>
-          <div style="font-family: var(--sans); font-size: 18px; font-weight: 800;">Cosmos Validator</div>
+          <div style="font-family: var(--sans); font-size: 18px; font-weight: 800; text-decoration: line-through; opacity: 0.7;">Cosmos Validator ✓</div>
         </div>
-        <div style="font-family: var(--mono); font-size: 11px; color: var(--muted); line-height: 1.8; padding-left: 18px;">ATOM staking rewards from day one. Proof of stake validation on Cosmos Hub mainnet. Immediate passive income stream.</div>
+        <div style="font-family: var(--mono); font-size: 11px; color: var(--accent); line-height: 1.8; padding-left: 18px;">LIVE — cosmoshub-4 syncing. ATOM staking rewards pending full sync.</div>
       </div>
     </div>
 
@@ -971,6 +990,89 @@ async function sendMessage() {
   }
 }
 </script>
+
+<!-- NETWORK LOGOS -->
+<div style="border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 50px 40px; position: relative; z-index: 1; background: var(--panel);">
+  <div style="max-width: 1200px; margin: 0 auto;">
+    <div style="font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 4px; text-transform: uppercase; text-align: center; margin-bottom: 40px;">Networks We Operate On</div>
+    <div style="display: flex; justify-content: center; align-items: center; gap: 50px; flex-wrap: wrap;">
+
+      <!-- XRP Ledger -->
+      <div style="text-align: center; opacity: 0.7; transition: opacity 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="24" fill="#23292F"/>
+          <path d="M33 14h3.5L28 23.5l8.5 10.5H33l-7-8.5-7 8.5H15.5l8.5-10.5L15.5 14H19l7 8.5 7-8.5z" fill="white"/>
+        </svg>
+        <div style="font-family: var(--mono); font-size: 9px; color: var(--muted); margin-top: 8px; letter-spacing: 1px;">XRP LEDGER</div>
+      </div>
+
+      <!-- Stellar -->
+      <div style="text-align: center; opacity: 0.7; transition: opacity 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="24" fill="#0A0A0A"/>
+          <path d="M36.5 17.8l-2.1.9-10.4-4.9c-.7-.3-1.5-.3-2.1.1L10.5 18.5l-2.1-.9 1.6-1c1.4-.8 3-.9 4.4-.2l9.4 4.5 9.4-4.5c1.4-.7 3-.6 4.4.2l1.6 1-2.2.2zM11.5 30.1l2.1-.9 10.4 4.9c.7.3 1.5.3 2.1-.1l11.4-4.6 2.1.9-1.6 1c-1.4.8-3 .9-4.4.2l-9.4-4.5-9.4 4.5c-1.4.7-3 .6-4.4-.2l-1.6-1 2.7-.1zM8.4 22.1l1.9.5 1.2 8.2-2-.5-1.1-8.2zm29.4 8.2l-2 .5 1.2-8.2 1.9-.5-1.1 8.2z" fill="white"/>
+        </svg>
+        <div style="font-family: var(--mono); font-size: 9px; color: var(--muted); margin-top: 8px; letter-spacing: 1px;">STELLAR</div>
+      </div>
+
+      <!-- Chainlink -->
+      <div style="text-align: center; opacity: 0.7; transition: opacity 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="24" fill="#375BD2"/>
+          <path d="M24 10l-4 2.3v4.6L24 19.2l4-2.3v-4.6L24 10zM16 14.6l-4 2.3v9.2l4 2.3 4-2.3v-4.6l-4-2.3v-4.6zm16 0v4.6l-4 2.3v4.6l4 2.3 4-2.3v-9.2l-4-2.3zM16 26.8l-4 2.3v4.6l4 2.3 4-2.3v-4.6l-4-2.3zm16 0l-4 2.3v4.6l4 2.3 4-2.3v-4.6l-4-2.3zM24 31.5l-4 2.3v4.6l4 2.3 4-2.3v-4.6l-4-2.3z" fill="white"/>
+        </svg>
+        <div style="font-family: var(--mono); font-size: 9px; color: var(--muted); margin-top: 8px; letter-spacing: 1px;">CHAINLINK</div>
+      </div>
+
+      <!-- Bitcoin -->
+      <div style="text-align: center; opacity: 0.7; transition: opacity 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="24" fill="#F7931A"/>
+          <path d="M33.5 21.2c.5-3.1-1.9-4.8-5.1-5.9l1-4.2-2.6-.6-1 4.1c-.7-.2-1.4-.3-2.1-.5l1-4.1-2.6-.6-1 4.2c-.6-.1-1.1-.3-1.7-.4l-3.5-.9-.7 2.7s1.9.4 1.8.5c1 .3 1.2 1 1.1 1.5l-2.7 10.7c-.1.5-.5.8-1.1.6 0 .1-1.8-.5-1.8-.5l-1.3 2.9 3.3.8c.6.2 1.2.3 1.8.5l-1 4.2 2.5.6 1-4.2c.7.2 1.4.4 2.1.5l-1 4.1 2.6.6 1-4.2c4.3.8 7.5.5 8.9-3.4 1.1-3.2-.1-5-2.3-6.2 1.6-.4 2.9-1.5 3.3-3.8zm-5.9 8.3c-.8 3.2-6.1 1.5-7.8 1l1.4-5.6c1.7.4 7.3 1.3 6.4 4.6zm.8-8.4c-.7 2.9-5.1 1.4-6.5 1.1l1.2-5.1c1.5.4 6.1 1 5.3 4z" fill="white"/>
+        </svg>
+        <div style="font-family: var(--mono); font-size: 9px; color: var(--muted); margin-top: 8px; letter-spacing: 1px;">BITCOIN</div>
+      </div>
+
+      <!-- The Graph -->
+      <div style="text-align: center; opacity: 0.7; transition: opacity 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="24" fill="#6F4CFF"/>
+          <circle cx="24" cy="24" r="5" fill="white"/>
+          <circle cx="12" cy="16" r="3.5" fill="white"/>
+          <circle cx="36" cy="16" r="3.5" fill="white"/>
+          <circle cx="12" cy="32" r="3.5" fill="white"/>
+          <circle cx="36" cy="32" r="3.5" fill="white"/>
+          <line x1="24" y1="19" x2="14" y2="17.5" stroke="white" stroke-width="1.5"/>
+          <line x1="24" y1="19" x2="34" y2="17.5" stroke="white" stroke-width="1.5"/>
+          <line x1="24" y1="29" x2="14" y2="30.5" stroke="white" stroke-width="1.5"/>
+          <line x1="24" y1="29" x2="34" y2="30.5" stroke="white" stroke-width="1.5"/>
+        </svg>
+        <div style="font-family: var(--mono); font-size: 9px; color: var(--muted); margin-top: 8px; letter-spacing: 1px;">THE GRAPH</div>
+      </div>
+
+      <!-- Cosmos -->
+      <div style="text-align: center; opacity: 0.7; transition: opacity 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="24" fill="#2E3148"/>
+          <circle cx="24" cy="24" r="4" fill="white"/>
+          <ellipse cx="24" cy="24" rx="16" ry="6" stroke="white" stroke-width="1.5" fill="none"/>
+          <ellipse cx="24" cy="24" rx="16" ry="6" stroke="white" stroke-width="1.5" fill="none" transform="rotate(60 24 24)"/>
+          <ellipse cx="24" cy="24" rx="16" ry="6" stroke="white" stroke-width="1.5" fill="none" transform="rotate(120 24 24)"/>
+        </svg>
+        <div style="font-family: var(--mono); font-size: 9px; color: var(--muted); margin-top: 8px; letter-spacing: 1px;">COSMOS</div>
+      </div>
+
+      <!-- ISO 20022 -->
+      <div style="text-align: center; opacity: 0.7; transition: opacity 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">
+        <div style="width: 48px; height: 48px; background: #0088ff; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
+          <div style="font-family: var(--mono); font-size: 8px; color: white; text-align: center; line-height: 1.4; font-weight: 700;">ISO<br>20022</div>
+        </div>
+        <div style="font-family: var(--mono); font-size: 9px; color: var(--muted); margin-top: 8px; letter-spacing: 1px;">ISO 20022</div>
+      </div>
+
+    </div>
+  </div>
+</div>
 
 <!-- FOOTER -->
 <footer style="flex-direction: column; gap: 40px; padding: 60px 40px;">
