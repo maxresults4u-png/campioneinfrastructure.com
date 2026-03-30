@@ -434,7 +434,7 @@
     <a href="/#services">Services</a>
     <a href="/#iso20022">ISO 20022</a>
     <a href="/#contact">Contact</a>
-    <a href="/compliance.html" style="color: var(--accent2);">Compliance</a>
+    <a href="compliance.html" style="color: var(--accent2);">Compliance</a>
   </div>
 </nav>
 
@@ -598,7 +598,7 @@
     </div>
     <div class="operator-item">
       <div class="operator-label">Contact Email</div>
-      <div class="operator-value highlight">maxresults4u@gmail.com</div>
+      <div class="operator-value highlight"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3d505c454f584e4851494e09487d5a505c5451135e5250">[email&#160;protected]</a></div>
     </div>
     <div class="operator-item">
       <div class="operator-label">ISO 20022 Status</div>
@@ -633,15 +633,9 @@
     For institutional partners, government agencies, or enterprise clients requiring<br>
     additional compliance documentation, please contact us directly.
   </p>
-  <a href="mailto:maxresults4u@gmail.com" style="font-family: var(--mono); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--bg); background: var(--accent2); padding: 16px 40px; text-decoration: none; display: inline-block;">Request Documentation</a>
+  <a href="/cdn-cgi/l/email-protection#d4b9b5aca6b1a7a1b8a0a7e0a194b3b9b5bdb8fab7bbb9" style="font-family: var(--mono); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--bg); background: var(--accent2); padding: 16px 40px; text-decoration: none; display: inline-block;">Request Documentation</a>
 </section>
 
 <!-- FOOTER -->
 <footer>
   <p>© 2026 <strong>Campione Infrastructure</strong> — Land O Lakes, FL</p>
-  <p>ISO 20022 Aligned · CLARITY Act Ready</p>
-  <p><a href="/" style="color: var(--muted); text-decoration: none;">← Back to Home</a></p>
-</footer>
-
-</body>
-</html>
