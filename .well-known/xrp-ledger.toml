@@ -1,6 +1,6 @@
 [METADATA]
-modified = "2026-03-28"
-expires = "2027-03-28"
+modified = "2026-03-30"
+expires = "2027-03-30"
 
 [[VALIDATORS]]
 public_key = "n9LbTCkNpn2X7jGBX4UJCkdVwmXKGaHu1jbcJK6U1GPF2wtES1D8"
@@ -9,12 +9,13 @@ owner_country = "US"
 server_country = "US"
 unl = "https://vl.ripple.com"
 
-[[ACCOUNTS]]
-# Add your XRPL account address here later if you have one
-```
-
-The file is functional as-is though — the domain association is handled by *where* it's hosted, not inside the file itself.
-
-**Once DNS clears you'll be able to verify it live at:**
-```
-https://campioneinfrastructure.com/.well-known/xrp-ledger.toml
+[DOCUMENTATION]
+ORG_NAME="Campione Infrastructure"
+ORG_URL="https://campioneinfrastructure.com"
+ORG_DESCRIPTION="Independent blockchain infrastructure operator. ISO 20022 aligned. XRPL validator, Stellar validator, Bitcoin Lightning node, and Chainlink oracle. CLARITY Act compliant infrastructure."
+ORG_PHYSICAL_ADDRESS="Land O Lakes, FL, USA"
+ORG_COUNTRY="US"
+ORG_OFFICIAL_EMAIL="maxresults4u@gmail.com"
+ORG_TWITTER="CampioneInfra"
+ISO20022_COMPLIANT="true"
+CLARITY_ACT_READY="true"
