@@ -573,6 +573,8 @@
     <a href="#services">Services</a>
     <a href="#iso20022" style="color: #0088ff;">ISO 20022</a>
     <a href="#identity">Identity</a>
+    <a href="/mission.html">Mission</a>
+    <a href="/compliance.html">Compliance</a>
     <a href="#contact">Contact</a>
   </div>
 </nav>
@@ -894,7 +896,71 @@ async function sendMessage() {
 </script>
 
 <!-- FOOTER -->
-<footer>
-  <p>© 2026 <strong>Campione Infrastructure</strong> — Land O Lakes, FL</p>
-  <p>XRPL · Stellar · Chainlink · Bitcoin Lightning</p>
-  <p>Built for the <strong
+<footer style="flex-direction: column; gap: 40px; padding: 60px 40px;">
+
+  <!-- TOP FOOTER -->
+  <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; width: 100%; flex-wrap: wrap;">
+    
+    <div>
+      <div style="font-family: var(--mono); font-size: 16px; color: var(--accent); letter-spacing: 2px; margin-bottom: 15px;">CAMPIONE<span style="color: var(--muted);">/</span>INFRA</div>
+      <p style="font-family: var(--mono); font-size: 11px; color: var(--muted); line-height: 2; margin-bottom: 15px;">Independent blockchain infrastructure operator running validator nodes, oracle services, and Lightning payment rails on the world's most ISO 20022 aligned networks.</p>
+      <div style="font-family: var(--mono); font-size: 10px; color: var(--muted);">A division of <strong style="color: var(--text);">MaxResults4U Business Solutions</strong></div>
+      <div style="font-family: var(--mono); font-size: 10px; color: var(--muted); margin-top: 5px;">In business since <strong style="color: var(--text);">2024</strong></div>
+    </div>
+
+    <div>
+      <div style="font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 20px;">Infrastructure</div>
+      <div style="font-family: var(--mono); font-size: 11px; color: var(--muted); line-height: 2.5;">
+        <div>XRPL Validator</div>
+        <div>Stellar Validator</div>
+        <div>Chainlink Oracle</div>
+        <div>Bitcoin Lightning</div>
+        <div>Stellar Horizon API</div>
+      </div>
+    </div>
+
+    <div>
+      <div style="font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 20px;">Company</div>
+      <div style="font-family: var(--mono); font-size: 11px; line-height: 2.5;">
+        <a href="/" style="display: block; color: var(--muted); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">Home</a>
+        <a href="/#services" style="display: block; color: var(--muted); text-decoration: none;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">Services</a>
+        <a href="/compliance.html" style="display: block; color: var(--muted); text-decoration: none;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">Compliance</a>
+        <a href="/mission.html" style="display: block; color: var(--muted); text-decoration: none;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">Mission</a>
+        <a href="/#contact" style="display: block; color: var(--muted); text-decoration: none;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">Contact</a>
+      </div>
+    </div>
+
+    <div>
+      <div style="font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 20px;">Standards</div>
+      <div style="font-family: var(--mono); font-size: 11px; color: var(--muted); line-height: 2.5;">
+        <div style="color: var(--accent);">✓ ISO 20022 Aligned</div>
+        <div style="color: var(--accent);">✓ CLARITY Act Ready</div>
+        <div style="color: var(--accent);">✓ TOML Verified</div>
+        <div style="color: var(--accent);">✓ 24/7 Uptime</div>
+        <div style="color: var(--accent);">✓ US Based Operator</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- DIVIDER -->
+  <div style="width: 100%; border-top: 1px solid var(--border);"></div>
+
+  <!-- BOTTOM FOOTER -->
+  <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 20px;">
+    <div>
+      <p style="font-family: var(--mono); font-size: 11px; color: var(--muted);">© 2024–2026 <strong style="color: var(--text);">MaxResults4U Business Solutions</strong> — All Rights Reserved</p>
+      <p style="font-family: var(--mono); font-size: 10px; color: var(--muted); margin-top: 5px;"><strong style="color: var(--accent);">Campione Infrastructure</strong> is a division of MaxResults4U Business Solutions · Land O Lakes, FL · USA</p>
+    </div>
+    <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+      <a href="/compliance.html" style="font-family: var(--mono); font-size: 10px; color: var(--muted); text-decoration: none; letter-spacing: 2px; text-transform: uppercase;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">Compliance</a>
+      <a href="/mission.html" style="font-family: var(--mono); font-size: 10px; color: var(--muted); text-decoration: none; letter-spacing: 2px; text-transform: uppercase;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">Mission</a>
+      <a href="/#iso20022" style="font-family: var(--mono); font-size: 10px; color: var(--muted); text-decoration: none; letter-spacing: 2px; text-transform: uppercase;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">ISO 20022</a>
+      <a href="/#contact" style="font-family: var(--mono); font-size: 10px; color: var(--muted); text-decoration: none; letter-spacing: 2px; text-transform: uppercase;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">Contact</a>
+    </div>
+  </div>
+
+</footer>
+
+<!-- OLD FOOTER REMOVED - keeping script tag structure intact -->
+<div style="display:none"><strong
