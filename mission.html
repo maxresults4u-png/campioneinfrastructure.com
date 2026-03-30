@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mission — Campione Infrastructure</title>
+<meta name="description" content="The mission of Campione Infrastructure — building the compliant, institutional-grade blockchain rails that will power the global financial system of tomorrow.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050508;
+    --panel: #0d0d15;
+    --border: #1a1a2e;
+    --accent: #00ff88;
+    --accent2: #0088ff;
+    --accent3: #ff6600;
+    --text: #e8e8f0;
+    --muted: #555570;
+    --mono: 'Space Mono', monospace;
+    --sans: 'Syne', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(0,255,136,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,136,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(5,5,8,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    z-index: 50;
+  }
+
+  .logo {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-decoration: none;
+  }
+
+  .logo span { color: var(--muted); }
+
+  nav a {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-left: 30px;
+    transition: color 0.2s;
+  }
+
+  nav a:hover { color: var(--accent); }
+
+  /* HERO */
+  .mission-hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 120px 40px 80px;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .mission-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .mission-tag::before {
+    content: '';
+    width: 50px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .mission-statement {
+    font-family: var(--sans);
+    font-size: clamp(32px, 5vw, 72px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -2px;
+    margin-bottom: 60px;
+    max-width: 1000px;
+  }
+
+  .mission-statement .highlight { color: var(--accent); }
+  .mission-statement .highlight2 { color: var(--accent2); }
+  .mission-statement .highlight3 { color: var(--accent3); }
+
+  .mission-core {
+    border-left: 3px solid var(--accent);
+    padding: 30px 40px;
+    margin-bottom: 60px;
+    background: rgba(0,255,136,0.03);
+    max-width: 800px;
+  }
+
+  .mission-core p {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text);
+    line-height: 2.5;
+    font-style: italic;
+  }
+
+  /* PILLARS */
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin: 80px 0;
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .pillar {
+    background: var(--panel);
+    padding: 50px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pillar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .pillar:nth-child(1)::before { background: var(--accent); }
+  .pillar:nth-child(2)::before { background: var(--accent2); }
+  .pillar:nth-child(3)::before { background: var(--accent3); }
+  .pillar:nth-child(4)::before { background: #f7931a; }
+
+  .pillar-num {
+    font-family: var(--mono);
+    font-size: 64px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.04);
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    line-height: 1;
+  }
+
+  .pillar-icon {
+    font-size: 36px;
+    margin-bottom: 25px;
+  }
+
+  .pillar-title {
+    font-family: var(--sans);
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: 15px;
+    line-height: 1.2;
+  }
+
+  .pillar-desc {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 2;
+  }
+
+  /* VALUES */
+  .values-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 80px 40px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-label::before {
+    content: '';
+    width: 30px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  h2 {
+    font-family: var(--sans);
+    font-size: clamp(32px, 4vw, 56px);
+    font-weight: 800;
+    letter-spacing: -2px;
+    margin-bottom: 50px;
+    line-height: 1;
+  }
+
+  .values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+  }
+
+  .value-card {
+    border: 1px solid var(--border);
+    padding: 40px;
+    transition: border-color 0.3s;
+  }
+
+  .value-card:hover { border-color: var(--accent); }
+
+  .value-title {
+    font-family: var(--sans);
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .value-title span {
+    color: var(--accent);
+    font-size: 24px;
+  }
+
+  .value-desc {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 2;
+  }
+
+  /* VISION */
+  .vision-block {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 80px 40px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .vision-inner {
+    background: linear-gradient(135deg, rgba(0,136,255,0.06) 0%, rgba(0,255,136,0.04) 50%, rgba(255,102,0,0.04) 100%);
+    border: 1px solid var(--border);
+    padding: 80px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .vision-inner::before {
+    content: '2030';
+    position: absolute;
+    right: -20px;
+    bottom: -40px;
+    font-family: var(--sans);
+    font-size: 200px;
+    font-weight: 800;
+    color: rgba(255,255,255,0.02);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .vision-inner h3 {
+    font-family: var(--sans);
+    font-size: clamp(28px, 4vw, 56px);
+    font-weight: 800;
+    letter-spacing: -2px;
+    margin-bottom: 30px;
+    line-height: 1;
+  }
+
+  .vision-inner h3 span { color: var(--accent2); }
+
+  .vision-inner p {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 2.5;
+    max-width: 750px;
+  }
+
+  .vision-inner p strong { color: var(--text); }
+
+  /* COMMITMENT */
+  .commitment {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .commitment-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  @media (max-width: 768px) {
+    .commitment-grid { grid-template-columns: 1fr; }
+    .mission-statement { font-size: 32px; }
+  }
+
+  .commitment-item {
+    background: var(--panel);
+    padding: 40px 30px;
+    text-align: center;
+  }
+
+  .commitment-num {
+    font-family: var(--sans);
+    font-size: 56px;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+
+  .commitment-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  hr { border: none; border-top: 1px solid var(--border); position: relative; z-index: 1; }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  footer p {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  footer strong { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="logo">CAMPIONE<span>/</span>INFRA</a>
+  <div>
+    <a href="/">Home</a>
+    <a href="/#services">Services</a>
+    <a href="/#iso20022">ISO 20022</a>
+    <a href="/compliance.html">Compliance</a>
+    <a href="/mission.html" style="color: var(--accent);">Mission</a>
+    <a href="/#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="mission-hero">
+  <div class="mission-tag">Our Purpose</div>
+  
+  <div class="mission-statement">
+    We exist to build the <span class="highlight">infrastructure</span> that the financial world will <span class="highlight2">depend on</span> — before the world knows it <span class="highlight3">needs it.</span>
+  </div>
+
+  <div class="mission-core">
+    <p>"To provide institutional-grade, ISO 20022 aligned blockchain infrastructure that serves as the trusted foundation for the next generation of global finance — delivering verifiable, compliant, and resilient decentralized rails to governments, enterprises, and developers who demand nothing less than excellence."</p>
+  </div>
+
+  <div style="font-family: var(--mono); font-size: 11px; color: var(--muted);">
+    — MaxResults4U Business Solutions · Campione Infrastructure Division · Est. 2024
+  </div>
+</div>
+
+<hr>
+
+<!-- PILLARS -->
+<div style="max-width: 1200px; margin: 0 auto; padding: 80px 40px 20px;">
+  <div class="section-label">What Drives Us</div>
+  <h2>Our Four Pillars</h2>
+</div>
+
+<div class="pillars" style="margin: 0 40px 80px; max-width: calc(1200px - 0px);">
+  <div class="pillar">
+    <div class="pillar-num">01</div>
+    <div class="pillar-icon">🏛️</div>
+    <div class="pillar-title">Institutional Integrity</div>
+    <div class="pillar-desc">We operate with the transparency, documentation, and accountability expected of regulated financial infrastructure. Every node we run is publicly verifiable. Every key is documented. Every claim is provable on-chain.</div>
+  </div>
+  <div class="pillar">
+    <div class="pillar-num">02</div>
+    <div class="pillar-icon">⚡</div>
+    <div class="pillar-title">Technical Excellence</div>
+    <div class="pillar-desc">We don't cut corners. Our infrastructure is hardened, monitored, and maintained to enterprise standards — 24 hours a day, 7 days a week. Uptime is not a goal. It is a commitment.</div>
+  </div>
+  <div class="pillar">
+    <div class="pillar-num">03</div>
+    <div class="pillar-icon">🌐</div>
+    <div class="pillar-title">Regulatory Foresight</div>
+    <div class="pillar-desc">We build ahead of regulation, not behind it. While others react to the CLARITY Act and ISO 20022 migration, we are already compliant — already positioned — already running the infrastructure that institutions will require.</div>
+  </div>
+  <div class="pillar">
+    <div class="pillar-num">04</div>
+    <div class="pillar-icon">🤝</div>
+    <div class="pillar-title">Trusted Partnership</div>
+    <div class="pillar-desc">We don't just run nodes — we become the infrastructure backbone our clients depend on. From independent developers to enterprise organizations, we deliver reliability that earns trust and sustains it for the long term.</div>
+  </div>
+</div>
+
+<hr>
+
+<!-- VALUES -->
+<div class="values-section">
+  <div class="section-label">What We Stand For</div>
+  <h2>Core Values</h2>
+  <div class="values-grid">
+    <div class="value-card">
+      <div class="value-title"><span>◈</span> Transparency</div>
+      <div class="value-desc">Our validator keys are public. Our domain is verified. Our compliance posture is documented. We believe the infrastructure that powers global finance must be open to scrutiny and built to withstand it.</div>
+    </div>
+    <div class="value-card">
+      <div class="value-title"><span>◈</span> Resilience</div>
+      <div class="value-desc">Financial infrastructure cannot afford downtime. We engineer for failure, plan for the unexpected, and maintain the kind of operational discipline that institutions require when they place their trust in our rails.</div>
+    </div>
+    <div class="value-card">
+      <div class="value-title"><span>◈</span> Innovation</div>
+      <div class="value-desc">We operate at the frontier of financial technology — running multi-chain infrastructure across XRPL, Stellar, Chainlink, and Bitcoin Lightning simultaneously, building the stack that tomorrow's finance will run on.</div>
+    </div>
+    <div class="value-card">
+      <div class="value-title"><span>◈</span> Compliance</div>
+      <div class="value-desc">ISO 20022 alignment is not a checkbox for us — it is a design principle. Every network we choose, every node we run, every service we offer is selected with institutional compliance and regulatory readiness as the foundation.</div>
+    </div>
+    <div class="value-card">
+      <div class="value-title"><span>◈</span> Accountability</div>
+      <div class="value-desc">We are a US-based operator with a documented physical presence, verified identity, and publicly accessible compliance records. When the world needs to know who is running the infrastructure — we are proud to answer.</div>
+    </div>
+    <div class="value-card">
+      <div class="value-title"><span>◈</span> Independence</div>
+      <div class="value-desc">We are not beholden to any single protocol, ecosystem, or corporate interest. Our independence is our strength — allowing us to serve the network honestly, operate without conflict, and build with long-term integrity.</div>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<!-- VISION -->
+<div class="vision-block">
+  <div class="vision-inner">
+    <div class="section-label">Looking Forward</div>
+    <h3>Our Vision for <span>2030</span></h3>
+    <p>
+      By 2030, the global financial system will run on blockchain rails. 
+      <strong>Central banks will issue digital currencies on ISO 20022 aligned networks.</strong> 
+      Enterprises will settle cross-border payments in seconds. 
+      Smart contracts will automate the financial agreements that today require armies of lawyers and bankers.<br><br>
+      <strong>Campione Infrastructure will be the trusted operator behind those rails.</strong><br><br>
+      We are building today what the world will depend on tomorrow — 
+      a multi-chain, institutionally verified, compliance-first infrastructure company 
+      that operates with the discipline of a Fortune 500 and the agility of a technology pioneer.<br><br>
+      <strong>The infrastructure of the future financial system is being built right now.</strong> 
+      We intend to be the ones who built it — and the ones the world trusts to keep it running.
+    </p>
+  </div>
+</div>
+
+<hr>
+
+<!-- COMMITMENT STATS -->
+<div class="commitment">
+  <div class="section-label">Our Commitment in Numbers</div>
+  <h2 style="margin-bottom: 40px;">Built to Last</h2>
+  <div class="commitment-grid">
+    <div class="commitment-item">
+      <div class="commitment-num">5</div>
+      <div class="commitment-label">Active Network Nodes</div>
+    </div>
+    <div class="commitment-item">
+      <div class="commitment-num">4</div>
+      <div class="commitment-label">ISO 20022 Aligned Networks</div>
+    </div>
+    <div class="commitment-item">
+      <div class="commitment-num">24/7</div>
+      <div class="commitment-label">Infrastructure Uptime</div>
+    </div>
+    <div class="commitment-item">
+      <div class="commitment-num">100%</div>
+      <div class="commitment-label">US Based Operations</div>
+    </div>
+    <div class="commitment-item">
+      <div class="commitment-num">2024</div>
+      <div class="commitment-label">Year Established</div>
+    </div>
+    <div class="commitment-item">
+      <div class="commitment-num">∞</div>
+      <div class="commitment-label">Commitment to Excellence</div>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<!-- CTA -->
+<div style="max-width: 1200px; margin: 0 auto; padding: 80px 40px; text-align: center; position: relative; z-index: 1;">
+  <div class="section-label" style="justify-content: center;">Join Us</div>
+  <h2 style="margin-bottom: 20px;">Build on Trusted Rails.</h2>
+  <p style="font-family: var(--mono); font-size: 12px; color: var(--muted); line-height: 2; margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto;">
+    Whether you are an enterprise seeking compliant blockchain infrastructure, 
+    a developer needing reliable API access, or an institution preparing for 
+    the post-CLARITY Act landscape — we are ready to be your infrastructure partner.
+  </p>
+  <a href="/#contact" style="font-family: var(--mono); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--bg); background: var(--accent); padding: 18px 48px; text-decoration: none; display: inline-block; clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);">Partner With Us</a>
+</div>
+
+<!-- FOOTER -->
+<footer style="flex-direction: column; gap: 30px;">
+  <div style="width: 100%; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
+    <div>
+      <p>© 2024–2026 <strong>MaxResults4U Business Solutions</strong> — All Rights Reserved</p>
+      <p style="margin-top: 5px; color: var(--muted);"><span style="color: var(--accent);">Campione Infrastructure</span> is a division of MaxResults4U Business Solutions · Land O Lakes, FL · USA</p>
+    </div>
+    <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+      <a href="/" style="font-family: var(--mono); font-size: 10px; color: var(--muted); text-decoration: none; letter-spacing: 2px; text-transform: uppercase;">Home</a>
+      <a href="/compliance.html" style="font-family: var(--mono); font-size: 10px; color: var(--muted); text-decoration: none; letter-spacing: 2px; text-transform: uppercase;">Compliance</a>
+      <a href="/#iso20022" style="font-family: var(--mono); font-size: 10px; color: var(--muted); text-decoration: none; letter-spacing: 2px; text-transform: uppercase;">ISO 20022</a>
+      <a href="/#contact" style="font-family: var(--mono); font-size: 10px; color: var(--muted); text-decoration: none; letter-spacing: 2px; text-transform: uppercase;">Contact</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
