@@ -638,7 +638,18 @@
 
 <!-- NAV -->
 <nav>
-  <a href="/" class="logo" style="text-decoration: none;">CAMPIONE<span>/</span>INFRA</a>
+  <a href="/" style="text-decoration: none; display: flex; align-items: center; gap: 10px;">
+    <svg width="32" height="32" viewBox="0 0 60 68" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="30,2 56,17 56,51 30,66 4,51 4,17" fill="none" stroke="#00ff88" stroke-width="2"/>
+      <polygon points="30,14 48,24 48,44 30,54 12,44 12,24" fill="none" stroke="#00ff88" stroke-width="1.5" opacity="0.5"/>
+      <polygon points="30,24 42,31 30,38 18,31" fill="#00ff88" opacity="0.9"/>
+      <line x1="30" y1="2" x2="30" y2="14" stroke="#0088ff" stroke-width="2"/>
+      <line x1="30" y1="54" x2="30" y2="66" stroke="#0088ff" stroke-width="2"/>
+      <circle cx="4" cy="34" r="3" fill="#0088ff"/>
+      <circle cx="56" cy="34" r="3" fill="#0088ff"/>
+    </svg>
+    <div class="logo" style="text-decoration: none;">CAMPIONE<span>/</span>INFRA</div>
+  </a>
   <div>
     <a href="#nodes">Nodes</a>
     <a href="#services">Services</a>
