@@ -654,7 +654,8 @@
 </nav>
 
 <!-- HERO -->
-<div class="hero">
+<div class="hero" style="display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center;">
+<div>
   <div class="hero-tag fade-in">Independent Blockchain Infrastructure — Land O Lakes, FL · Est. 2024</div>
   <h1 class="fade-in">
     <span class="line1">TRUSTED</span>
@@ -705,6 +706,65 @@
     <a href="sla.html" style="font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">View SLA →</a>
   </div>
 </div>
+
+<!-- STAKING VISUAL -->
+<div style="display: flex; align-items: center; justify-content: center; padding-right: 40px;">
+  <div style="position: relative; width: 320px; height: 320px;">
+
+    <!-- OUTER RING -->
+    <div style="position: absolute; inset: 0; border-radius: 50%; border: 1px solid rgba(0,255,136,0.15); animation: spinSlow 20s linear infinite;"></div>
+    <div style="position: absolute; inset: 20px; border-radius: 50%; border: 1px dashed rgba(0,136,255,0.15); animation: spinSlow 15s linear infinite reverse;"></div>
+
+    <!-- ORBITING COINS -->
+    <!-- XRP -->
+    <div style="position: absolute; top: 50%; left: 50%; width: 100%; height: 100%; animation: spinSlow 8s linear infinite; transform-origin: 0 0;">
+      <div style="position: absolute; top: -20px; left: -20px; width: 40px; height: 40px; background: #23292F; border-radius: 50%; border: 2px solid rgba(0,136,255,0.5); display: flex; align-items: center; justify-content: center; font-size: 16px; box-shadow: 0 0 15px rgba(0,136,255,0.3);">⬡</div>
+    </div>
+
+    <!-- STELLAR -->
+    <div style="position: absolute; top: 50%; left: 50%; width: 100%; height: 100%; animation: spinSlow 8s linear infinite; animation-delay: -2s; transform-origin: 0 0;">
+      <div style="position: absolute; top: -18px; left: -18px; width: 36px; height: 36px; background: #0A0A0A; border-radius: 50%; border: 2px solid rgba(0,255,136,0.5); display: flex; align-items: center; justify-content: center; font-size: 14px; box-shadow: 0 0 15px rgba(0,255,136,0.3);">✦</div>
+    </div>
+
+    <!-- CHAINLINK -->
+    <div style="position: absolute; top: 50%; left: 50%; width: 80%; height: 80%; animation: spinSlow 6s linear infinite reverse; transform-origin: 0 0;">
+      <div style="position: absolute; top: -16px; left: -16px; width: 32px; height: 32px; background: #375BD2; border-radius: 50%; border: 2px solid rgba(55,91,210,0.7); display: flex; align-items: center; justify-content: center; font-size: 12px; box-shadow: 0 0 15px rgba(55,91,210,0.4);">⬡</div>
+    </div>
+
+    <!-- BITCOIN -->
+    <div style="position: absolute; top: 50%; left: 50%; width: 80%; height: 80%; animation: spinSlow 6s linear infinite reverse; animation-delay: -3s; transform-origin: 0 0;">
+      <div style="position: absolute; top: -16px; left: -16px; width: 32px; height: 32px; background: #F7931A; border-radius: 50%; border: 2px solid rgba(247,147,26,0.7); display: flex; align-items: center; justify-content: center; font-size: 12px; box-shadow: 0 0 15px rgba(247,147,26,0.4);">₿</div>
+    </div>
+
+    <!-- COSMOS -->
+    <div style="position: absolute; top: 50%; left: 50%; width: 60%; height: 60%; animation: spinSlow 5s linear infinite; animation-delay: -1s; transform-origin: 0 0;">
+      <div style="position: absolute; top: -14px; left: -14px; width: 28px; height: 28px; background: #2E3148; border-radius: 50%; border: 2px solid rgba(46,49,72,0.9); display: flex; align-items: center; justify-content: center; font-size: 11px; box-shadow: 0 0 12px rgba(100,100,200,0.3);">⚛️</div>
+    </div>
+
+    <!-- CENTER -->
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+      <div style="width: 90px; height: 90px; background: radial-gradient(circle, rgba(0,255,136,0.15) 0%, rgba(0,136,255,0.1) 100%); border-radius: 50%; border: 2px solid rgba(0,255,136,0.4); display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 0 30px rgba(0,255,136,0.2);">
+        <div style="font-family: var(--sans); font-size: 11px; font-weight: 800; color: var(--accent); letter-spacing: 1px;">STAKING</div>
+        <div style="font-family: var(--mono); font-size: 9px; color: var(--muted); margin-top: 3px;">AS A SERVICE</div>
+      </div>
+    </div>
+
+    <!-- APY LABEL -->
+    <div style="position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%); text-align: center; white-space: nowrap;">
+      <div style="font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 2px;">UP TO <span style="color: var(--accent); font-weight: 700;">15% APY</span> · NON-CUSTODIAL</div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+<style>
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+</style>
 
 <script>
 // Calculate days running since March 28 2026
