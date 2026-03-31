@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Payments — Campione Infrastructure</title>
-<meta name="description" content="Pay Campione Infrastructure for blockchain node setup, validator monitoring, oracle services, and consulting. Accept crypto payments in XRP, XLM, ETH, BTC, ATOM.">
+<meta name="description" content="Pay Campione Infrastructure for blockchain node setup, validator monitoring, oracle services, and consulting. Crypto payments accepted in XRP, XLM, ETH, BTC, ATOM.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
@@ -20,623 +20,369 @@
     --mono: 'Space Mono', monospace;
     --sans: 'Syne', sans-serif;
   }
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--sans);
-    overflow-x: hidden;
-  }
-
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: 
-      linear-gradient(rgba(0,255,136,0.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,255,136,0.02) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    padding: 20px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: rgba(5,5,8,0.95);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--border);
-    z-index: 50;
-  }
-
-  .logo {
-    font-family: var(--mono);
-    font-size: 14px;
-    color: var(--accent);
-    letter-spacing: 2px;
-    text-decoration: none;
-  }
-
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); overflow-x: hidden; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(0,255,136,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,136,0.02) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; z-index: 0; }
+  nav { position: fixed; top: 0; left: 0; right: 0; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; background: rgba(5,5,8,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); z-index: 50; }
+  .logo { font-family: var(--mono); font-size: 14px; color: var(--accent); letter-spacing: 2px; text-decoration: none; display: flex; align-items: center; gap: 10px; }
   .logo span { color: var(--muted); }
-
-  nav a {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--muted);
-    text-decoration: none;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-left: 30px;
-    transition: color 0.2s;
-  }
-
+  nav a { font-family: var(--mono); font-size: 11px; color: var(--muted); text-decoration: none; letter-spacing: 2px; text-transform: uppercase; margin-left: 30px; transition: color 0.2s; }
   nav a:hover { color: var(--accent); }
-
-  .page-hero {
-    padding: 140px 40px 60px;
-    max-width: 1200px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 1;
-  }
-
-  .page-tag {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--accent);
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .page-tag::before {
-    content: '';
-    width: 30px;
-    height: 1px;
-    background: var(--accent);
-  }
-
-  h1 {
-    font-family: var(--sans);
-    font-size: clamp(48px, 7vw, 100px);
-    font-weight: 800;
-    line-height: 0.9;
-    letter-spacing: -3px;
-    margin-bottom: 30px;
-  }
-
+  .page-hero { padding: 140px 40px 60px; max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
+  .page-tag { font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+  .page-tag::before { content: ''; width: 30px; height: 1px; background: var(--accent); }
+  h1 { font-family: var(--sans); font-size: clamp(48px, 7vw, 90px); font-weight: 800; line-height: 0.9; letter-spacing: -3px; margin-bottom: 30px; }
   h1 span { color: var(--accent); }
-
-  .page-desc {
-    font-family: var(--mono);
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 2;
-    max-width: 700px;
-  }
-
-  section {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 60px 40px;
-    position: relative;
-    z-index: 1;
-  }
-
-  .section-label {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--accent);
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .section-label::before {
-    content: '';
-    width: 30px;
-    height: 1px;
-    background: var(--accent);
-  }
-
-  h2 {
-    font-family: var(--sans);
-    font-size: clamp(28px, 4vw, 48px);
-    font-weight: 800;
-    letter-spacing: -2px;
-    margin-bottom: 40px;
-  }
-
+  .page-desc { font-family: var(--mono); font-size: 13px; color: var(--muted); line-height: 2; max-width: 700px; }
+  section { max-width: 1200px; margin: 0 auto; padding: 60px 40px; position: relative; z-index: 1; }
+  .section-label { font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+  .section-label::before { content: ''; width: 30px; height: 1px; background: var(--accent); }
+  h2 { font-family: var(--sans); font-size: clamp(28px, 4vw, 48px); font-weight: 800; letter-spacing: -2px; margin-bottom: 40px; }
   hr { border: none; border-top: 1px solid var(--border); position: relative; z-index: 1; }
-
-  /* PRICING */
-  .pricing-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-    margin-bottom: 60px;
-  }
-
-  .price-card {
-    background: var(--panel);
-    padding: 40px 30px;
-    position: relative;
-  }
-
-  .price-card.featured {
-    background: rgba(0,255,136,0.03);
-  }
-
-  .price-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: var(--border);
-  }
-
-  .price-card.featured::before { background: var(--accent); }
-
-  .price-tag {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--accent);
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    margin-bottom: 15px;
-  }
-
-  .price-name {
-    font-family: var(--sans);
-    font-size: 22px;
-    font-weight: 800;
-    margin-bottom: 10px;
-  }
-
-  .price-amount {
-    font-family: var(--sans);
-    font-size: 48px;
-    font-weight: 800;
-    color: var(--accent);
-    line-height: 1;
-    margin-bottom: 5px;
-  }
-
-  .price-period {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--muted);
-    margin-bottom: 25px;
-  }
-
-  .price-features {
-    list-style: none;
-    margin-bottom: 30px;
-  }
-
-  .price-features li {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--muted);
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    gap: 10px;
-  }
-
-  .price-features li::before {
-    content: '✓';
-    color: var(--accent);
-    min-width: 15px;
-  }
-
-  .price-features li:last-child { border-bottom: none; }
-
-  .price-btn {
-    display: block;
-    text-align: center;
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    padding: 14px;
-    text-decoration: none;
-    transition: all 0.2s;
-    border: 1px solid var(--accent);
-    color: var(--accent);
-  }
-
-  .price-btn:hover { background: rgba(0,255,136,0.1); }
-  .price-btn.featured-btn { background: var(--accent); color: var(--bg); border-color: var(--accent); }
-  .price-btn.featured-btn:hover { background: #00ffaa; }
-
-  /* WALLET CARDS */
-  .wallet-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    margin-bottom: 40px;
-  }
-
-  .wallet-card {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    padding: 30px;
-    position: relative;
-    transition: border-color 0.3s;
-  }
-
+  .pricing-table { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
+  .pricing-table th { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 3px; text-transform: uppercase; padding: 15px 20px; text-align: left; background: var(--panel); border-bottom: 1px solid var(--border); }
+  .pricing-table td { font-family: var(--mono); font-size: 12px; color: var(--muted); padding: 18px 20px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  .pricing-table tr:hover td { background: rgba(0,255,136,0.02); }
+  .service-name { font-family: var(--sans); font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+  .service-sub { font-family: var(--mono); font-size: 10px; color: var(--muted); }
+  .price-cell { font-family: var(--sans); font-size: 22px; font-weight: 800; color: var(--accent); white-space: nowrap; }
+  .price-period { font-family: var(--mono); font-size: 9px; color: var(--muted); display: block; }
+  .order-btn { font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; padding: 10px 20px; background: none; border: 1px solid var(--accent); color: var(--accent); cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+  .order-btn:hover { background: rgba(0,255,136,0.1); }
+  .badge { display: inline-block; padding: 3px 10px; font-family: var(--mono); font-size: 9px; letter-spacing: 1px; text-transform: uppercase; }
+  .badge.green { background: rgba(0,255,136,0.1); color: var(--accent); border: 1px solid var(--accent); }
+  .badge.blue { background: rgba(0,136,255,0.1); color: var(--accent2); border: 1px solid var(--accent2); }
+  .badge.orange { background: rgba(255,102,0,0.1); color: var(--accent3); border: 1px solid var(--accent3); }
+  .process-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 60px; }
+  .process-step { background: var(--panel); padding: 30px; }
+  .step-num { font-family: var(--sans); font-size: 48px; font-weight: 800; color: rgba(0,255,136,0.1); line-height: 1; margin-bottom: 15px; }
+  .step-title { font-family: var(--sans); font-size: 16px; font-weight: 800; margin-bottom: 10px; }
+  .step-desc { font-family: var(--mono); font-size: 11px; color: var(--muted); line-height: 2; }
+  .wallet-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 40px; }
+  .wallet-card { background: var(--panel); border: 1px solid var(--border); padding: 25px; transition: border-color 0.3s; }
   .wallet-card:hover { border-color: var(--accent); }
-
-  .wallet-header {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 20px;
-  }
-
-  .wallet-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-  }
-
-  .wallet-name {
-    font-family: var(--sans);
-    font-size: 18px;
-    font-weight: 800;
-  }
-
-  .wallet-network {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--muted);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
-
-  .wallet-address {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--accent2);
-    word-break: break-all;
-    background: var(--bg);
-    padding: 12px;
-    border: 1px solid var(--border);
-    border-left: 2px solid var(--accent);
-    margin-bottom: 12px;
-    cursor: pointer;
-    transition: border-color 0.2s;
-  }
-
-  .wallet-address:hover { border-left-color: var(--accent2); }
-
-  .copy-btn {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    background: none;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    padding: 8px 16px;
-    cursor: pointer;
-    transition: all 0.2s;
-    width: 100%;
-  }
-
-  .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .copy-btn.copied { border-color: var(--accent); color: var(--accent); }
-
-  /* NOTICE */
-  .notice {
-    background: rgba(255,102,0,0.05);
-    border: 1px solid var(--accent3);
-    padding: 20px 25px;
-    margin-bottom: 40px;
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--muted);
-    line-height: 2;
-  }
-
+  .wallet-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+  .wallet-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .wallet-name { font-family: var(--sans); font-size: 16px; font-weight: 800; }
+  .wallet-network { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
+  .wallet-address { font-family: var(--mono); font-size: 10px; color: var(--accent2); word-break: break-all; background: var(--bg); padding: 10px; border: 1px solid var(--border); border-left: 2px solid var(--accent); margin-bottom: 10px; }
+  .copy-btn { font-family: var(--mono); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; background: none; border: 1px solid var(--border); color: var(--muted); padding: 7px 14px; cursor: pointer; transition: all 0.2s; width: 100%; }
+  .copy-btn:hover, .copy-btn.copied { border-color: var(--accent); color: var(--accent); }
+  .notice { background: rgba(255,102,0,0.05); border: 1px solid var(--accent3); padding: 20px 25px; margin-bottom: 40px; font-family: var(--mono); font-size: 11px; color: var(--muted); line-height: 2; }
   .notice strong { color: var(--accent3); }
-
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-    z-index: 1;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 1000; overflow-y: auto; padding: 40px 20px; }
+  .modal-box { max-width: 560px; margin: 0 auto; background: var(--panel); border: 1px solid var(--border); padding: 40px; position: relative; }
+  .modal-close { position: absolute; top: 20px; right: 20px; background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; }
+  input, textarea, select { width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 12px; font-family: var(--mono); font-size: 12px; outline: none; margin-bottom: 12px; transition: border-color 0.2s; }
+  input:focus, textarea:focus, select:focus { border-color: var(--accent); }
+  select option { background: var(--panel); }
+  .submit-btn { width: 100%; background: var(--accent); color: var(--bg); border: none; padding: 14px; font-family: var(--mono); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; font-weight: 700; }
+  .submit-btn:hover { background: #00ffaa; }
+  .faq-item { border-bottom: 1px solid var(--border); padding: 20px 0; }
+  .faq-q { font-family: var(--sans); font-size: 16px; font-weight: 800; margin-bottom: 10px; }
+  .faq-a { font-family: var(--mono); font-size: 11px; color: var(--muted); line-height: 2; }
+  footer { border-top: 1px solid var(--border); padding: 40px; display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1; flex-wrap: wrap; gap: 20px; }
   footer p { font-family: var(--mono); font-size: 11px; color: var(--muted); }
   footer strong { color: var(--accent); }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
-  <a href="/" class="logo">CAMPIONE<span>/</span>INFRA</a>
+  <a href="/" class="logo">
+    <svg width="28" height="28" viewBox="0 0 60 68" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="30,2 56,17 56,51 30,66 4,51 4,17" fill="none" stroke="#00ff88" stroke-width="2"/>
+      <polygon points="30,14 48,24 48,44 30,54 12,44 12,24" fill="none" stroke="#00ff88" stroke-width="1.5" opacity="0.5"/>
+      <polygon points="30,24 42,31 30,38 18,31" fill="#00ff88" opacity="0.9"/>
+      <line x1="30" y1="2" x2="30" y2="14" stroke="#0088ff" stroke-width="2"/>
+      <line x1="30" y1="54" x2="30" y2="66" stroke="#0088ff" stroke-width="2"/>
+      <circle cx="4" cy="34" r="3" fill="#0088ff"/>
+      <circle cx="56" cy="34" r="3" fill="#0088ff"/>
+    </svg>
+    CAMPIONE<span>/</span>INFRA
+  </a>
   <div>
     <a href="/">Home</a>
     <a href="/#services">Services</a>
     <a href="/mission.html">Mission</a>
     <a href="/compliance.html">Compliance</a>
-    <a href="/payments.html" style="color: var(--accent);">Payments</a>
+    <a href="/sla.html">SLA</a>
+    <a href="/payments.html" style="color:var(--accent);">Payments</a>
     <a href="/#contact">Contact</a>
   </div>
 </nav>
 
-<!-- HERO -->
 <div class="page-hero">
-  <div class="page-tag">Payment Information</div>
-  <h1>PAY WITH<br><span>CRYPTO.</span></h1>
-  <p class="page-desc">
-    Campione Infrastructure accepts cryptocurrency payments for all services. 
-    Fast, borderless, and fully transparent. Select your preferred network and 
-    send payment directly to our verified wallet addresses below.
-  </p>
+  <div class="page-tag">Pricing & Payments</div>
+  <h1>SIMPLE.<br><span>TRANSPARENT.</span></h1>
+  <p class="page-desc">All services are priced clearly with no hidden fees. We accept cryptocurrency for all transactions. Place an order below and we'll contact you within 4 hours.</p>
 </div>
 
 <hr>
 
-<!-- PRICING -->
-<section>
+<section id="pricing">
   <div class="section-label">Service Pricing</div>
-  <h2>Our Rates</h2>
-  <div class="pricing-grid">
-    <div class="price-card">
-      <div class="price-tag">API Access</div>
-      <div class="price-name">Horizon API</div>
-      <div class="price-amount">$99</div>
-      <div class="price-period">per month</div>
-      <ul class="price-features">
-        <li>Dedicated Stellar Horizon endpoint</li>
-        <li>99.9% uptime SLA</li>
-        <li>Unlimited API calls</li>
-        <li>Email support</li>
-      </ul>
-      <a href="/cdn-cgi/l/email-protection#680509101a0d1b1d041c1b5c1d280f05090104460b0705571b1d0a020d0b1c5520071a0112070648293821482106191d011a11" class="price-btn">Get Started</a>
+  <h2>What We Charge</h2>
+  <table class="pricing-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Service</th>
+        <th>Price</th>
+        <th>Delivery</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="color:var(--muted);">01</td>
+        <td><div class="service-name">Node Infrastructure Setup</div><div class="service-sub">XRPL, Stellar, Chainlink, Bitcoin, Cosmos — full deployment</div></td>
+        <td><div class="price-cell">$999<span class="price-period">one time</span></div></td>
+        <td style="color:var(--muted);">24–48 hrs</td>
+        <td><span class="badge green">Available</span></td>
+        <td><button class="order-btn" onclick="openOrder('Node Infrastructure Setup','$999 one-time')">Order Now</button></td>
+      </tr>
+      <tr>
+        <td style="color:var(--muted);">02</td>
+        <td><div class="service-name">Validator Monitoring</div><div class="service-sub">24/7 uptime monitoring, instant alerts, monthly reports</div></td>
+        <td><div class="price-cell">$199<span class="price-period">per month</span></div></td>
+        <td style="color:var(--muted);">Same day</td>
+        <td><span class="badge green">Available</span></td>
+        <td><button class="order-btn" onclick="openOrder('Validator Monitoring','$199/month')">Order Now</button></td>
+      </tr>
+      <tr>
+        <td style="color:var(--muted);">03</td>
+        <td><div class="service-name">Stellar Horizon API</div><div class="service-sub">Dedicated endpoint, no rate limits, 99.9% uptime SLA</div></td>
+        <td><div class="price-cell">$99<span class="price-period">per month</span></div></td>
+        <td style="color:var(--muted);">1 hour</td>
+        <td><span class="badge green">Available</span></td>
+        <td><button class="order-btn" onclick="openOrder('Stellar Horizon API','$99/month')">Order Now</button></td>
+      </tr>
+      <tr>
+        <td style="color:var(--muted);">04</td>
+        <td><div class="service-name">Lightning Payment Rails</div><div class="service-sub">Channel setup, routing, liquidity management</div></td>
+        <td><div class="price-cell">$149<span class="price-period">per month</span></div></td>
+        <td style="color:var(--muted);">Same day</td>
+        <td><span class="badge blue">Coming Soon</span></td>
+        <td><button class="order-btn" onclick="openOrder('Lightning Payment Rails','$149/month')">Pre-Order</button></td>
+      </tr>
+      <tr>
+        <td style="color:var(--muted);">05</td>
+        <td><div class="service-name">Staking as a Service</div><div class="service-sub">ATOM, XLM, DOT, HBAR — non-custodial, up to 15% APY</div></td>
+        <td><div class="price-cell" style="font-size:16px;">5–10%<span class="price-period">commission on rewards</span></div></td>
+        <td style="color:var(--muted);">Same day</td>
+        <td><span class="badge green">Available</span></td>
+        <td><button class="order-btn" onclick="openOrder('Staking as a Service','5-10% commission')">Start Now</button></td>
+      </tr>
+      <tr>
+        <td style="color:var(--muted);">06</td>
+        <td><div class="service-name">Chainlink Oracle Services</div><div class="service-sub">Custom data feeds, job config, LINK token management</div></td>
+        <td><div class="price-cell" style="font-size:16px;">Custom<span class="price-period">contact us</span></div></td>
+        <td style="color:var(--muted);">48–72 hrs</td>
+        <td><span class="badge green">Available</span></td>
+        <td><button class="order-btn" onclick="openOrder('Chainlink Oracle Services','Custom pricing')">Inquire</button></td>
+      </tr>
+      <tr>
+        <td style="color:var(--muted);">07</td>
+        <td><div class="service-name">DEX Liquidity Services</div><div class="service-sub">Stellar DEX market making and liquidity pool management</div></td>
+        <td><div class="price-cell" style="font-size:16px;">Custom<span class="price-period">% of yield</span></div></td>
+        <td style="color:var(--muted);">48 hrs</td>
+        <td><span class="badge green">Available</span></td>
+        <td><button class="order-btn" onclick="openOrder('DEX Liquidity Services','Custom - % of yield')">Inquire</button></td>
+      </tr>
+      <tr>
+        <td style="color:var(--muted);">08</td>
+        <td><div class="service-name">Infrastructure Consulting</div><div class="service-sub">CLARITY Act, ISO 20022, architecture review, security audit</div></td>
+        <td><div class="price-cell">$250<span class="price-period">per hour</span></div></td>
+        <td style="color:var(--muted);">48 hrs</td>
+        <td><span class="badge green">Available</span></td>
+        <td><button class="order-btn" onclick="openOrder('Infrastructure Consulting','$250/hour')">Book Now</button></td>
+      </tr>
+    </tbody>
+  </table>
+  <div style="background:rgba(0,136,255,0.05); border:1px solid var(--accent2); padding:20px 25px; font-family:var(--mono); font-size:11px; color:var(--muted); line-height:2;">
+    <strong style="color:var(--accent2);">Annual Billing:</strong> Pay 12 months upfront and receive <strong style="color:var(--accent);">20% off</strong> any monthly service. Contact us to arrange.
+  </div>
+</section>
+
+<hr>
+
+<section id="how-it-works">
+  <div class="section-label">The Process</div>
+  <h2>How It Works</h2>
+  <div class="process-grid">
+    <div class="process-step">
+      <div class="step-num">01</div>
+      <div class="step-title">Place Your Order</div>
+      <div class="step-desc">Click any Order button. Fill out the short form with your name, email, and requirements. Takes under 2 minutes.</div>
     </div>
-    <div class="price-card featured">
-      <div class="price-tag">⭐ Most Popular</div>
-      <div class="price-name">Node Setup</div>
-      <div class="price-amount">$999</div>
-      <div class="price-period">one time</div>
-      <ul class="price-features">
-        <li>Full node deployment</li>
-        <li>XRPL, Stellar, Chainlink, or Bitcoin</li>
-        <li>Domain + TOML verification</li>
-        <li>Security hardening</li>
-        <li>30 days support</li>
-      </ul>
-      <a href="/cdn-cgi/l/email-protection#aac7cbd2d8cfd9dfc6ded99edfeacdc7cbc3c684c9c5c795d9dfc8c0cfc9de97e4c5cecf8af9cfdedfda8ae3c4dbdfc3d8d3" class="price-btn featured-btn">Get Started</a>
+    <div class="process-step">
+      <div class="step-num">02</div>
+      <div class="step-title">We Contact You</div>
+      <div class="step-desc">Kenneth responds within 4 hours to confirm details, answer questions, and send payment instructions.</div>
     </div>
-    <div class="price-card">
-      <div class="price-tag">Monitoring</div>
-      <div class="price-name">Validator Monitoring</div>
-      <div class="price-amount">$199</div>
-      <div class="price-period">per month</div>
-      <ul class="price-features">
-        <li>24/7 uptime monitoring</li>
-        <li>Instant alerts</li>
-        <li>Monthly reports</li>
-        <li>Incident response</li>
-      </ul>
-      <a href="/cdn-cgi/l/email-protection#8ae7ebf2f8eff9ffe6fef9beffcaede7ebe3e6a4e9e5e7b5f9ffe8e0efe9feb7c7e5e4e3fee5f8e3e4edaac3e4fbffe3f8f3" class="price-btn">Get Started</a>
+    <div class="process-step">
+      <div class="step-num">03</div>
+      <div class="step-title">Send Payment</div>
+      <div class="step-desc">Pay via crypto using the verified wallet addresses below. Send confirmation to kenneth@campioneinfrastructure.com.</div>
     </div>
-    <div class="price-card">
-      <div class="price-tag">Consulting</div>
-      <div class="price-name">Infrastructure Consulting</div>
-      <div class="price-amount">$250</div>
-      <div class="price-period">per hour</div>
-      <ul class="price-features">
-        <li>CLARITY Act positioning</li>
-        <li>ISO 20022 compliance guidance</li>
-        <li>Architecture review</li>
-        <li>Security audit</li>
-      </ul>
-      <a href="/cdn-cgi/l/email-protection#fd909c858f988e8891898ec988bd9a909c9491d39e9290c28e889f97989e89c0be92938e88918994939addb4938c88948f84" class="price-btn">Get Started</a>
+    <div class="process-step">
+      <div class="step-num">04</div>
+      <div class="step-title">We Deliver</div>
+      <div class="step-desc">Service deployed within stated timeframe. You receive full documentation, credentials, and ongoing support.</div>
     </div>
   </div>
 </section>
 
 <hr>
 
-<!-- PAYMENT ADDRESSES -->
-<section>
+<section id="crypto-addresses">
   <div class="section-label">Crypto Payment Addresses</div>
   <h2>Send Payment</h2>
-
   <div class="notice">
-    <strong>⚠️ Important:</strong> Always verify the address before sending. Double-check the first and last 6 characters. 
-    Send only the matching cryptocurrency to each address. Contact us at <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="731e120b011600061f0700470633141e121a1f5d101c1e">[email&#160;protected]</a> before sending large payments.
+    <strong>⚠️ Important:</strong> Always verify the wallet address before sending. Double-check the first and last 6 characters. Send only the matching cryptocurrency to each address. Email us before sending large payments.
   </div>
-
   <div class="wallet-grid">
-
-    <!-- XRP -->
     <div class="wallet-card">
       <div class="wallet-header">
-        <div class="wallet-icon" style="background: #23292F;">⬡</div>
-        <div>
-          <div class="wallet-name">XRP</div>
-          <div class="wallet-network">XRP Ledger · Mainnet</div>
-        </div>
+        <div class="wallet-icon" style="background:#23292F;">⬡</div>
+        <div><div class="wallet-name">XRP</div><div class="wallet-network">XRP Ledger · Mainnet</div></div>
       </div>
-      <div class="wallet-address" onclick="copyAddress(this, 'rw2ciyaNshpHe7bCHo4bRWq6pqqynnWKQg')">
-        rw2ciyaNshpHe7bCHo4bRWq6pqqynnWKQg
-      </div>
-      <button class="copy-btn" onclick="copyAddress(null, 'rw2ciyaNshpHe7bCHo4bRWq6pqqynnWKQg', this)">
-        Copy Address
-      </button>
+      <div class="wallet-address">rw2ciyaNshpHe7bCHo4bRWq6pqqynnWKQg</div>
+      <button class="copy-btn" onclick="copyAddr('rw2ciyaNshpHe7bCHo4bRWq6pqqynnWKQg',this)">Copy Address</button>
     </div>
-
-    <!-- XLM -->
     <div class="wallet-card">
       <div class="wallet-header">
-        <div class="wallet-icon" style="background: #0A0A0A;">✦</div>
-        <div>
-          <div class="wallet-name">XLM</div>
-          <div class="wallet-network">Stellar Network · Mainnet</div>
-        </div>
+        <div class="wallet-icon" style="background:#0A0A0A;">✦</div>
+        <div><div class="wallet-name">XLM</div><div class="wallet-network">Stellar Network · Mainnet</div></div>
       </div>
-      <div class="wallet-address" onclick="copyAddress(this, 'GB2TTAQHMUSVTBN6GAHNUY6QLYAWU6ZCTUQDMEI7L7L3HZBOYNLXEHIP')">
-        GB2TTAQHMUSVTBN6GAHNUY6QLYAWU6ZCTUQDMEI7L7L3HZBOYNLXEHIP
-      </div>
-      <button class="copy-btn" onclick="copyAddress(null, 'GB2TTAQHMUSVTBN6GAHNUY6QLYAWU6ZCTUQDMEI7L7L3HZBOYNLXEHIP', this)">
-        Copy Address
-      </button>
+      <div class="wallet-address">GB2TTAQHMUSVTBN6GAHNUY6QLYAWU6ZCTUQDMEI7L7L3HZBOYNLXEHIP</div>
+      <button class="copy-btn" onclick="copyAddr('GB2TTAQHMUSVTBN6GAHNUY6QLYAWU6ZCTUQDMEI7L7L3HZBOYNLXEHIP',this)">Copy Address</button>
     </div>
-
-    <!-- ETH -->
     <div class="wallet-card">
       <div class="wallet-header">
-        <div class="wallet-icon" style="background: #627EEA;">Ξ</div>
-        <div>
-          <div class="wallet-name">ETH / LINK / GRT</div>
-          <div class="wallet-network">Ethereum Network · Mainnet</div>
-        </div>
+        <div class="wallet-icon" style="background:#627EEA; color:#fff;">Ξ</div>
+        <div><div class="wallet-name">ETH / LINK / GRT</div><div class="wallet-network">Ethereum · ERC-20</div></div>
       </div>
-      <div class="wallet-address" onclick="copyAddress(this, '0x54711b6C956b0821504bF91653fDfdFE914F4Bb1')">
-        0x54711b6C956b0821504bF91653fDfdFE914F4Bb1
-      </div>
-      <button class="copy-btn" onclick="copyAddress(null, '0x54711b6C956b0821504bF91653fDfdFE914F4Bb1', this)">
-        Copy Address
-      </button>
+      <div class="wallet-address">0x54711b6C956b0821504bF91653fDfdFE914F4Bb1</div>
+      <button class="copy-btn" onclick="copyAddr('0x54711b6C956b0821504bF91653fDfdFE914F4Bb1',this)">Copy Address</button>
     </div>
-
-    <!-- BTC -->
     <div class="wallet-card">
       <div class="wallet-header">
-        <div class="wallet-icon" style="background: #F7931A;">₿</div>
-        <div>
-          <div class="wallet-name">BTC</div>
-          <div class="wallet-network">Bitcoin Network · Mainnet</div>
-        </div>
+        <div class="wallet-icon" style="background:#F7931A; color:#fff;">₿</div>
+        <div><div class="wallet-name">BTC</div><div class="wallet-network">Bitcoin · Mainnet</div></div>
       </div>
-      <div class="wallet-address" onclick="copyAddress(this, '3MVahNQDZxRV8u3U8839G3LLphuGu1ga1D')">
-        3MVahNQDZxRV8u3U8839G3LLphuGu1ga1D
-      </div>
-      <button class="copy-btn" onclick="copyAddress(null, '3MVahNQDZxRV8u3U8839G3LLphuGu1ga1D', this)">
-        Copy Address
-      </button>
+      <div class="wallet-address">3MVahNQDZxRV8u3U8839G3LLphuGu1ga1D</div>
+      <button class="copy-btn" onclick="copyAddr('3MVahNQDZxRV8u3U8839G3LLphuGu1ga1D',this)">Copy Address</button>
     </div>
-
-    <!-- ATOM -->
     <div class="wallet-card">
       <div class="wallet-header">
-        <div class="wallet-icon" style="background: #2E3148;">⚛️</div>
-        <div>
-          <div class="wallet-name">ATOM</div>
-          <div class="wallet-network">Cosmos Hub · Mainnet</div>
-        </div>
+        <div class="wallet-icon" style="background:#2E3148;">⚛️</div>
+        <div><div class="wallet-name">ATOM</div><div class="wallet-network">Cosmos Hub · Mainnet</div></div>
       </div>
-      <div class="wallet-address" onclick="copyAddress(this, 'cosmos1ejtual9qhrumxsc7rfhdfkjnrf2slggwraczph')">
-        cosmos1ejtual9qhrumxsc7rfhdfkjnrf2slggwraczph
-      </div>
-      <button class="copy-btn" onclick="copyAddress(null, 'cosmos1ejtual9qhrumxsc7rfhdfkjnrf2slggwraczph', this)">
-        Copy Address
-      </button>
+      <div class="wallet-address">cosmos1ejtual9qhrumxsc7rfhdfkjnrf2slggwraczph</div>
+      <button class="copy-btn" onclick="copyAddr('cosmos1ejtual9qhrumxsc7rfhdfkjnrf2slggwraczph',this)">Copy Address</button>
     </div>
-
-    <!-- FIAT -->
-    <div class="wallet-card" style="border-color: var(--accent3);">
+    <div class="wallet-card" style="border-color:var(--accent3);">
       <div class="wallet-header">
-        <div class="wallet-icon" style="background: #1a1a2e; font-size: 16px;">💳</div>
-        <div>
-          <div class="wallet-name">USD / Fiat</div>
-          <div class="wallet-network">Traditional Payment</div>
-        </div>
+        <div class="wallet-icon" style="background:#1a1a2e; font-size:16px;">💳</div>
+        <div><div class="wallet-name">USD / Fiat</div><div class="wallet-network">Wire · ACH · Invoice</div></div>
       </div>
-      <div style="font-family: var(--mono); font-size: 11px; color: var(--muted); line-height: 2; margin-bottom: 12px;">
-        For USD payments, wire transfers, or invoicing contact us directly. We accept ACH, wire transfer, and major credit cards via invoice.
-      </div>
-      <a href="/cdn-cgi/l/email-protection#c5a8a4bdb7a0b6b0a9b1b6f1b085a2a8a4aca9eba6aaa8fab6b0a7afa0a6b1f895a4bca8a0abb1e58cabb4b0acb7bc" class="copy-btn" style="display: block; text-align: center; text-decoration: none; border-color: var(--accent3); color: var(--accent3);">
-        Request Invoice
-      </a>
+      <div style="font-family:var(--mono); font-size:11px; color:var(--muted); line-height:2; margin-bottom:12px;">ACH, wire transfer, and invoice available for enterprise clients.</div>
+      <a href="mailto:kenneth@campioneinfrastructure.com?subject=Invoice Request" class="copy-btn" style="display:block; text-align:center; text-decoration:none; border-color:var(--accent3); color:var(--accent3);">Request Invoice</a>
     </div>
-
   </div>
 </section>
 
 <hr>
 
-<!-- FAQ -->
-<section>
-  <div class="section-label">Payment FAQ</div>
-  <h2>Common Questions</h2>
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px;">
-    <div style="border: 1px solid var(--border); padding: 30px;">
-      <div style="font-family: var(--sans); font-size: 16px; font-weight: 800; margin-bottom: 12px;">How do I get started?</div>
-      <div style="font-family: var(--mono); font-size: 11px; color: var(--muted); line-height: 2;">Email us at <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="690408111b0c1a1c051d1a5d1c290e04080005470a0604">[email&#160;protected]</a> with your project details. We'll respond within 24 hours with a proposal and payment instructions.</div>
+<section id="faq">
+  <div class="section-label">Common Questions</div>
+  <h2>FAQ</h2>
+  <div style="max-width:800px;">
+    <div class="faq-item">
+      <div class="faq-q">How quickly will I hear back after ordering?</div>
+      <div class="faq-a">Kenneth responds to all orders within 4 hours. For urgent requests email kenneth@campioneinfrastructure.com with [URGENT] in the subject line.</div>
     </div>
-    <div style="border: 1px solid var(--border); padding: 30px;">
-      <div style="font-family: var(--sans); font-size: 16px; font-weight: 800; margin-bottom: 12px;">What is your refund policy?</div>
-      <div style="font-family: var(--mono); font-size: 11px; color: var(--muted); line-height: 2;">Monthly services are billed in advance. Node setup fees are non-refundable once deployment begins. Contact us with any concerns.</div>
+    <div class="faq-item">
+      <div class="faq-q">Do I need my own server for node setup?</div>
+      <div class="faq-a">Not necessarily. We can provision a Vultr VPS as part of the setup fee, or deploy onto your existing infrastructure. We'll discuss the best option for your needs during onboarding.</div>
     </div>
-    <div style="border: 1px solid var(--border); padding: 30px;">
-      <div style="font-family: var(--sans); font-size: 16px; font-weight: 800; margin-bottom: 12px;">Do you offer discounts?</div>
-      <div style="font-family: var(--mono); font-size: 11px; color: var(--muted); line-height: 2;">Yes — annual prepayment receives 20% discount. Bundle pricing available for multiple services. Contact us to discuss.</div>
+    <div class="faq-item">
+      <div class="faq-q">Is staking custodial?</div>
+      <div class="faq-a">No — all staking is non-custodial. You delegate from your own wallet to our validator. We never hold your private keys. You can undelegate at any time.</div>
     </div>
-    <div style="border: 1px solid var(--border); padding: 30px;">
-      <div style="font-family: var(--sans); font-size: 16px; font-weight: 800; margin-bottom: 12px;">How fast is delivery?</div>
-      <div style="font-family: var(--mono); font-size: 11px; color: var(--muted); line-height: 2;">Node setup: 24-48 hours. API access: same day. Consulting: scheduled within 48 hours of payment confirmation.</div>
+    <div class="faq-item">
+      <div class="faq-q">What is the Stellar Horizon API endpoint?</div>
+      <div class="faq-a">Our Horizon API runs at 45.77.113.67:8000 on Stellar mainnet v25.0.0. Paid clients receive a dedicated API key with unlimited access and no rate limits.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">What is your refund policy?</div>
+      <div class="faq-a">Monthly services: cancel with 30 days notice. One-time setup fees are non-refundable once deployment begins. Consulting is non-refundable once the session is delivered.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Are you ISO 20022 compliant?</div>
+      <div class="faq-a">Yes — all networks we operate (XRPL, Stellar, Chainlink) are ISO 20022 registered or aligned. We are also positioned for CLARITY Act compliance. See our compliance page for full documentation.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Do you offer enterprise contracts?</div>
+      <div class="faq-a">Yes. For banks, fintechs, and institutional clients we offer custom SLA terms, dedicated infrastructure, and formal contracts. Contact us to discuss your requirements.</div>
     </div>
   </div>
 </section>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-function copyAddress(el, address, btn) {
-  navigator.clipboard.writeText(address).then(() => {
-    if (btn) {
-      btn.textContent = '✓ Copied!';
-      btn.classList.add('copied');
-      setTimeout(() => {
-        btn.textContent = 'Copy Address';
-        btn.classList.remove('copied');
-      }, 2000);
-    }
-  });
+<!-- ORDER MODAL -->
+<div class="modal-overlay" id="orderModal" onclick="closeOrder()">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeOrder()">✕</button>
+    <div style="font-family:var(--mono); font-size:10px; color:var(--accent); letter-spacing:4px; text-transform:uppercase; margin-bottom:10px;">Place Order</div>
+    <h2 id="modal-title" style="font-size:24px; margin-bottom:5px;"></h2>
+    <div id="modal-price" style="font-family:var(--mono); font-size:13px; color:var(--accent); margin-bottom:25px;"></div>
+    <input type="text" id="o-name" placeholder="Full name *">
+    <input type="email" id="o-email" placeholder="Email address *">
+    <input type="text" id="o-company" placeholder="Company name (optional)">
+    <select id="o-payment">
+      <option value="">Preferred payment method...</option>
+      <option>XRP</option><option>XLM (Stellar)</option><option>ETH</option>
+      <option>Bitcoin (BTC)</option><option>ATOM</option><option>USD / Invoice</option>
+    </select>
+    <textarea id="o-details" placeholder="Tell us about your requirements and any questions..." rows="4"></textarea>
+    <button class="submit-btn" onclick="submitOrder()">Submit Order Request</button>
+    <div id="order-success" style="display:none; font-family:var(--mono); font-size:11px; color:var(--accent); text-align:center; margin-top:15px; padding:15px; border:1px solid var(--accent);">✓ Order received! Kenneth will contact you within 4 hours.</div>
+  </div>
+</div>
+
+<script>
+let curService='', curPrice='';
+function openOrder(s,p){ curService=s; curPrice=p; document.getElementById('modal-title').textContent=s; document.getElementById('modal-price').textContent=p; document.getElementById('orderModal').style.display='block'; document.getElementById('order-success').style.display='none'; document.body.style.overflow='hidden'; }
+function closeOrder(){ document.getElementById('orderModal').style.display='none'; document.body.style.overflow=''; }
+async function submitOrder(){
+  const n=document.getElementById('o-name').value, e=document.getElementById('o-email').value, c=document.getElementById('o-company').value, p=document.getElementById('o-payment').value, d=document.getElementById('o-details').value;
+  if(!n||!e){alert('Please enter your name and email.');return;}
+  try{
+    const r=await fetch('https://formspree.io/f/mlgojzyj',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({type:'service_order',service:curService,price:curPrice,name:n,email:e,company:c,payment:p,details:d})});
+    if(r.ok){document.getElementById('order-success').style.display='block';['o-name','o-email','o-company','o-details'].forEach(i=>document.getElementById(i).value='');}
+    else throw new Error();
+  }catch{window.location.href=`mailto:kenneth@campioneinfrastructure.com?subject=Order: ${curService}&body=Name: ${n}%0AEmail: ${e}%0ADetails: ${d}`;}
 }
+function copyAddr(a,b){navigator.clipboard.writeText(a).then(()=>{b.textContent='✓ Copied!';b.classList.add('copied');setTimeout(()=>{b.textContent='Copy Address';b.classList.remove('copied');},2000);});}
 </script>
 
-<!-- FOOTER -->
 <footer>
   <div>
     <p>© 2024–2026 <strong>MaxResults4U Business Solutions</strong> — All Rights Reserved</p>
-    <p style="margin-top: 5px;"><span style="color: var(--accent);">Campione Infrastructure</span> is a division of MaxResults4U Business Solutions · Land O Lakes, FL · USA</p>
+    <p style="margin-top:5px;"><span style="color:var(--accent);">Campione Infrastructure</span> · Land O Lakes, FL · USA · kenneth@campioneinfrastructure.com</p>
   </div>
-  <div style="display: flex; gap: 20px; flex-wrap: wrap;">
-    <a href="/" style="font-family: var(--mono); font-size: 10px; color: var(--muted); text-decoration: none; letter-spacing: 2px; text-transform: uppercase;">Home</a>
-    <a href="compliance.html" style="font-family: var(--mono); font-size: 10px; color: var(--muted); text-decoration: none; letter-spacing: 2px; text-transform: uppercase;">Compliance</a>
-    <a href="sla.html" style="font-family: var(--mono); font-size: 10px; color: var(--muted); text-decoration: none; letter-spacing: 2px; text-transform: uppercase;">SLA</a>
-    <a href="mission.html" style="font-family: var(--mono); font-size: 10px; color: var(--muted); text-decoration: none; letter-spacing: 2px; text-transform: uppercase;">Mission</a>
-    <a href="/#contact" style="font-family: var(--mono); font-size: 10px; color: var(--muted); text-decoration: none; letter-spacing: 2px; text-transform: uppercase;">Contact</a>
+  <div style="display:flex; gap:20px; flex-wrap:wrap;">
+    <a href="/" style="font-family:var(--mono); font-size:10px; color:var(--muted); text-decoration:none; letter-spacing:2px; text-transform:uppercase;">Home</a>
+    <a href="/compliance.html" style="font-family:var(--mono); font-size:10px; color:var(--muted); text-decoration:none; letter-spacing:2px; text-transform:uppercase;">Compliance</a>
+    <a href="/sla.html" style="font-family:var(--mono); font-size:10px; color:var(--muted); text-decoration:none; letter-spacing:2px; text-transform:uppercase;">SLA</a>
+    <a href="/mission.html" style="font-family:var(--mono); font-size:10px; color:var(--muted); text-decoration:none; letter-spacing:2px; text-transform:uppercase;">Mission</a>
+    <a href="/#contact" style="font-family:var(--mono); font-size:10px; color:var(--muted); text-decoration:none; letter-spacing:2px; text-transform:uppercase;">Contact</a>
   </div>
 </footer>
+
+</body>
+</html>
