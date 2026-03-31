@@ -1,0 +1,24 @@
+# /etc/systemd/system/horizon-keys.service
+# Campione Infrastructure — Horizon API Key Manager
+
+[Unit]
+Description=Campione Horizon API Key Manager
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/horizon-api
+
+# ── Set your real values here ──
+Environment=STRIPE_SECRET_KEY=sk_live_YOUR_KEY_HERE
+Environment=STRIPE_WEBHOOK_SECRET=whsec_YOUR_WEBHOOK_SECRET_HERE
+Environment=STRIPE_PRICE_ID=price_YOUR_PRICE_ID_HERE
+Environment=ADMIN_TOKEN=CHANGE_THIS_TO_A_STRONG_SECRET
+
+ExecStart=/usr/bin/python3 /root/horizon-api/app.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
