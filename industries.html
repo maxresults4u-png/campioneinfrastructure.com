@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Industries We Serve — Campione Infrastructure</title>
+<meta name="description" content="Campione Infrastructure serves community banks, credit unions, fintech startups, payment processors, and hedge funds with US-based, ISO 20022 compliant blockchain infrastructure.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050508;
+    --panel: #0d0d15;
+    --border: #1a1a2e;
+    --accent: #00ff88;
+    --accent2: #0088ff;
+    --accent3: #ff6600;
+    --text: #e8e8f0;
+    --muted: #555570;
+    --mono: 'Space Mono', monospace;
+    --sans: 'Syne', sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); overflow-x: hidden; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(0,255,136,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,136,0.02) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; z-index: 0; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; background: rgba(5,5,8,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); z-index: 50; }
+  .logo { font-family: var(--mono); font-size: 14px; color: var(--accent); letter-spacing: 2px; text-decoration: none; display: flex; align-items: center; gap: 10px; }
+  .logo span { color: var(--muted); }
+  nav a { font-family: var(--mono); font-size: 11px; color: var(--muted); text-decoration: none; letter-spacing: 2px; text-transform: uppercase; margin-left: 30px; transition: color 0.2s; }
+  nav a:hover, nav a.active { color: var(--accent); }
+
+  .page-hero { padding: 140px 40px 60px; max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
+  .page-tag { font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+  .page-tag::before { content: ''; width: 30px; height: 1px; background: var(--accent); }
+  h1 { font-family: var(--sans); font-size: clamp(48px, 7vw, 90px); font-weight: 800; line-height: 0.9; letter-spacing: -3px; margin-bottom: 30px; }
+  h1 span { color: var(--accent); }
+  .page-desc { font-family: var(--mono); font-size: 13px; color: var(--muted); line-height: 2; max-width: 700px; }
+
+  section { max-width: 1200px; margin: 0 auto; padding: 60px 40px; position: relative; z-index: 1; }
+  .section-label { font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+  .section-label::before { content: ''; width: 30px; height: 1px; background: var(--accent); }
+  h2 { font-family: var(--sans); font-size: clamp(28px, 4vw, 48px); font-weight: 800; letter-spacing: -2px; margin-bottom: 40px; }
+  hr { border: none; border-top: 1px solid var(--border); position: relative; z-index: 1; }
+
+  /* Why US-Based Banner */
+  .us-banner { background: rgba(0,255,136,0.03); border: 1px solid rgba(0,255,136,0.2); padding: 40px; margin-bottom: 0; position: relative; overflow: hidden; }
+  .us-banner::before { content: 'USA'; position: absolute; right: -20px; top: -20px; font-family: var(--sans); font-size: 120px; font-weight: 800; color: rgba(0,255,136,0.04); line-height: 1; pointer-events: none; }
+  .us-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; }
+  .us-point { }
+  .us-point-title { font-family: var(--sans); font-size: 15px; font-weight: 800; color: var(--accent); margin-bottom: 8px; }
+  .us-point-desc { font-family: var(--mono); font-size: 11px; color: var(--muted); line-height: 2; }
+
+  /* Industry Cards */
+  .industry-card { background: var(--panel); border: 1px solid var(--border); padding: 40px; margin-bottom: 2px; transition: border-color 0.3s; position: relative; overflow: hidden; }
+  .industry-card:hover { border-color: var(--accent); }
+  .industry-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--accent); opacity: 0; transition: opacity 0.3s; }
+  .industry-card:hover::before { opacity: 1; }
+  .industry-header { display: flex; align-items: flex-start; gap: 30px; margin-bottom: 30px; flex-wrap: wrap; }
+  .industry-icon { width: 60px; height: 60px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; background: var(--bg); }
+  .industry-title-block { flex: 1; }
+  .industry-tag { font-family: var(--mono); font-size: 9px; color: var(--accent); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; }
+  .industry-title { font-family: var(--sans); font-size: clamp(22px, 3vw, 32px); font-weight: 800; letter-spacing: -1px; margin-bottom: 8px; }
+  .industry-sub { font-family: var(--mono); font-size: 12px; color: var(--muted); line-height: 1.8; }
+  .industry-body { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+  @media(max-width:768px){ .industry-body { grid-template-columns: 1fr; } }
+  .pain-points h4, .our-solution h4 { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 15px; }
+  .pain-list, .solution-list { list-style: none; }
+  .pain-list li { font-family: var(--mono); font-size: 11px; color: var(--muted); padding: 8px 0; border-bottom: 1px solid var(--border); line-height: 1.8; display: flex; gap: 10px; }
+  .pain-list li::before { content: '—'; color: var(--accent3); flex-shrink: 0; }
+  .solution-list li { font-family: var(--mono); font-size: 11px; color: var(--muted); padding: 8px 0; border-bottom: 1px solid var(--border); line-height: 1.8; display: flex; gap: 10px; }
+  .solution-list li::before { content: '✓'; color: var(--accent); flex-shrink: 0; }
+  .industry-footer { margin-top: 30px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .services-used { font-family: var(--mono); font-size: 10px; color: var(--muted); }
+  .services-used span { color: var(--accent2); margin-left: 8px; }
+  .cta-btn { font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; padding: 10px 24px; background: none; border: 1px solid var(--accent); color: var(--accent); cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; }
+  .cta-btn:hover { background: rgba(0,255,136,0.1); }
+
+  /* Positioning statement */
+  .position-block { background: var(--panel); border: 1px solid var(--border); padding: 50px; text-align: center; }
+  .position-block blockquote { font-family: var(--sans); font-size: clamp(20px, 3vw, 32px); font-weight: 800; letter-spacing: -1px; line-height: 1.3; color: var(--text); margin-bottom: 20px; }
+  .position-block blockquote span { color: var(--accent); }
+  .position-block cite { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+
+  /* Differentiators */
+  .diff-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+  .diff-item { background: var(--panel); padding: 30px; }
+  .diff-num { font-family: var(--sans); font-size: 48px; font-weight: 800; color: rgba(0,255,136,0.1); line-height: 1; margin-bottom: 15px; }
+  .diff-title { font-family: var(--sans); font-size: 16px; font-weight: 800; margin-bottom: 10px; }
+  .diff-desc { font-family: var(--mono); font-size: 11px; color: var(--muted); line-height: 2; }
+
+  /* CTA Section */
+  .cta-section { background: rgba(0,136,255,0.03); border: 1px solid rgba(0,136,255,0.2); padding: 60px 40px; text-align: center; }
+  .cta-section h2 { margin-bottom: 15px; }
+  .cta-section p { font-family: var(--mono); font-size: 13px; color: var(--muted); margin-bottom: 30px; line-height: 2; }
+  .cta-buttons { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+  .btn-primary { font-family: var(--mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; padding: 14px 30px; background: var(--accent); color: var(--bg); border: none; cursor: pointer; font-weight: 700; text-decoration: none; display: inline-block; transition: background 0.2s; }
+  .btn-primary:hover { background: #00ffaa; }
+  .btn-secondary { font-family: var(--mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; padding: 14px 30px; background: none; color: var(--accent2); border: 1px solid var(--accent2); cursor: pointer; text-decoration: none; display: inline-block; transition: all 0.2s; }
+  .btn-secondary:hover { background: rgba(0,136,255,0.1); }
+
+  footer { border-top: 1px solid var(--border); padding: 40px; display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1; flex-wrap: wrap; gap: 20px; }
+  footer p { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  footer strong { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">
+    <svg width="28" height="28" viewBox="0 0 60 68" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="30,2 56,17 56,51 30,66 4,51 4,17" fill="none" stroke="#00ff88" stroke-width="2"/>
+      <polygon points="30,14 48,24 48,44 30,54 12,44 12,24" fill="none" stroke="#00ff88" stroke-width="1.5" opacity="0.5"/>
+      <polygon points="30,24 42,31 30,38 18,31" fill="#00ff88" opacity="0.9"/>
+      <line x1="30" y1="2" x2="30" y2="14" stroke="#0088ff" stroke-width="2"/>
+      <line x1="30" y1="54" x2="30" y2="66" stroke="#0088ff" stroke-width="2"/>
+      <circle cx="4" cy="34" r="3" fill="#0088ff"/>
+      <circle cx="56" cy="34" r="3" fill="#0088ff"/>
+    </svg>
+    CAMPIONE<span>/</span>INFRA
+  </a>
+  <div>
+    <a href="/">Home</a>
+    <a href="/#services">Services</a>
+    <a href="/mission.html">Mission</a>
+    <a href="/compliance.html">Compliance</a>
+    <a href="/industries.html" class="active">Industries</a>
+    <a href="/sla.html">SLA</a>
+    <a href="/payments.html">Payments</a>
+    <a href="/#contact">Contact</a>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-tag">Industries We Serve</div>
+  <h1>BUILT FOR<br><span>INSTITUTIONS.</span></h1>
+  <p class="page-desc">Campione Infrastructure is not a generic node provider. We are a Florida-based, white-glove blockchain infrastructure partner for financial institutions, fintechs, and professional operators who require compliance, reliability, and a human being on the other end of the line.</p>
+</div>
+
+<hr>
+
+<!-- WHY US-BASED MATTERS -->
+<section>
+  <div class="section-label">Why US-Based Matters</div>
+  <h2>Florida-Based. Fully Accountable.</h2>
+  <div class="us-banner">
+    <div class="us-grid">
+      <div class="us-point">
+        <div class="us-point-title">CLARITY Act Ready</div>
+        <div class="us-point-desc">Operating under US jurisdiction with full compliance posture documented. No offshore ambiguity.</div>
+      </div>
+      <div class="us-point">
+        <div class="us-point-title">ISO 20022 Aligned</div>
+        <div class="us-point-desc">XRPL and Stellar are ISO 20022 registered. We are the infrastructure layer for the new financial messaging standard.</div>
+      </div>
+      <div class="us-point">
+        <div class="us-point-title">Institutional Trust</div>
+        <div class="us-point-desc">Banks and fintechs require US-domiciled vendors. We meet procurement requirements that offshore providers cannot.</div>
+      </div>
+      <div class="us-point">
+        <div class="us-point-title">Direct Accountability</div>
+        <div class="us-point-desc">Kenneth Campione answers the phone. One point of contact. No support tickets. No overseas call centers.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr>
+
+<!-- INDUSTRY CARDS -->
+<section>
+  <div class="section-label">Client Profiles</div>
+  <h2>Who We Work With</h2>
+
+  <!-- Community Banks & Credit Unions -->
+  <div class="industry-card">
+    <div class="industry-header">
+      <div class="industry-icon">🏦</div>
+      <div class="industry-title-block">
+        <div class="industry-tag">Financial Institutions</div>
+        <div class="industry-title">Community Banks & Credit Unions</div>
+        <div class="industry-sub">US financial institutions exploring blockchain rails for cross-border payments, correspondent banking, and ISO 20022 readiness.</div>
+      </div>
+    </div>
+    <div class="industry-body">
+      <div class="pain-points">
+        <h4>Their Challenges</h4>
+        <ul class="pain-list">
+          <li>SWIFT fees eating into cross-border payment margins</li>
+          <li>ISO 20022 migration deadline pressure from regulators</li>
+          <li>No internal blockchain engineering resources</li>
+          <li>Vendor compliance requirements demand US-domiciled partners</li>
+          <li>Need auditable, documented infrastructure</li>
+        </ul>
+      </div>
+      <div class="our-solution">
+        <h4>How We Help</h4>
+        <ul class="solution-list">
+          <li>XRPL validator node — ISO 20022 registered network</li>
+          <li>Stellar Horizon API for programmable payment rails</li>
+          <li>Full compliance documentation package</li>
+          <li>White-glove onboarding with Kenneth directly</li>
+          <li>SLA with 99.9% uptime and 4-hour response guarantee</li>
+        </ul>
+      </div>
+    </div>
+    <div class="industry-footer">
+      <div class="services-used">Relevant services:<span>XRPL Validator · Stellar Horizon API · Consulting · Monitoring</span></div>
+      <a href="/#contact" class="cta-btn">Start a Conversation</a>
+    </div>
+  </div>
+
+  <!-- Fintech Startups -->
+  <div class="industry-card">
+    <div class="industry-header">
+      <div class="industry-icon">⚡</div>
+      <div class="industry-title-block">
+        <div class="industry-tag">Emerging Finance</div>
+        <div class="industry-title">Fintech Startups</div>
+        <div class="industry-sub">Early and growth-stage fintechs building on blockchain who need production-grade infrastructure without the overhead of running it themselves.</div>
+      </div>
+    </div>
+    <div class="industry-body">
+      <div class="pain-points">
+        <h4>Their Challenges</h4>
+        <ul class="pain-list">
+          <li>Public Horizon and RPC endpoints are unreliable under load</li>
+          <li>No time or budget to manage node infrastructure</li>
+          <li>Need fast time-to-market with reliable backend</li>
+          <li>Investors expect compliance documentation</li>
+          <li>Engineering team focused on product, not DevOps</li>
+        </ul>
+      </div>
+      <div class="our-solution">
+        <h4>How We Help</h4>
+        <ul class="solution-list">
+          <li>Dedicated Stellar Horizon API — $99/month, instant access</li>
+          <li>Node infrastructure setup in 24–48 hours</li>
+          <li>Chainlink oracle integration for price feeds</li>
+          <li>We handle all node maintenance and upgrades</li>
+          <li>SLA and compliance docs ready for investor due diligence</li>
+        </ul>
+      </div>
+    </div>
+    <div class="industry-footer">
+      <div class="services-used">Relevant services:<span>Horizon API · Node Setup · Chainlink Oracle · Monitoring</span></div>
+      <a href="/payments.html" class="cta-btn">See Pricing</a>
+    </div>
+  </div>
+
+  <!-- Payment Processors -->
+  <div class="industry-card">
+    <div class="industry-header">
+      <div class="industry-icon">💸</div>
+      <div class="industry-title-block">
+        <div class="industry-tag">Payment Infrastructure</div>
+        <div class="industry-title">Payment Processors</div>
+        <div class="industry-sub">Companies moving money domestically and internationally who want to add crypto payment rails — XRP, XLM, or Lightning — to their existing stack.</div>
+      </div>
+    </div>
+    <div class="industry-body">
+      <div class="pain-points">
+        <h4>Their Challenges</h4>
+        <ul class="pain-list">
+          <li>Card network fees compressing margins on small transactions</li>
+          <li>Cross-border settlement taking 1–5 business days</li>
+          <li>Need redundant, low-latency blockchain connectivity</li>
+          <li>Lightning Network setup requires specialized expertise</li>
+          <li>Regulatory uncertainty requires US-based compliant partners</li>
+        </ul>
+      </div>
+      <div class="our-solution">
+        <h4>How We Help</h4>
+        <ul class="solution-list">
+          <li>Lightning Payment Rails — instant BTC settlement</li>
+          <li>XRP and XLM payment infrastructure on ISO 20022 networks</li>
+          <li>Florida-based, CLARITY Act compliant operation</li>
+          <li>Sub-second settlement vs 3–5 day SWIFT delays</li>
+          <li>Dedicated infrastructure — no shared public endpoints</li>
+        </ul>
+      </div>
+    </div>
+    <div class="industry-footer">
+      <div class="services-used">Relevant services:<span>Lightning Rails · XRPL Validator · Horizon API · Consulting</span></div>
+      <a href="/#contact" class="cta-btn">Discuss Your Stack</a>
+    </div>
+  </div>
+
+  <!-- Hedge Funds & Asset Managers -->
+  <div class="industry-card">
+    <div class="industry-header">
+      <div class="industry-icon">📊</div>
+      <div class="industry-title-block">
+        <div class="industry-tag">Asset Management</div>
+        <div class="industry-title">Hedge Funds & Asset Managers</div>
+        <div class="industry-sub">Professional capital allocators seeking staking yield, on-chain data infrastructure, and compliant validator exposure to ISO 20022 networks.</div>
+      </div>
+    </div>
+    <div class="industry-body">
+      <div class="pain-points">
+        <h4>Their Challenges</h4>
+        <ul class="pain-list">
+          <li>Staking yield requires trusted, non-custodial validator partners</li>
+          <li>On-chain data needs dedicated, low-latency node access</li>
+          <li>Compliance team requires US-domiciled infrastructure vendors</li>
+          <li>Need auditable records of validator performance</li>
+          <li>DEX liquidity strategies require reliable Stellar infrastructure</li>
+        </ul>
+      </div>
+      <div class="our-solution">
+        <h4>How We Help</h4>
+        <ul class="solution-list">
+          <li>Staking as a Service — ATOM, XLM, non-custodial, up to 15% APY</li>
+          <li>The Graph node for indexed on-chain data queries</li>
+          <li>Cosmos validator with documented uptime history</li>
+          <li>DEX liquidity services on Stellar</li>
+          <li>Monthly performance reports and full documentation</li>
+        </ul>
+      </div>
+    </div>
+    <div class="industry-footer">
+      <div class="services-used">Relevant services:<span>Staking · The Graph · Cosmos Validator · DEX Liquidity</span></div>
+      <a href="/#contact" class="cta-btn">Request Information</a>
+    </div>
+  </div>
+</section>
+
+<hr>
+
+<!-- POSITIONING STATEMENT -->
+<section>
+  <div class="position-block">
+    <blockquote>"We are not the cheapest option. We are the <span>right</span> option — for institutions that cannot afford downtime, ambiguity, or an offshore vendor who doesn't pick up the phone."</blockquote>
+    <cite>— Kenneth Campione, Founder · Campione Infrastructure · Florida, USA</cite>
+  </div>
+</section>
+
+<hr>
+
+<!-- DIFFERENTIATORS -->
+<section>
+  <div class="section-label">What Sets Us Apart</div>
+  <h2>Our Differentiators</h2>
+  <div class="diff-grid">
+    <div class="diff-item">
+      <div class="diff-num">01</div>
+      <div class="diff-title">US-Based & Accountable</div>
+      <div class="diff-desc">Florida-domiciled. CLARITY Act positioned. One human being responsible for your infrastructure. Not a faceless platform.</div>
+    </div>
+    <div class="diff-item">
+      <div class="diff-num">02</div>
+      <div class="diff-title">ISO 20022 Native</div>
+      <div class="diff-desc">Operating on the only two ISO 20022 registered blockchain networks — XRPL and Stellar. Built for the future of financial messaging.</div>
+    </div>
+    <div class="diff-item">
+      <div class="diff-num">03</div>
+      <div class="diff-title">White-Glove Service</div>
+      <div class="diff-desc">Every engagement starts with a direct conversation. We scope your needs, deploy exactly what you require, and stay available.</div>
+    </div>
+    <div class="diff-item">
+      <div class="diff-num">04</div>
+      <div class="diff-title">Validator Operator</div>
+      <div class="diff-desc">We don't just proxy other people's nodes. We run our own validators on XRPL, Stellar, and Cosmos — skin in the game.</div>
+    </div>
+  </div>
+</section>
+
+<hr>
+
+<!-- CTA -->
+<section>
+  <div class="cta-section">
+    <div class="section-label" style="justify-content:center;">Ready to Talk</div>
+    <h2>Let's Find the Right Fit</h2>
+    <p>Every engagement starts with a conversation. Tell us what you're building<br>and we'll tell you exactly how we can support it.</p>
+    <div class="cta-buttons">
+      <a href="/#contact" class="btn-primary">Contact Us</a>
+      <a href="/payments.html" class="btn-secondary">View Pricing & Services</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>
+    <p>© 2024–2026 <strong>MaxResults4U Business Solutions</strong> — All Rights Reserved</p>
+    <p style="margin-top:5px;"><span style="color:var(--accent);">Campione Infrastructure</span> · Land O Lakes, FL · Florida, USA · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="cca7a9a2a2a9b8a48cafada1bca5a3a2a9a5a2aabeadbfb8beb9afb8b9bea9e2afa3a1">[email&#160;protected]</a></p>
+  </div>
+  <div style="display:flex; gap:20px; flex-wrap:wrap;">
+    <a href="/" style="font-family:var(--mono); font-size:10px; color:var(--muted); text-decoration:none; letter-spacing:2px; text-transform:uppercase;">Home</a>
+    <a href="/compliance.html" style="font-family:var(--mono); font-size:10px; color:var(--muted); text-decoration:none; letter-spacing:2px; text-transform:uppercase;">Compliance</a>
+    <a href="/sla.html" style="font-family:var(--mono); font-size:10px; color:var(--muted); text-decoration:none; letter-spacing:2px; text-transform:uppercase;">SLA</a>
+    <a href="/mission.html" style="font-family:var(--mono); font-size:10px; color:var(--muted); text-decoration:none; letter-spacing:2px; text-transform:uppercase;">Mission</a>
+    <a href="/#contact" style="font-family:var(--mono); font-size:10px; 
