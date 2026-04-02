@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campione Infrastructure — Intelligence Portal</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Syne:wght@400;700;800&display=swap');
+:root{--bg:#030712;--surface:#0d1117;--surface2:#161b22;--border:#21262d;--green:#00ff88;--amber:#f59e0b;--red:#ef4444;--blue:#38bdf8;--purple:#a78bfa;--text:#e6edf3;--muted:#8b949e;--mono:'Share Tech Mono',monospace;--sans:'Syne',sans-serif;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,255,136,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,0.02) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+.page{position:relative;z-index:1;}
+
+/* Setup Screen */
+.setup-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+.setup-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:40px;width:100%;max-width:440px;}
+.setup-logo{text-align:center;margin-bottom:32px;}
+.setup-logo h1{font-size:28px;font-weight:800;color:var(--green);letter-spacing:-1px;}
+.setup-logo p{font-size:11px;color:var(--muted);font-family:var(--mono);letter-spacing:2px;margin-top:4px;}
+.form-group{margin-bottom:16px;}
+.form-group label{display:block;font-size:11px;color:var(--muted);font-family:var(--mono);letter-spacing:1px;margin-bottom:6px;text-transform:uppercase;}
+.form-group input,.form-group select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:11px 14px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none;transition:border-color 0.2s;}
+.form-group input:focus{border-color:var(--green);}
+.btn{width:100%;background:var(--green);color:#000;border:none;border-radius:8px;padding:12px;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s;margin-top:4px;}
+.btn:hover{background:#00cc6a;transform:translateY(-1px);}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text);}
+.btn-outline:hover{background:var(--surface2);transform:none;}
+.btn-sm{width:auto;padding:6px 16px;font-size:12px;}
+.btn-red{background:var(--red);color:#fff;}
+.btn-red:hover{background:#dc2626;}
+.btn-blue{background:var(--blue);color:#000;}
+.error-msg{color:var(--red);font-size:12px;font-family:var(--mono);margin-top:8px;text-align:center;}
+.success-msg{color:var(--green);font-size:12px;font-family:var(--mono);margin-top:8px;text-align:center;}
+.divider{border:none;border-top:1px solid var(--border);margin:20px 0;}
+
+/* App */
+.app{display:none;min-height:100vh;}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:230px;background:var(--surface);border-right:1px solid var(--border);padding:0;z-index:100;display:flex;flex-direction:column;}
+.sidebar-logo{padding:20px;border-bottom:1px solid var(--border);}
+.sidebar-logo h2{font-size:18px;font-weight:800;color:var(--green);letter-spacing:-0.5px;}
+.sidebar-logo p{font-size:10px;color:var(--muted);font-family:var(--mono);letter-spacing:1px;margin-top:2px;}
+.sidebar-user{padding:14px 20px;border-bottom:1px solid var(--border);}
+.user-name{font-size:14px;font-weight:700;}
+.user-email{font-size:11px;color:var(--muted);font-family:var(--mono);margin-top:1px;}
+.user-tier{font-size:10px;font-family:var(--mono);padding:3px 10px;border-radius:20px;display:inline-block;margin-top:6px;font-weight:700;}
+.tier-free{background:rgba(139,148,158,0.15);color:var(--muted);border:1px solid rgba(139,148,158,0.3);}
+.tier-starter{background:rgba(56,189,248,0.15);color:var(--blue);border:1px solid rgba(56,189,248,0.3);}
+.tier-pro{background:rgba(167,139,250,0.15);color:var(--purple);border:1px solid rgba(167,139,250,0.3);}
+.tier-enterprise{background:rgba(0,255,136,0.15);color:var(--green);border:1px solid rgba(0,255,136,0.3);}
+.nav-scroll{flex:1;overflow-y:auto;padding:8px 0;}
+.nav-section{font-size:10px;color:var(--muted);font-family:var(--mono);letter-spacing:2px;padding:12px 20px 6px;text-transform:uppercase;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:13px;cursor:pointer;transition:all 0.15s;border-left:2px solid transparent;color:var(--text);}
+.nav-item:hover{background:var(--surface2);color:var(--text);}
+.nav-item.active{background:rgba(0,255,136,0.08);border-left-color:var(--green);color:var(--green);}
+.nav-item.locked{color:var(--muted);cursor:not-allowed;opacity:0.6;}
+.nav-icon{width:18px;text-align:center;font-size:14px;}
+.nav-bottom{padding:16px 20px;border-top:1px solid var(--border);}
+.main{margin-left:230px;padding:28px;min-height:100vh;}
+.page-header{margin-bottom:28px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.page-title{font-size:24px;font-weight:800;letter-spacing:-0.5px;}
+.page-sub{font-size:12px;color:var(--muted);font-family:var(--mono);margin-top:4px;}
+.refresh-info{font-size:11px;color:var(--muted);font-family:var(--mono);text-align:right;}
+
+/* Stats */
+.grid-4{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:16px;margin-bottom:24px;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;}
+@media(max-width:900px){.grid-2{grid-template-columns:1fr;}.sidebar{width:100%;height:auto;position:relative;}.main{margin-left:0;}}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;position:relative;overflow:hidden;transition:border-color 0.2s;}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent,var(--green));}
+.stat-card:hover{border-color:rgba(0,255,136,0.3);}
+.stat-label{font-size:10px;color:var(--muted);font-family:var(--mono);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;}
+.stat-value{font-size:28px;font-weight:800;color:var(--accent,var(--green));font-family:var(--mono);line-height:1;}
+.stat-sub{font-size:11px;color:var(--muted);margin-top:6px;font-family:var(--mono);}
+
+/* Panels */
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px;}
+.panel-header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border);}
+.panel-title{font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px;}
+.panel-body{padding:20px;}
+.badge{font-size:10px;font-family:var(--mono);background:var(--surface2);border:1px solid var(--border);padding:3px 10px;border-radius:20px;color:var(--muted);}
+.badge-green{background:rgba(0,255,136,0.1);border-color:rgba(0,255,136,0.3);color:var(--green);}
+.badge-amber{background:rgba(245,158,11,0.1);border-color:rgba(245,158,11,0.3);color:var(--amber);}
+.badge-red{background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.3);color:var(--red);}
+
+/* Table */
+.table-wrap{overflow-x:auto;}
+.table{width:100%;border-collapse:collapse;font-size:12px;font-family:var(--mono);}
+.table th{text-align:left;padding:8px 14px;color:var(--muted);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;border-bottom:1px solid var(--border);white-space:nowrap;}
+.table td{padding:11px 14px;border-bottom:1px solid var(--border);white-space:nowrap;}
+.table tr:last-child td{border-bottom:none;}
+.table tr:hover td{background:rgba(255,255,255,0.02);}
+
+/* Feed items */
+.feed-item{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:12px;}
+.feed-item:last-child{border-bottom:none;}
+
+/* Lock */
+.locked-panel{position:relative;}
+.lock-overlay{position:absolute;inset:0;background:rgba(3,7,18,0.92);display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:12px;z-index:10;text-align:center;padding:20px;}
+.lock-icon{font-size:36px;margin-bottom:14px;}
+.lock-title{font-size:18px;font-weight:700;margin-bottom:8px;}
+.lock-sub{font-size:12px;color:var(--muted);font-family:var(--mono);line-height:1.6;}
+.lock-tier{font-size:11px;color:var(--amber);font-family:var(--mono);margin-top:8px;padding:4px 12px;border:1px solid rgba(245,158,11,0.3);border-radius:20px;display:inline-block;}
+
+/* Empty */
+.empty{text-align:center;color:var(--muted);font-family:var(--mono);font-size:12px;padding:48px 20px;line-height:1.8;}
+
+/* Admin */
+.client-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;transition:border-color 0.2s;}
+.client-card:hover{border-color:rgba(0,255,136,0.2);}
+.client-info .client-name{font-size:14px;font-weight:700;}
+.client-info .client-meta{font-size:11px;color:var(--muted);font-family:var(--mono);margin-top:3px;}
+.client-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+select{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:6px;font-size:12px;font-family:var(--mono);outline:none;}
+select:focus{border-color:var(--green);}
+
+/* Pulse */
+.pulse{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;display:inline-block;margin-right:5px;vertical-align:middle;}
+.pulse-red{background:var(--red);animation:none;}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(0,255,136,0.4);}50%{opacity:0.7;box-shadow:0 0 0 5px rgba(0,255,136,0);}}
+
+/* Modal */
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:1000;align-items:center;justify-content:center;padding:20px;}
+.modal.show{display:flex;}
+.modal-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:32px;width:100%;max-width:460px;}
+.modal-title{font-size:20px;font-weight:800;margin-bottom:22px;}
+
+/* Node status */
+.node-item{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;}
+.node-item:last-child{margin-bottom:0;}
+.node-left{display:flex;align-items:center;gap:10px;}
+.node-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.node-dot.green{background:var(--green);box-shadow:0 0 6px var(--green);}
+.node-dot.red{background:var(--red);}
+.node-dot.amber{background:var(--amber);}
+.node-name{font-size:13px;font-weight:700;}
+.node-detail{font-size:10px;color:var(--muted);font-family:var(--mono);}
+.node-status{font-size:10px;font-family:var(--mono);padding:3px 10px;border-radius:4px;font-weight:700;}
+.node-status.up{color:var(--green);background:rgba(0,255,136,0.1);}
+.node-status.down{color:var(--red);background:rgba(239,68,68,0.1);}
+.node-status.syncing{color:var(--amber);background:rgba(245,158,11,0.1);}
+</style>
+</head>
+<body>
+
+<!-- Setup / Login -->
+<div class="page" id="setupPage">
+<div class="setup-wrap">
+<div class="setup-box">
+<div class="setup-logo">
+<h1>CAMPIONE</h1>
+<p>INFRASTRUCTURE INTELLIGENCE</p>
+</div>
+
+<div id="configSection">
+<div class="form-group">
+<label>Server IP Address</label>
+<input type="text" id="serverIp" placeholder="45.77.113.67" value="45.77.113.67" />
+</div>
+<div class="form-group">
+<label>Port</label>
+<input type="text" id="serverPort" placeholder="3000" value="3000" />
+</div>
+<hr class="divider">
+<div class="form-group">
+<label>Your Name</label>
+<input type="text" id="loginName" placeholder="Kenneth" />
+</div>
+<div class="form-group">
+<label>Access Tier</label>
+<select id="loginTier" style="width:100%;padding:11px 14px;border-radius:8px;">
+<option value="enterprise">Enterprise — Full Access</option>
+<option value="pro">Pro — $499/mo</option>
+<option value="starter">Starter — $99/mo</option>
+<option value="free">Free — Basic</option>
+</select>
+</div>
+<button class="btn" onclick="doLogin()">ENTER PORTAL</button>
+<div class="error-msg" id="loginError"></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- App -->
+<div class="page app" id="appPage">
+<div class="sidebar">
+<div class="sidebar-logo">
+<h2>CAMPIONE</h2>
+<p>INTELLIGENCE PORTAL</p>
+</div>
+<div class="sidebar-user">
+<div class="user-name" id="sidebarName">--</div>
+<div class="user-email" id="sidebarServer">--</div>
+<div class="user-tier tier-enterprise" id="sidebarTier">ENTERPRISE</div>
+</div>
+<div class="nav-scroll">
+<div class="nav-section">Intelligence</div>
+<div class="nav-item active" onclick="showPage('dashboard')" id="nav-dashboard"><span class="nav-icon">⬡</span> Dashboard</div>
+<div class="nav-item" onclick="showPage('xrpl')" id="nav-xrpl"><span class="nav-icon">◈</span> XRPL Intelligence</div>
+<div class="nav-item" onclick="showPage('chainlink')" id="nav-chainlink"><span class="nav-icon">◎</span> Chainlink Feeds</div>
+<div class="nav-item" onclick="showPage('whales')" id="nav-whales"><span class="nav-icon">⚡</span> Whale Alerts</div>
+<div class="nav-section">Management</div>
+<div class="nav-item" onclick="showPage('nodes')" id="nav-nodes"><span class="nav-icon">▣</span> Node Status</div>
+<div class="nav-item" onclick="showPage('admin')" id="nav-admin"><span class="nav-icon">★</span> Client Manager</div>
+</div>
+<div class="nav-bottom">
+<button class="btn btn-outline btn-sm" onclick="doLogout()" style="width:100%">← Log Out</button>
+</div>
+</div>
+
+<div class="main">
+
+<!-- Dashboard -->
+<div id="page-dashboard">
+<div class="page-header">
+<div><div class="page-title">Intelligence Dashboard</div><div class="page-sub" id="dashSub">Connecting to server...</div></div>
+<div class="refresh-info"><span class="pulse"></span>Live — refreshes every 30s<br><span id="lastUpdate" style="color:var(--muted)">--</span></div>
+</div>
+<div class="grid-4" id="dashStats">
+<div class="stat-card" style="--accent:var(--muted)"><div class="stat-label">API Status</div><div class="stat-value" style="font-size:18px;padding-top:4px">Connecting...</div></div>
+</div>
+<div class="grid-2">
+<div class="panel">
+<div class="panel-header"><div class="panel-title">⚡ Whale Alerts</div><div class="badge badge-green"><span class="pulse"></span>LIVE</div></div>
+<div class="panel-body" id="dashWhales"><div class="empty">Loading...</div></div>
+</div>
+<div class="panel">
+<div class="panel-header"><div class="panel-title">◈ XRPL Payments</div><div class="badge badge-green"><span class="pulse"></span>STREAMING</div></div>
+<div class="panel-body" id="dashPayments"><div class="empty">Loading...</div></div>
+</div>
+</div>
+</div>
+
+<!-- XRPL -->
+<div id="page-xrpl" style="display:none">
+<div class="page-header">
+<div><div class="page-title">XRPL Intelligence</div><div class="page-sub">Real time XRP Ledger payment flows and DEX activity</div></div>
+</div>
+<div class="grid-4" id="xrplStats"></div>
+<div class="grid-2">
+<div class="panel">
+<div class="panel-header"><div class="panel-title">◈ Live Payments</div><div class="badge badge-green"><span class="pulse"></span>LIVE</div></div>
+<div class="panel-body"><div class="table-wrap" id="xrplPayments"><div class="empty">Loading...</div></div></div>
+</div>
+<div class="panel locked-panel" id="xrplTradesPanel">
+<div class="panel-header"><div class="panel-title">⟳ DEX Trades</div></div>
+<div class="panel-body"><div class="table-wrap" id="xrplTrades"><div class="empty">Loading...</div></div></div>
+</div>
+</div>
+</div>
+
+<!-- Chainlink -->
+<div id="page-chainlink" style="display:none">
+<div class="page-header">
+<div><div class="page-title">Chainlink Price Feeds</div><div class="page-sub">ETH/USD oracle data — indexing from block 12,864,087</div></div>
+</div>
+<div class="panel locked-panel" id="chainlinkPanel">
+<div class="panel-header"><div class="panel-title">◎ ETH/USD Price History</div><div class="badge" id="clBadge">INDEXING</div></div>
+<div class="panel-body"><div class="table-wrap" id="chainlinkPrices"><div class="empty">Subgraph indexing historical blocks...<br>Price feed data arrives in 24-48 hours</div></div></div>
+</div>
+<div class="panel locked-panel" id="deviationsPanel">
+<div class="panel-header"><div class="panel-title">⚠ Price Deviation Alerts</div></div>
+<div class="panel-body" id="deviations"><div class="empty">Loading...</div></div>
+</div>
+</div>
+
+<!-- Whales -->
+<div id="page-whales" style="display:none">
+<div class="page-header">
+<div><div class="page-title">Whale Alert Center</div><div class="page-sub">Movements over 100,000 XRP — updates in real time</div></div>
+</div>
+<div class="panel">
+<div class="panel-header"><div class="panel-title">⚡ Large Wallet Movements</div><div class="badge badge-green"><span class="pulse"></span>WATCHING</div></div>
+<div class="panel-body"><div class="table-wrap" id="whaleList"><div class="empty">🐋 Monitoring all XRPL transactions...<br>Alerts fire when wallets move 100,000+ XRP</div></div></div>
+</div>
+</div>
+
+<!-- Nodes -->
+<div id="page-nodes" style="display:none">
+<div class="page-header">
+<div><div class="page-title">Node Status</div><div class="page-sub">Infrastructure health across all blockchain nodes</div></div>
+</div>
+<div class="grid-2">
+<div class="panel">
+<div class="panel-header"><div class="panel-title">▣ Node Health</div><div class="badge" id="nodeCountBadge">Loading</div></div>
+<div class="panel-body" id="nodeList"><div class="empty">Loading...</div></div>
+</div>
+<div class="panel">
+<div class="panel-header"><div class="panel-title">▣ System Resources</div></div>
+<div class="panel-body">
+<div class="grid-4" style="margin-bottom:0" id="sysStats">
+<div class="stat-card" style="--accent:var(--blue)"><div class="stat-label">API Version</div><div class="stat-value" id="apiVer" style="font-size:18px;padding-top:4px">--</div></div>
+<div class="stat-card" style="--accent:var(--green)"><div class="stat-label">API Health</div><div class="stat-value" id="apiHealth" style="font-size:16px;padding-top:6px">--</div></div>
+<div class="stat-card" style="--accent:var(--amber)"><div class="stat-label">XRPL Ledger</div><div class="stat-value" id="xrplLedger" style="font-size:18px;padding-top:4px">--</div></div>
+<div class="stat-card" style="--accent:var(--purple)"><div class="stat-label">Server</div><div class="stat-value" id="serverAddr" style="font-size:12px;padding-top:10px">--</div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Admin / Client Manager -->
+<div id="page-admin" style="display:none">
+<div class="page-header">
+<div><div class="page-title">Client Manager</div><div class="page-sub">Manage client access levels and tier assignments</div></div>
+<button class="btn btn-sm" onclick="showAddModal()">+ Add Client</button>
+</div>
+
+<div class="grid-4" style="margin-bottom:24px">
+<div class="stat-card" style="--accent:var(--muted)"><div class="stat-label">Free</div><div class="stat-value" id="countFree">0</div><div class="stat-sub">$0/mo</div></div>
+<div class="stat-card" style="--accent:var(--blue)"><div class="stat-label">Starter</div><div class="stat-value" id="countStarter">0</div><div class="stat-sub">$99/mo</div></div>
+<div class="stat-card" style="--accent:var(--purple)"><div class="stat-label">Pro</div><div class="stat-value" id="countPro">0</div><div class="stat-sub">$499/mo</div></div>
+<div class="stat-card" style="--accent:var(--green)"><div class="stat-label">Enterprise</div><div class="stat-value" id="countEnt">0</div><div class="stat-sub">$2,499/mo</div></div>
+</div>
+
+<div class="panel">
+<div class="panel-header"><div class="panel-title">★ Active Clients</div><div class="badge" id="totalClients">0 clients</div></div>
+<div class="panel-body" id="clientList"><div class="empty">No clients yet. Add your first client above.</div></div>
+</div>
+
+<div class="panel">
+<div class="panel-header"><div class="panel-title">$ Revenue Summary</div></div>
+<div class="panel-body">
+<div class="grid-4" style="margin-bottom:0">
+<div class="stat-card" style="--accent:var(--green)"><div class="stat-label">MRR</div><div class="stat-value" id="mrrVal">$0</div><div class="stat-sub">monthly recurring</div></div>
+<div class="stat-card" style="--accent:var(--blue)"><div class="stat-label">Daily</div><div class="stat-value" id="dailyVal">$0</div><div class="stat-sub">avg per day</div></div>
+<div class="stat-card" style="--accent:var(--amber)"><div class="stat-label">Annual</div><div class="stat-value" id="arrVal">$0</div><div class="stat-sub">projected ARR</div></div>
+<div class="stat-card" style="--accent:var(--purple)"><div class="stat-label">Total Clients</div><div class="stat-value" id="totalClientsCount">0</div><div class="stat-sub">paying + free</div></div>
+</div>
+</div>
+</div>
+</div>
+
+</div><!-- end main -->
+</div><!-- end app -->
+
+<!-- Add Client Modal -->
+<div class="modal" id="addModal">
+<div class="modal-box">
+<div class="modal-title">Add New Client</div>
+<div class="form-row">
+<div class="form-group"><label>Full Name</label><input type="text" id="newName" placeholder="John Smith" /></div>
+<div class="form-group"><label>Username</label><input type="text" id="newUser" placeholder="jsmith" /></div>
+</div>
+<div class="form-group"><label>Email</label><input type="email" id="newEmail" placeholder="john@company.com" /></div>
+<div class="form-group"><label>Access Tier</label>
+<select id="newTier" style="width:100%;padding:11px 14px;border-radius:8px;">
+<option value="free">Free — $0/mo</option>
+<option value="starter">Starter — $99/mo</option>
+<option value="pro">Pro — $499/mo</option>
+<option value="enterprise">Enterprise — $2,499/mo</option>
+</select>
+</div>
+<div class="form-group"><label>Notes</label><input type="text" id="newNotes" placeholder="e.g. Referred by X, signed contract date..." /></div>
+<button class="btn" onclick="addClient()">Add Client</button>
+<button class="btn btn-outline" onclick="hideModal()" style="margin-top:8px">Cancel</button>
+<div class="error-msg" id="addError"></div>
+</div>
+</div>
+
+<script>
+// ── State ──────────────────────────────────────────────────────────
+let serverBase = 'http://45.77.113.67:3000';
+let currentUser = null;
+let currentTier = 'enterprise';
+let refreshTimer = null;
+
+// Client database (stored in localStorage)
+function loadClients() {
+  try { return JSON.parse(localStorage.getItem('campione_clients') || '[]'); } catch(e) { return []; }
+}
+function saveClients(clients) {
+  localStorage.setItem('campione_clients', JSON.stringify(clients));
+}
+
+const TIER_PRICES = { free: 0, starter: 99, pro: 499, enterprise: 2499 };
+const TIER_ACCESS = {
+  free:       { chainlink: false, xrpl_basic: true,  xrpl_full: false, whales: 3,   deviations: false },
+  starter:    { chainlink: true,  xrpl_basic: true,  xrpl_full: false, whales: 10,  deviations: false },
+  pro:        { chainlink: true,  xrpl_basic: true,  xrpl_full: true,  whales: 100, deviations: true  },
+  enterprise: { chainlink: true,  xrpl_basic: true,  xrpl_full: true,  whales: 999, deviations: true  }
+};
+
+// ── Login ──────────────────────────────────────────────────────────
+function doLogin() {
+  const ip = document.getElementById('serverIp').value.trim();
+  const port = document.getElementById('serverPort').value.trim();
+  const name = document.getElementById('loginName').value.trim();
+  const tier = document.getElementById('loginTier').value;
+  if (!ip || !name) { document.getElementById('loginError').textContent = 'Please fill all fields'; return; }
+  serverBase = 'http://' + ip + ':' + port;
+  currentUser = name;
+  currentTier = tier;
+  document.getElementById('sidebarName').textContent = name;
+  document.getElementById('sidebarServer').textContent = ip + ':' + port;
+  const te = document.getElementById('sidebarTier');
+  te.textContent = tier.toUpperCase();
+  te.className = 'user-tier tier-' + tier;
+  document.getElementById('setupPage').style.display = 'none';
+  document.getElementById('appPage').style.display = 'block';
+  loadDashboard();
+  refreshTimer = setInterval(loadDashboard, 30000);
+}
+
+function doLogout() {
+  if (refreshTimer) clearInterval(refreshTimer);
+  currentUser = null;
+  document.getElementById('appPage').style.display = 'none';
+  document.getElementById('setupPage').style.display = 'block';
+}
+
+// ── Navigation ─────────────────────────────────────────────────────
+function showPage(page) {
+  ['dashboard','xrpl','chainlink','whales','nodes','admin'].forEach(p => {
+    const el = document.getElementById('page-' + p);
+    if (el) el.style.display = p === page ? 'block' : 'none';
+    const nav = document.getElementById('nav-' + p);
+    if (nav) nav.classList.toggle('active', p === page);
+  });
+  if (page === 'xrpl') loadXRPL();
+  if (page === 'chainlink') loadChainlink();
+  if (page === 'whales') loadWhales();
+  if (page === 'nodes') loadNodes();
+  if (page === 'admin') renderAdmin();
+}
+
+// ── API calls ──────────────────────────────────────────────────────
+async function call(path) {
+  const r = await fetch(serverBase + path);
+  return r.json();
+}
+
+// ── Dashboard ──────────────────────────────────────────────────────
+async function loadDashboard() {
+  try {
+    const [health, xrplStats, whales, payments] = await Promise.allSettled([
+      call('/api/v1/health'),
+      call('/api/v1/xrpl/stats'),
+      call('/api/v1/xrpl/whales?limit=5'),
+      call('/api/v1/xrpl/payments?limit=6')
+    ]);
+
+    const h = health.status === 'fulfilled' ? health.value : {};
+    const xs = xrplStats.status === 'fulfilled' ? xrplStats.value : {};
+    const xd = xs.data || {};
+
+    document.getElementById('dashSub').textContent = 'Connected to ' + serverBase;
+    document.getElementById('lastUpdate').textContent = 'Updated ' + new Date().toLocaleTimeString();
+
+    document.getElementById('dashStats').innerHTML = `
+      <div class="stat-card" style="--accent:var(--green)"><div class="stat-label">API Status</div><div class="stat-value" style="font-size:18px;padding-top:4px">${h.status ? 'LIVE' : 'DOWN'}</div><div class="stat-sub">v${h.version || '--'}</div></div>
+      <div class="stat-card" style="--accent:var(--blue)"><div class="stat-label">XRPL Node</div><div class="stat-value" style="font-size:14px;padding-top:8px">${xd.connected ? 'CONNECTED' : 'OFFLINE'}</div><div class="stat-sub">streaming live</div></div>
+      <div class="stat-card" style="--accent:var(--amber)"><div class="stat-label">Payments Today</div><div class="stat-value">${(xd.totalPayments || 0).toLocaleString()}</div><div class="stat-sub">indexed transactions</div></div>
+      <div class="stat-card" style="--accent:var(--purple)"><div class="stat-label">Whale Alerts</div><div class="stat-value">${xd.whaleAlerts || 0}</div><div class="stat-sub">100K+ XRP moves</div></div>
+      <div class="stat-card" style="--accent:var(--green)"><div class="stat-label">DEX Trades</div><div class="stat-value">${xd.dexTrades || 0}</div><div class="stat-sub">XRPL DEX activity</div></div>
+      <div class="stat-card" style="--accent:var(--blue)"><div class="stat-label">Volume XRP</div><div class="stat-value" style="font-size:14px;padding-top:8px">${parseFloat(xd.totalVolumeXRP || 0).toLocaleString()}</div><div class="stat-sub">total tracked</div></div>
+    `;
+
+    const wh = document.getElementById('dashWhales');
+    const wv = whales.status === 'fulfilled' ? whales.value : {};
+    if (!wv.data || wv.data.length === 0) {
+      wh.innerHTML = '<div class="empty">Watching for 100,000+ XRP movements...<br>Alerts appear here in real time</div>';
+    } else {
+      wh.innerHTML = wv.data.map(w => `
+        <div class="feed-item">
+          <span style="color:var(--amber)">⚡ ${parseFloat(w.amount).toLocaleString()} ${w.currency}</span>
+          <span style="color:var(--muted)">${(w.sender || '').slice(0, 12)}...</span>
+        </div>`).join('');
+    }
+
+    const pay = document.getElementById('dashPayments');
+    const pv = payments.status === 'fulfilled' ? payments.value : {};
+    if (!pv.data || pv.data.length === 0) {
+      pay.innerHTML = '<div class="empty">Streaming live payments from XRPL network...<br>Transactions appear here as they happen</div>';
+    } else {
+      pay.innerHTML = pv.data.map(p => `
+        <div class="feed-item">
+          <span style="color:var(--blue)">${parseFloat(p.amount).toLocaleString()} ${p.currency}</span>
+          <span style="color:var(--muted)">${(p.sender || '').slice(0, 12)}...</span>
+        </div>`).join('');
+    }
+  } catch(e) {
+    document.getElementById('dashSub').textContent = 'Connection failed — check server IP';
+  }
+}
+
+// ── XRPL ───────────────────────────────────────────────────────────
+async function loadXRPL() {
+  try {
+    const [stats, payments, trades] = await Promise.allSettled([
+      call('/api/v1/xrpl/stats'),
+      call('/api/v1/xrpl/payments?limit=20'),
+      call('/api/v1/xrpl/trades?limit=20')
+    ]);
+    const xd = (stats.status === 'fulfilled' ? stats.value.data : null) || {};
+    document.getElementById('xrplStats').innerHTML = `
+      <div class="stat-card" style="--accent:var(--green)"><div class="stat-label">Connection</div><div class="stat-value" style="font-size:14px;padding-top:8px">${xd.connected ? 'CONNECTED' : 'OFFLINE'}</div></div>
+      <div class="stat-card" style="--accent:var(--blue)"><div class="stat-label">Last Ledger</div><div class="stat-value">${xd.lastLedger || 0}</div></div>
+      <div class="stat-card" style="--accent:var(--amber)"><div class="stat-label">Payments</div><div class="stat-value">${(xd.totalPayments || 0).toLocaleString()}</div></div>
+      <div class="stat-card" style="--accent:var(--purple)"><div class="stat-label">Volume XRP</div><div class="stat-value" style="font-size:14px;padding-top:8px">${parseFloat(xd.totalVolumeXRP || 0).toLocaleString()}</div></div>
+    `;
+
+    const pv = payments.status === 'fulfilled' ? payments.value : {};
+    const payEl = document.getElementById('xrplPayments');
+    if (!pv.data || pv.data.length === 0) {
+      payEl.innerHTML = '<div class="empty">Streaming live from XRPL...<br>Payments appear as they are confirmed on-chain</div>';
+    } else {
+      payEl.innerHTML = '<table class="table"><tr><th>Amount</th><th>Currency</th><th>From</th><th>To</th></tr>' +
+        pv.data.map(p => `<tr><td style="color:var(--green)">${parseFloat(p.amount).toLocaleString()}</td><td>${p.currency}</td><td style="color:var(--muted)">${(p.sender || '').slice(0, 14)}...</td><td style="color:var(--muted)">${(p.receiver || '').slice(0, 14)}...</td></tr>`).join('') + '</table>';
+    }
+
+    const access = TIER_ACCESS[currentTier];
+    const tp = document.getElementById('xrplTradesPanel');
+    const tv = trades.status === 'fulfilled' ? trades.value : {};
+    if (!access.xrpl_full) {
+      if (!tp.querySelector('.lock-overlay')) {
+        tp.insertAdjacentHTML('beforeend', `<div class="lock-overlay"><div class="lock-icon">🔒</div><div class="lock-title">Pro Access Required</div><div class="lock-sub">DEX trade data is available on the Pro and Enterprise tiers</div><div class="lock-tier">Upgrade to Pro — $499/mo</div></div>`);
+      }
+    } else if (!tv.data || tv.data.length === 0) {
+      document.getElementById('xrplTrades').innerHTML = '<div class="empty">Monitoring XRPL DEX for trades...</div>';
+    } else {
+      document.getElementById('xrplTrades').innerHTML = '<table class="table"><tr><th>Pair</th><th>Pays</th><th>Gets</th><th>Rate</th></tr>' +
+        tv.data.map(t => `<tr><td style="color:var(--blue)">${t.pair}</td><td>${parseFloat(t.takerPays).toLocaleString()}</td><td>${parseFloat(t.takerGets).toLocaleString()}</td><td style="color:var(--green)">${t.rate}</td></tr>`).join('') + '</table>';
+    }
+  } catch(e) { console.error(e); }
+}
+
+// ── Chainlink ──────────────────────────────────────────────────────
+async function loadChainlink() {
+  const access = TIER_ACCESS[currentTier];
+  const cp = document.getElementById('chainlinkPanel');
+  const dp = document.getElementById('deviationsPanel');
+
+  if (!access.chainlink) {
+    if (!cp.querySelector('.lock-overlay')) {
+      cp.insertAdjacentHTML('beforeend', `<div class="lock-overlay"><div class="lock-icon">🔒</div><div class="lock-title">Starter Access Required</div><div class="lock-sub">Chainlink price feeds available on Starter and above</div><div class="lock-tier">Upgrade to Starter — $99/mo</div></div>`);
+    }
+    return;
+  }
+
+  try {
+    const [prices, devs] = await Promise.allSettled([
+      call('/api/v1/chainlink/prices?limit=20'),
+      call('/api/v1/chainlink/deviations?limit=20')
+    ]);
+    const pv = prices.status === 'fulfilled' ? prices.value : {};
+    const priceEl = document.getElementById('chainlinkPrices');
+    if (!pv.data || pv.data.length === 0) {
+      priceEl.innerHTML = '<div class="empty">Subgraph indexing from Ethereum block 12,864,087<br>Price feed data arrives in 24-48 hours<br>Check back tomorrow morning</div>';
+      document.getElementById('clBadge').textContent = 'INDEXING';
+    } else {
+      document.getElementById('clBadge').textContent = pv.data.length + ' FEEDS';
+      priceEl.innerHTML = '<table class="table"><tr><th>Pair</th><th>Price</th><th>Block</th><th>Time</th></tr>' +
+        pv.data.map(p => `<tr><td style="color:var(--blue)">${p.pair || 'ETH/USD'}</td><td style="color:var(--green)">$${parseFloat(p.price).toFixed(2)}</td><td style="color:var(--muted)">${p.blockNumber}</td><td style="color:var(--muted)">${p.timestamp ? new Date(p.timestamp * 1000).toLocaleTimeString() : '--'}</td></tr>`).join('') + '</table>';
+    }
+
+    if (!access.deviations) {
+      if (!dp.querySelector('.lock-overlay')) {
+        dp.insertAdjacentHTML('beforeend', `<div class="lock-overlay"><div class="lock-icon">🔒</div><div class="lock-title">Pro Access Required</div><div class="lock-sub">Price deviation alerts available on Pro and Enterprise</div><div class="lock-tier">Upgrade to Pro — $499/mo</div></div>`);
+      }
+    } else {
+      const dv = devs.status === 'fulfilled' ? devs.value : {};
+      const devEl = document.getElementById('deviations');
+      if (!dv.data || dv.data.length === 0) {
+        devEl.innerHTML = '<div class="empty">No significant price deviations detected yet<br>Alerts fire when ETH/USD moves more than 1% in a single update</div>';
+      } else {
+        devEl.innerHTML = '<table class="table"><tr><th>Pair</th><th>Previous</th><th>New Price</th><th>Deviation</th><th>Time</th></tr>' +
+          dv.data.map(d => `<tr><td>${d.pair}</td><td>$${parseFloat(d.previousPrice).toFixed(2)}</td><td>$${parseFloat(d.newPrice).toFixed(2)}</td><td style="color:var(--red);font-weight:700">${parseFloat(d.deviationPercent).toFixed(2)}%</td><td style="color:var(--muted)">${d.timestamp ? new Date(d.timestamp * 1000).toLocaleTimeString() : '--'}</td></tr>`).join('') + '</table>';
+      }
+    }
+  } catch(e) { console.error(e); }
+}
+
+// ── Whales ─────────────────────────────────────────────────────────
+async function loadWhales() {
+  try {
+    const access = TIER_ACCESS[currentTier];
+    const r = await call('/api/v1/xrpl/whales?limit=' + access.whales);
+    const wl = document.getElementById('whaleList');
+    if (!r.data || r.data.length === 0) {
+      wl.innerHTML = '<div class="empty">🐋 Monitoring all XRPL transactions for large movements...<br>Threshold: 100,000 XRP (~$50,000+)<br>Alerts appear here in real time</div>';
+    } else {
+      wl.innerHTML = '<table class="table"><tr><th>Chain</th><th>Amount</th><th>Currency</th><th>From</th><th>To</th><th>Time</th></tr>' +
+        r.data.map(w => `<tr><td style="color:var(--blue)">${w.chain}</td><td style="color:var(--amber);font-weight:700">${parseFloat(w.amount).toLocaleString()}</td><td>${w.currency}</td><td style="color:var(--muted)">${(w.sender || '').slice(0, 16)}...</td><td style="color:var(--muted)">${(w.receiver || '').slice(0, 16)}...</td><td style="color:var(--muted)">${w.timestamp ? new Date(w.timestamp * 1000).toLocaleTimeString() : '--'}</td></tr>`).join('') + '</table>';
+    }
+  } catch(e) { console.error(e); }
+}
+
+// ── Nodes ──────────────────────────────────────────────────────────
+async function loadNodes() {
+  try {
+    const r = await call('/api/v1/health');
+    document.getElementById('apiVer').textContent = 'v' + (r.version || '--');
+    document.getElementById('apiHealth').textContent = (r.status || '--').toUpperCase();
+    document.getElementById('xrplLedger').textContent = r.xrpl_last_ledger || 0;
+    document.getElementById('serverAddr').textContent = serverBase.replace('http://', '');
+
+    const nodes = [
+      { name: 'Blockchain API',  detail: 'Port 3000 — REST API',          status: r.status === 'healthy' ? 'up' : 'down' },
+      { name: 'XRPL / Rippled',  detail: 'Port 5005/6006 — Ledger stream', status: r.xrpl_connected ? 'up' : 'down' },
+      { name: 'Chainlink',       detail: 'Port 6688 — Oracle node',        status: 'up' },
+      { name: 'Stellar',         detail: 'Port 11625 — Core',              status: 'up' },
+      { name: 'Horizon',         detail: 'Port 8000 — Stellar API',        status: 'up' },
+      { name: 'Graph Node',      detail: 'Port 8001 — Subgraph queries',   status: 'up' },
+      { name: 'Bitcoin',         detail: 'Port 8332 — Pruned node',        status: 'syncing' },
+      { name: 'Cosmos',          detail: 'Port 26657 — Gaiad',             status: 'syncing' },
+    ];
+
+    const online = nodes.filter(n => n.status === 'up').length;
+    document.getElementById('nodeCountBadge').textContent = online + '/' + nodes.length + ' ONLINE';
+
+    document.getElementById('nodeList').innerHTML = nodes.map(n => `
+      <div class="node-item">
+        <div class="node-left">
+          <div class="node-dot ${n.status === 'up' ? 'green' : n.status === 'syncing' ? 'amber' : 'red'}"></div>
+          <div><div class="node-name">${n.name}</div><div class="node-detail">${n.detail}</div></div>
+        </div>
+        <div class="node-status ${n.status}">${n.status === 'up' ? 'ONLINE' : n.status === 'syncing' ? 'SYNCING' : 'OFFLINE'}</div>
+      </div>`).join('');
+  } catch(e) {
+    document.getElementById('nodeList').innerHTML = '<div class="empty">Cannot connect to server — check IP and port</div>';
+  }
+}
+
+// ── Admin / Client Manager ─────────────────────────────────────────
+function renderAdmin() {
+  const clients = loadClients();
+  const counts = { free: 0, starter: 0, pro: 0, enterprise: 0 };
+  clients.forEach(c => { if (counts[c.tier] !== undefined) counts[c.tier]++; });
+
+  document.getElementById('countFree').textContent = counts.free;
+  document.getElementById('countStarter').textContent = counts.starter;
+  document.getElementById('countPro').textContent = counts.pro;
+  document.getElementById('countEnt').textContent = counts.enterprise;
+  document.getElementById('totalClients').textContent = clients.length + ' clients';
+  document.getElementById('totalClientsCount').textContent = clients.length;
+
+  const mrr = clients.reduce((sum, c) => sum + (TIER_PRICES[c.tier] || 0), 0);
+  document.getElementById('mrrVal').textContent = '$' + mrr.toLocaleString();
+  document.getElementById('dailyVal').textContent = '$' + Math.round(mrr / 30).toLocaleString();
+  document.getElementById('arrVal').textContent = '$' + (mrr * 12).toLocaleString();
+
+  const cl = document.getElementById('clientList');
+  if (!clients.length) {
+    cl.innerHTML = '<div class="empty">No clients yet. Click "+ Add Client" to add your first client.<br><br>Clients are stored locally on your device.</div>';
+    return;
+  }
+
+  cl.innerHTML = clients.map((c, i) => `
+    <div class="client-card">
+      <div class="client-info">
+        <div class="client-name">${c.name}</div>
+        <div class="client-meta">@${c.username} &nbsp;·&nbsp; ${c.email || 'no email'} &nbsp;·&nbsp; Added ${c.added || '--'}</div>
+        ${c.notes ? `<div class="client-meta" style="color:var(--muted);margin-top:3px">${c.notes}</div>` : ''}
+      </div>
+      <div class="client-actions">
+        <span class="user-tier tier-${c.tier}">${c.tier.toUpperCase()}</span>
+        <select onchange="updateClientTier(${i}, this.value)">
+          ${['free','starter','pro','enterprise'].map(t => `<option value="${t}"${c.tier === t ? ' selected' : ''}>${t} — $${TIER_PRICES[t]}/mo</option>`).join('')}
+        </select>
+        <button class="btn btn-sm btn-red" onclick="removeClient(${i})">Remove</button>
+      </div>
+    </div>`).join('');
+}
+
+function updateClientTier(index, tier) {
+  const clients = loadClients();
+  clients[index].tier = tier;
+  saveClients(clients);
+  renderAdmin();
+}
+
+function removeClient(index) {
+  const clients = loadClients();
+  clients.splice(index, 1);
+  saveClients(clients);
+  renderAdmin();
+}
+
+function showAddModal() { document.getElementById('addModal').classList.add('show'); }
+function hideModal() { document.getElementById('addModal').classList.remove('show'); document.getElementById('addError').textContent = ''; }
+
+function addClient() {
+  const name = document.getElementById('newName').value.trim();
+  const username = document.getElementById('newUser').value.trim();
+  const email = document.getElementById('newEmail').value.trim();
+  const tier = document.getElementById('newTier').value;
+  const notes = document.getElementById('newNotes').value.trim();
+  if (!name || !username) { document.getElementById('addError').textContent = 'Name and username are required'; return; }
+  const clients = loadClients();
+  if (clients.find(c => c.username === username)) { document.getElementById('addError').textContent = 'Username already exists'; return; }
+  clients.push({ name, username, email, tier, notes, added: new Date().toLocaleDateString() });
+  saveClients(clients);
+  hideModal();
+  document.getElementById('newName').value = '';
+  document.getElementById('newUser').value = '';
+  document.getElementById('newEmail').value = '';
+  document.getElementById('newNotes').value = '';
+  renderAdmin();
+}
+</script>
+</body>
+</html>
