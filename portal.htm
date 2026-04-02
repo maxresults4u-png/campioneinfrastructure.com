@@ -1,1 +1,364 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blockchain API Data — Campione Infrastructure</title>
+<meta name="description" content="Real time blockchain intelligence data — XRPL payment flows, Chainlink price feeds, whale alerts and price deviation signals. Institutional grade data from our own node infrastructure.">
+<link rel="canonical" href="https://campioneinfrastructure.com/portal.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #060a14;
+    --bg2: #0a0f1e;
+    --panel: #0d1424;
+    --border: #1a2340;
+    --accent: #2563eb;
+    --accent-bright: #3b82f6;
+    --accent2: #0ea5e9;
+    --accent3: #f59e0b;
+    --live: #22c55e;
+    --text: #eef2ff;
+    --muted: #4a5580;
+    --mono: 'Space Mono', monospace;
+    --sans: 'Syne', sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); overflow-x: hidden; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(37,99,235,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(37,99,235,0.025) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; z-index: 0; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; padding: 18px 40px; display: flex; justify-content: space-between; align-items: center; background: rgba(6,10,20,0.97); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); z-index: 50; }
+  .logo { font-family: var(--mono); font-size: 14px; color: var(--text); letter-spacing: 2px; text-decoration: none; display: flex; align-items: center; gap: 10px; }
+  .logo-slash { color: var(--accent); }
+  nav a { font-family: var(--mono); font-size: 10px; color: var(--muted); text-decoration: none; letter-spacing: 2px; text-transform: uppercase; transition: color 0.2s; margin-left: 24px; }
+  nav a:hover { color: var(--accent-bright); }
+
+  .hero { min-height: 60vh; display: flex; flex-direction: column; justify-content: center; padding: 140px 40px 80px; position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; }
+  .hero-tag { font-family: var(--mono); font-size: 11px; color: var(--live); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+  .hero-tag::before { content: ''; width: 30px; height: 1px; background: var(--live); }
+  .dot { width: 6px; height: 6px; border-radius: 50%; animation: pulse 2s ease-in-out infinite; flex-shrink: 0; }
+  .dot.green { background: var(--live); }
+  .dot.amber { background: var(--accent3); }
+  .dot.blue { background: var(--accent2); }
+  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+  h1 { font-family: var(--sans); font-size: clamp(48px, 8vw, 100px); font-weight: 800; line-height: 0.9; letter-spacing: -3px; margin-bottom: 36px; }
+  h1 .line1 { display: block; color: var(--text); }
+  h1 .line2 { display: block; color: transparent; -webkit-text-stroke: 1px var(--live); }
+  .hero-desc { font-family: var(--mono); font-size: 13px; color: var(--muted); line-height: 2; max-width: 680px; margin-bottom: 40px; }
+  .hero-desc strong { color: var(--accent-bright); }
+  .btn-primary { font-family: var(--mono); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: #000; background: var(--live); padding: 16px 36px; text-decoration: none; transition: all 0.2s; border: none; cursor: pointer; border-radius: 6px; display: inline-block; font-weight: 700; }
+  .btn-primary:hover { background: #16a34a; transform: translateY(-2px); }
+  .btn-secondary { font-family: var(--mono); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-bright); border: 1px solid rgba(59,130,246,0.4); padding: 16px 36px; text-decoration: none; transition: all 0.2s; border-radius: 6px; display: inline-block; }
+  .btn-secondary:hover { background: rgba(59,130,246,0.08); }
+
+  section { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 80px 40px; }
+  .section-label { font-family: var(--mono); font-size: 11px; color: var(--accent-bright); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+  .section-label::before { content: ''; width: 30px; height: 1px; background: var(--accent-bright); }
+  h2 { font-family: var(--sans); font-size: clamp(32px, 5vw, 56px); font-weight: 800; line-height: 1; letter-spacing: -2px; margin-bottom: 50px; }
+  .divider { border: none; border-top: 1px solid var(--border); position: relative; z-index: 1; }
+
+  /* Stats */
+  .stats-row { display: flex; gap: 40px; flex-wrap: wrap; margin-bottom: 50px; }
+  .stat-item { text-align: left; }
+  .stat-val { font-family: var(--sans); font-size: 40px; font-weight: 800; color: var(--live); line-height: 1; }
+  .stat-val.blue { color: var(--accent-bright); }
+  .stat-val.amber { color: var(--accent3); }
+  .stat-label { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; }
+
+  /* Data feeds */
+  .feeds-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 20px; }
+  .feed-card { background: var(--panel); padding: 32px 28px; position: relative; transition: background 0.2s; }
+  .feed-card:hover { background: #111929; }
+  .feed-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+  .feed-card.xrpl::before { background: var(--accent-bright); }
+  .feed-card.chainlink::before { background: var(--accent3); }
+  .feed-card.whale::before { background: var(--live); }
+  .feed-card.dex::before { background: var(--accent2); }
+  .feed-icon { font-size: 28px; margin-bottom: 16px; }
+  .feed-name { font-family: var(--sans); font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+  .feed-status { font-family: var(--mono); font-size: 10px; letter-spacing: 3px; color: var(--muted); margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+  .feed-desc { font-family: var(--mono); font-size: 11px; color: var(--muted); line-height: 1.9; }
+  .feed-endpoints { margin-top: 16px; }
+  .endpoint { font-family: var(--mono); font-size: 10px; color: var(--accent2); padding: 5px 10px; background: var(--bg); border: 1px solid var(--border); border-left: 2px solid var(--accent); margin-bottom: 4px; }
+
+  /* Pricing */
+  .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+  .price-card { border: 1px solid var(--border); padding: 36px 28px; background: var(--panel); border-radius: 10px; position: relative; transition: all 0.2s; }
+  .price-card:hover { border-color: var(--accent-bright); transform: translateY(-4px); }
+  .price-card.featured { border-color: var(--live); background: rgba(34,197,94,0.04); }
+  .price-card.featured::before { content: 'MOST POPULAR'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--live); color: #000; font-family: var(--mono); font-size: 9px; padding: 3px 12px; border-radius: 20px; letter-spacing: 2px; font-weight: 700; white-space: nowrap; }
+  .price-tier { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px; }
+  .price-amount { font-family: var(--sans); font-size: 42px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+  .price-amount span { font-size: 16px; color: var(--muted); font-weight: 400; }
+  .price-desc { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-bottom: 24px; line-height: 1.6; }
+  .price-features { list-style: none; margin-bottom: 28px; }
+  .price-features li { font-family: var(--mono); font-size: 11px; color: var(--muted); padding: 7px 0; border-bottom: 1px solid var(--border); display: flex; gap: 10px; align-items: flex-start; }
+  .price-features li:last-child { border-bottom: none; }
+  .price-features li .check { color: var(--live); flex-shrink: 0; }
+  .price-features li .lock { color: var(--muted); flex-shrink: 0; opacity: 0.5; }
+  .price-btn { display: block; text-align: center; font-family: var(--mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; padding: 12px; border-radius: 6px; text-decoration: none; transition: all 0.2s; cursor: pointer; border: none; width: 100%; }
+  .price-btn.primary { background: var(--live); color: #000; font-weight: 700; }
+  .price-btn.primary:hover { background: #16a34a; }
+  .price-btn.secondary { background: transparent; border: 1px solid var(--border); color: var(--muted); }
+  .price-btn.secondary:hover { border-color: var(--accent-bright); color: var(--accent-bright); }
+
+  /* Comparison */
+  .compare-table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 12px; }
+  .compare-table th { padding: 14px 20px; text-align: center; border-bottom: 1px solid var(--border); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+  .compare-table th:first-child { text-align: left; }
+  .compare-table td { padding: 14px 20px; border-bottom: 1px solid var(--border); text-align: center; color: var(--muted); }
+  .compare-table td:first-child { text-align: left; color: var(--text); }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .yes { color: var(--live); font-weight: 700; }
+  .no { color: var(--muted); opacity: 0.4; }
+  .val { color: var(--accent-bright); }
+
+  /* CTA Block */
+  .cta-block { background: rgba(34,197,94,0.04); border: 1px solid rgba(34,197,94,0.3); padding: 60px; text-align: center; border-radius: 12px; position: relative; overflow: hidden; }
+  .cta-block::before { content: 'API'; position: absolute; top: -30px; right: -20px; font-family: var(--sans); font-size: 180px; font-weight: 800; color: rgba(34,197,94,0.04); pointer-events: none; }
+  .cta-block h3 { font-family: var(--sans); font-size: clamp(32px, 5vw, 56px); font-weight: 800; letter-spacing: -2px; margin-bottom: 16px; }
+  .cta-block p { font-family: var(--mono); font-size: 12px; color: var(--muted); line-height: 2; max-width: 600px; margin: 0 auto 36px; }
+  .cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+  footer { border-top: 1px solid var(--border); padding: 40px; display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1; flex-wrap: wrap; gap: 20px; }
+  footer p { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  footer a { font-family: var(--mono); font-size: 10px; color: var(--muted); text-decoration: none; letter-spacing: 2px; text-transform: uppercase; margin-left: 20px; transition: color 0.2s; }
+  footer a:hover { color: var(--accent-bright); }
+
+  @media(max-width: 768px) {
+    nav { padding: 16px 20px; }
+    nav > div { display: none; }
+    .hero { padding: 100px 20px 60px; }
+    section { padding: 60px 20px; }
+    .stats-row { gap: 24px; }
+    .cta-block { padding: 40px 24px; }
+    footer { padding: 30px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">
+    <svg width="28" height="28" viewBox="0 0 60 68" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="30,2 56,17 56,51 30,66 4,51 4,17" fill="none" stroke="#2563eb" stroke-width="2"/>
+      <polygon points="30,14 48,24 48,44 30,54 12,44 12,24" fill="none" stroke="#2563eb" stroke-width="1.5" opacity="0.5"/>
+      <polygon points="30,24 42,31 30,38 18,31" fill="#2563eb" opacity="0.9"/>
+    </svg>
+    CAMPIONE<span class="logo-slash">/</span>INFRA
+  </a>
+  <div>
+    <a href="/">Home</a>
+    <a href="/#services">Services</a>
+    <a href="/#iso20022">ISO 20022</a>
+    <a href="/#contact">Contact</a>
+    <a href="/portal.html" style="color:var(--live);">Blockchain API Data</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div style="position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:140px 40px 80px;">
+  <div class="hero-tag"><div class="dot green"></div> Live Data — Powered by Our Own Node Infrastructure</div>
+  <h1>
+    <span class="line1">BLOCKCHAIN</span>
+    <span class="line2">INTELLIGENCE.</span>
+  </h1>
+  <p class="hero-desc">
+    Real time data from our own <strong>XRPL</strong>, <strong>Chainlink</strong>, <strong>Stellar</strong> and <strong>Bitcoin</strong> nodes.<br><br>
+    Payment flows, whale alerts, price feeds and deviation signals —
+    served via clean REST API. <strong>90% cheaper than Chainalysis.</strong>
+    Built for traders, developers and financial institutions.
+  </p>
+  <div class="stats-row">
+    <div class="stat-item"><div class="stat-val">$0</div><div class="stat-label">To Start</div></div>
+    <div class="stat-item"><div class="stat-val blue">4</div><div class="stat-label">Live Data Feeds</div></div>
+    <div class="stat-item"><div class="stat-val amber">90%</div><div class="stat-label">Cheaper Than Chainalysis</div></div>
+    <div class="stat-item"><div class="stat-val">24/7</div><div class="stat-label">Live Streaming</div></div>
+  </div>
+  <div style="display:flex;gap:16px;flex-wrap:wrap;">
+    <a href="/portal/index.html" class="btn-primary">Access Portal →</a>
+    <a href="/#contact" class="btn-secondary">Contact Sales</a>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- DATA FEEDS -->
+<section>
+  <div class="section-label">What We Index</div>
+  <h2>Live Data Feeds</h2>
+  <div class="feeds-grid">
+    <div class="feed-card xrpl">
+      <div class="feed-icon">◈</div>
+      <div class="feed-name">XRPL Payments</div>
+      <div class="feed-status"><div class="dot green"></div> Streaming Live Now</div>
+      <div class="feed-desc">Every XRP payment on the ledger captured in real time. Sender, receiver, amount, currency and timestamp. 1,500+ transactions per second indexed automatically.</div>
+      <div class="feed-endpoints">
+        <div class="endpoint">GET /api/v1/xrpl/payments</div>
+        <div class="endpoint">GET /api/v1/xrpl/stats</div>
+        <div class="endpoint">GET /api/v1/xrpl/trades</div>
+      </div>
+    </div>
+    <div class="feed-card whale">
+      <div class="feed-icon">⚡</div>
+      <div class="feed-name">Whale Alerts</div>
+      <div class="feed-status"><div class="dot green"></div> Watching 24/7</div>
+      <div class="feed-desc">Automatic detection of large wallet movements over 100,000 XRP. Real time alerts as they happen on chain. Critical signal for traders and risk managers.</div>
+      <div class="feed-endpoints">
+        <div class="endpoint">GET /api/v1/xrpl/whales</div>
+        <div class="endpoint">GET /api/v1/alerts/whales</div>
+      </div>
+    </div>
+    <div class="feed-card chainlink">
+      <div class="feed-icon">◎</div>
+      <div class="feed-name">Chainlink Price Feeds</div>
+      <div class="feed-status"><div class="dot amber"></div> Indexing — Data Tomorrow</div>
+      <div class="feed-desc">ETH/USD oracle price history from our own Chainlink node. Every price update captured via The Graph subgraph. Historical and real time data available.</div>
+      <div class="feed-endpoints">
+        <div class="endpoint">GET /api/v1/chainlink/prices</div>
+        <div class="endpoint">GET /api/v1/chainlink/deviations</div>
+      </div>
+    </div>
+    <div class="feed-card dex">
+      <div class="feed-icon">⟳</div>
+      <div class="feed-name">XRPL DEX Trades</div>
+      <div class="feed-status"><div class="dot green"></div> Live — Pro+ Only</div>
+      <div class="feed-desc">All OfferCreate events on the XRPL built-in DEX. Currency pairs, exchange rates, trade volumes. EUR/XRP, USD/XRP, and 40+ pairs tracked automatically.</div>
+      <div class="feed-endpoints">
+        <div class="endpoint">GET /api/v1/xrpl/trades</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- PRICING -->
+<section>
+  <div class="section-label">Pricing</div>
+  <h2>Simple,<br>Transparent Tiers</h2>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-tier">Free</div>
+      <div class="price-amount" style="color:var(--muted);">$0<span>/mo</span></div>
+      <div class="price-desc">Get started — no credit card required</div>
+      <ul class="price-features">
+        <li><span class="check">✓</span> XRPL basic stats</li>
+        <li><span class="check">✓</span> Last 3 whale alerts</li>
+        <li><span class="check">✓</span> 10 requests/minute</li>
+        <li><span class="lock">✗</span> Chainlink price feeds</li>
+        <li><span class="lock">✗</span> DEX trade data</li>
+        <li><span class="lock">✗</span> Price deviations</li>
+      </ul>
+      <a href="/portal/index.html" class="price-btn secondary">Get Free Access</a>
+    </div>
+    <div class="price-card">
+      <div class="price-tier">Starter</div>
+      <div class="price-amount" style="color:var(--accent-bright);">$99<span>/mo</span></div>
+      <div class="price-desc">For individual traders and developers</div>
+      <ul class="price-features">
+        <li><span class="check">✓</span> Live XRPL payments</li>
+        <li><span class="check">✓</span> Last 10 whale alerts</li>
+        <li><span class="check">✓</span> Chainlink price history</li>
+        <li><span class="check">✓</span> 100 requests/minute</li>
+        <li><span class="lock">✗</span> DEX trade data</li>
+        <li><span class="lock">✗</span> Price deviations</li>
+      </ul>
+      <a href="/portal/index.html" class="price-btn secondary">Get Starter</a>
+    </div>
+    <div class="price-card featured">
+      <div class="price-tier" style="color:var(--live);">Pro</div>
+      <div class="price-amount" style="color:var(--live);">$499<span>/mo</span></div>
+      <div class="price-desc">For professional traders and funds</div>
+      <ul class="price-features">
+        <li><span class="check">✓</span> Everything in Starter</li>
+        <li><span class="check">✓</span> Full DEX trade data</li>
+        <li><span class="check">✓</span> Price deviation alerts</li>
+        <li><span class="check">✓</span> Last 100 whale alerts</li>
+        <li><span class="check">✓</span> 1,000 requests/minute</li>
+        <li><span class="check">✓</span> Priority support</li>
+      </ul>
+      <a href="/portal/index.html" class="price-btn primary">Get Pro Access</a>
+    </div>
+    <div class="price-card">
+      <div class="price-tier" style="color:var(--accent3);">Enterprise</div>
+      <div class="price-amount" style="color:var(--accent3);">$2,499<span>/mo</span></div>
+      <div class="price-desc">For institutions and compliance teams</div>
+      <ul class="price-features">
+        <li><span class="check">✓</span> Everything in Pro</li>
+        <li><span class="check">✓</span> Unlimited whale alerts</li>
+        <li><span class="check">✓</span> Unlimited requests</li>
+        <li><span class="check">✓</span> Custom data feeds</li>
+        <li><span class="check">✓</span> Webhook alerts</li>
+        <li><span class="check">✓</span> Dedicated support</li>
+      </ul>
+      <a href="/#contact" class="price-btn secondary">Contact Sales</a>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- COMPARISON TABLE -->
+<section>
+  <div class="section-label">Why Us</div>
+  <h2>Compare to<br>The Competition</h2>
+  <div style="overflow-x:auto;">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th style="color:var(--live);">Campione</th>
+          <th>Chainalysis</th>
+          <th>Nansen</th>
+          <th>Glassnode</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Monthly Cost</td><td class="yes">$99 - $2,499</td><td class="val">$2,500 - $8,000</td><td class="val">$1,250 - $3,333</td><td class="val">$208 - $2,500</td></tr>
+        <tr><td>XRPL Payment Data</td><td class="yes">✓</td><td class="no">✗</td><td class="no">✗</td><td class="no">✗</td></tr>
+        <tr><td>Chainlink Oracle Data</td><td class="yes">✓</td><td class="no">✗</td><td class="no">✗</td><td class="no">✗</td></tr>
+        <tr><td>Own Node Infrastructure</td><td class="yes">✓ Florida, USA</td><td class="no">3rd party</td><td class="no">3rd party</td><td class="no">3rd party</td></tr>
+        <tr><td>Real Time Streaming</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="val">Delayed</td></tr>
+        <tr><td>Free Tier</td><td class="yes">✓</td><td class="no">✗</td><td class="no">✗</td><td class="no">✗</td></tr>
+        <tr><td>US Based Operator</td><td class="yes">✓ Florida</td><td class="yes">✓</td><td class="no">✗</td><td class="no">✗</td></tr>
+        <tr><td>ISO 20022 Aligned</td><td class="yes">✓</td><td class="no">✗</td><td class="no">✗</td><td class="no">✗</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- CTA -->
+<section>
+  <div class="cta-block">
+    <div class="section-label" style="justify-content:center;">Get Started Today</div>
+    <h3>Free to start.<br>Live in minutes.</h3>
+    <p>Access real time blockchain intelligence data from our own US-based node infrastructure. No credit card required to start. Upgrade when you're ready.</p>
+    <div class="cta-buttons">
+      <a href="/portal/index.html" class="btn-primary">Access Portal →</a>
+      <a href="/#contact" class="btn-secondary">Talk to Sales</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>
+    <p>© 2024–2026 <strong>MaxResults4U Business Solutions</strong> — Campione Infrastructure</p>
+    <p style="margin-top:5px;">🇺🇸 Land O Lakes, FL · kenneth@campioneinfrastructure.com</p>
+  </div>
+  <div>
+    <a href="/">Home</a>
+    <a href="/#services">Services</a>
+    <a href="/#contact">Contact</a>
+    <a href="/portal.html" style="color:var(--live);">API Portal</a>
+  </div>
+</footer>
+
+</body>
+</html>
