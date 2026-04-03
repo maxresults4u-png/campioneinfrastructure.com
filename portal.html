@@ -89,6 +89,15 @@
   .price-card:hover { border-color: var(--accent-bright); transform: translateY(-4px); }
   .price-card.featured { border-color: var(--live); background: rgba(34,197,94,0.04); }
   .price-card.featured::before { content: 'MOST POPULAR'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--live); color: #000; font-family: var(--mono); font-size: 9px; padding: 3px 12px; border-radius: 20px; letter-spacing: 2px; font-weight: 700; white-space: nowrap; }
+
+  .early-bird-banner { background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(245,158,11,0.05)); border: 1px solid rgba(245,158,11,0.5); border-radius: 10px; padding: 20px 28px; margin-bottom: 40px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  .early-bird-badge { background: var(--accent3); color: #000; font-family: var(--mono); font-size: 10px; font-weight: 700; padding: 4px 12px; border-radius: 20px; letter-spacing: 2px; white-space: nowrap; }
+  .early-bird-text { font-family: var(--mono); font-size: 12px; color: var(--accent3); line-height: 1.6; }
+  .early-bird-text strong { color: var(--text); }
+  .price-original { font-size: 18px; color: var(--muted); text-decoration: line-through; display: block; margin-bottom: 2px; font-family: var(--mono); }
+  .price-card.featured::before { content: 'MOST POPULAR + BEST DEAL'; }
+  .countdown { font-family: var(--mono); font-size: 11px; color: var(--accent3); margin-top: 4px; }
+
   .price-tier { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px; }
   .price-amount { font-family: var(--sans); font-size: 42px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
   .price-amount span { font-size: 16px; color: var(--muted); font-weight: 400; }
@@ -240,6 +249,16 @@
 <section>
   <div class="section-label">Pricing</div>
   <h2>Simple,<br>Transparent Tiers</h2>
+  <div class="early-bird-banner">
+    <div>
+      <div class="early-bird-badge">🔥 APRIL EARLY BIRD — 60% OFF</div>
+      <div class="early-bird-text" style="margin-top:10px;"><strong>Lock in founding member pricing before May 1st.</strong><br>Prices increase 60% on May 1, 2026. Subscribe now and keep this rate forever.</div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-family:var(--mono);font-size:11px;color:var(--muted);">Offer expires</div>
+      <div style="font-family:var(--sans);font-size:24px;font-weight:800;color:var(--accent3);" id="countdown">Loading...</div>
+    </div>
+  </div>
   <div class="pricing-grid">
     <div class="price-card">
       <div class="price-tier">Free</div>
@@ -257,7 +276,7 @@
     </div>
     <div class="price-card">
       <div class="price-tier">Starter</div>
-      <div class="price-amount" style="color:var(--accent-bright);">$99<span>/mo</span></div>
+      <div class="price-original">$248/mo</div><div class="price-amount" style="color:var(--accent-bright);">$99<span>/mo</span></div><div class="countdown">60% off — April only</div>
       <div class="price-desc">For individual traders and developers</div>
       <ul class="price-features">
         <li><span class="check">✓</span> Live XRPL payments</li>
@@ -271,7 +290,7 @@
     </div>
     <div class="price-card featured">
       <div class="price-tier" style="color:var(--live);">Pro</div>
-      <div class="price-amount" style="color:var(--live);">$499<span>/mo</span></div>
+      <div class="price-original">$1,248/mo</div><div class="price-amount" style="color:var(--live);">$499<span>/mo</span></div><div class="countdown">60% off — April only</div>
       <div class="price-desc">For professional traders and funds</div>
       <ul class="price-features">
         <li><span class="check">✓</span> Everything in Starter</li>
@@ -285,7 +304,7 @@
     </div>
     <div class="price-card">
       <div class="price-tier" style="color:var(--accent3);">Enterprise</div>
-      <div class="price-amount" style="color:var(--accent3);">$2,499<span>/mo</span></div>
+      <div class="price-original">$6,248/mo</div><div class="price-amount" style="color:var(--accent3);">$2,499<span>/mo</span></div><div class="countdown">60% off — April only</div>
       <div class="price-desc">For institutions and compliance teams</div>
       <ul class="price-features">
         <li><span class="check">✓</span> Everything in Pro</li>
@@ -374,6 +393,23 @@
 <div id="req-error" style="display:none;font-family:monospace;font-size:12px;color:#ef4444;text-align:center;margin-top:8px;"></div>
 </div>
 </div>
+
+
+<script>
+function updateCountdown() {
+  var end = new Date('2026-05-01T00:00:00');
+  var now = new Date();
+  var diff = end - now;
+  if (diff <= 0) { document.getElementById('countdown') && (document.getElementById('countdown').textContent = 'Expired'); return; }
+  var days = Math.floor(diff / (1000*60*60*24));
+  var hours = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+  var mins = Math.floor((diff % (1000*60*60)) / (1000*60));
+  var el = document.getElementById('countdown');
+  if (el) el.textContent = days + 'd ' + hours + 'h ' + mins + 'm left';
+}
+updateCountdown();
+setInterval(updateCountdown, 60000);
+</script>
 
 <script>
 function requestAccess(tier) {
