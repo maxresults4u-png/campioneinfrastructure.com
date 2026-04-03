@@ -179,7 +179,7 @@
     <div class="stat-item"><div class="stat-val">24/7</div><div class="stat-label">Live Streaming</div></div>
   </div>
   <div style="display:flex;gap:16px;flex-wrap:wrap;">
-    <a href="/campione-portal.html" class="btn-primary">Access Portal →</a>
+    <button class="btn-primary" onclick="document.getElementById('requestModal').style.display='flex'">Request Access →</button>
     <a href="/#contact" class="btn-secondary">Contact Sales</a>
   </div>
 </div>
@@ -253,7 +253,7 @@
         <li><span class="lock">✗</span> DEX trade data</li>
         <li><span class="lock">✗</span> Price deviations</li>
       </ul>
-      <a href="/campione-portal.html" class="price-btn secondary">Get Free Access</a>
+      <button class="price-btn secondary" onclick="requestAccess('Free')">Request Free Access</button>
     </div>
     <div class="price-card">
       <div class="price-tier">Starter</div>
@@ -267,7 +267,7 @@
         <li><span class="lock">✗</span> DEX trade data</li>
         <li><span class="lock">✗</span> Price deviations</li>
       </ul>
-      <a href="/campione-portal.html" class="price-btn secondary">Get Starter</a>
+      <button class="price-btn secondary" onclick="requestAccess('Starter - $99/mo')">Request Starter Access</button>
     </div>
     <div class="price-card featured">
       <div class="price-tier" style="color:var(--live);">Pro</div>
@@ -281,7 +281,7 @@
         <li><span class="check">✓</span> 1,000 requests/minute</li>
         <li><span class="check">✓</span> Priority support</li>
       </ul>
-      <a href="/campione-portal.html" class="price-btn primary">Get Pro Access</a>
+      <button class="price-btn primary" onclick="requestAccess('Pro - $499/mo')">Request Pro Access</button>
     </div>
     <div class="price-card">
       <div class="price-tier" style="color:var(--accent3);">Enterprise</div>
@@ -295,7 +295,7 @@
         <li><span class="check">✓</span> Webhook alerts</li>
         <li><span class="check">✓</span> Dedicated support</li>
       </ul>
-      <a href="/#contact" class="price-btn secondary">Contact Sales</a>
+      <button class="price-btn secondary" onclick="requestAccess('Enterprise - $2499/mo')">Request Enterprise Access</button>
     </div>
   </div>
 </section>
@@ -340,8 +340,8 @@
     <h3>Free to start.<br>Live in minutes.</h3>
     <p>Access real time blockchain intelligence data from our own US-based node infrastructure. No credit card required to start. Upgrade when you're ready.</p>
     <div class="cta-buttons">
-      <a href="/campione-portal.html" class="btn-primary">Access Portal →</a>
-      <a href="/#contact" class="btn-secondary">Talk to Sales</a>
+      <button class="btn-primary" onclick="document.getElementById('requestModal').style.display='flex'">Request Access →</button>
+      <button class="btn-secondary" onclick="requestAccess('Enterprise - $2499/mo')">Talk to Sales</button>
     </div>
   </div>
 </section>
