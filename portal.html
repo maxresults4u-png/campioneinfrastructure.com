@@ -354,4 +354,67 @@
   <div>
     <a href="/">Home</a>
     <a href="/#services">Services</a>
-    
+<div id="requestModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:1000;align-items:center;justify-content:center;padding:20px;">
+<div style="background:#0d1424;border:1px solid #1a2340;border-radius:16px;padding:40px;width:100%;max-width:480px;position:relative;">
+<button onclick="document.getElementById('requestModal').style.display='none'" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#4a5580;font-size:20px;cursor:pointer;">x</button>
+<div style="font-family:var(--mono);font-size:10px;color:#22c55e;letter-spacing:4px;text-transform:uppercase;margin-bottom:16px;">Request Access</div>
+<h3 style="font-family:var(--sans);font-size:24px;font-weight:800;letter-spacing:-1px;margin-bottom:24px;">Get Your Portal Access</h3>
+<input type="text" id="req-name" placeholder="Your full name *" style="width:100%;background:#0a0f1e;border:1px solid #1a2340;color:#eef2ff;padding:12px;font-family:monospace;font-size:12px;outline:none;margin-bottom:12px;border-radius:4px;box-sizing:border-box;">
+<input type="email" id="req-email" placeholder="Your email address *" style="width:100%;background:#0a0f1e;border:1px solid #1a2340;color:#eef2ff;padding:12px;font-family:monospace;font-size:12px;outline:none;margin-bottom:12px;border-radius:4px;box-sizing:border-box;">
+<input type="text" id="req-company" placeholder="Company (optional)" style="width:100%;background:#0a0f1e;border:1px solid #1a2340;color:#eef2ff;padding:12px;font-family:monospace;font-size:12px;outline:none;margin-bottom:12px;border-radius:4px;box-sizing:border-box;">
+<select id="req-tier" style="width:100%;background:#0a0f1e;border:1px solid #1a2340;color:#eef2ff;padding:12px;font-family:monospace;font-size:12px;outline:none;margin-bottom:12px;border-radius:4px;box-sizing:border-box;">
+<option value="Free">Free</option>
+<option value="Starter">Starter - $99/mo</option>
+<option value="Pro">Pro - $499/mo</option>
+<option value="Enterprise">Enterprise - $2499/mo</option>
+</select>
+<textarea id="req-message" placeholder="Tell us about your use case (optional)" rows="3" style="width:100%;background:#0a0f1e;border:1px solid #1a2340;color:#eef2ff;padding:12px;font-family:monospace;font-size:12px;outline:none;margin-bottom:16px;border-radius:4px;resize:none;box-sizing:border-box;"></textarea>
+<button onclick="submitRequest()" style="width:100%;background:#22c55e;color:#000;border:none;padding:14px;font-size:14px;font-weight:700;cursor:pointer;border-radius:6px;">Submit Request</button>
+<div id="req-success" style="display:none;font-family:monospace;font-size:12px;color:#22c55e;text-align:center;margin-top:16px;padding:14px;border:1px solid #22c55e;border-radius:6px;">Request received! Kenneth will email your credentials within 24 hours.</div>
+<div id="req-error" style="display:none;font-family:monospace;font-size:12px;color:#ef4444;text-align:center;margin-top:8px;"></div>
+</div>
+</div>
+
+<script>
+function requestAccess(tier) {
+  var sel = document.getElementById("req-tier");
+  for (var i = 0; i < sel.options.length; i++) {
+    if (sel.options[i].value.toLowerCase().indexOf(tier.toLowerCase()) !== -1) {
+      sel.selectedIndex = i; break;
+    }
+  }
+  document.getElementById("requestModal").style.display = "flex";
+}
+async function submitRequest() {
+  var name = document.getElementById("req-name").value.trim();
+  var email = document.getElementById("req-email").value.trim();
+  var company = document.getElementById("req-company").value.trim();
+  var tier = document.getElementById("req-tier").value;
+  var message = document.getElementById("req-message").value.trim();
+  var errEl = document.getElementById("req-error");
+  if (!name || !email) {
+    errEl.style.display = "block";
+    errEl.textContent = "Please enter your name and email.";
+    return;
+  }
+  errEl.style.display = "none";
+  try {
+    var res = await fetch("https://formspree.io/f/mlgojzyj", {
+      method: "POST",
+      headers: {"Content-Type":"application/json","Accept":"application/json"},
+      body: JSON.stringify({subject:"Portal Access Request - "+tier, name:name, email:email, company:company, tier:tier, message:message, type:"portal_access_request"})
+    });
+    if (res.ok) {
+      document.getElementById("req-success").style.display = "block";
+      document.getElementById("req-name").value = "";
+      document.getElementById("req-email").value = "";
+      document.getElementById("req-company").value = "";
+      document.getElementById("req-message").value = "";
+    } else { throw new Error("Failed"); }
+  } catch(e) {
+    window.location.href = "mailto:maxresults4u@gmail.com?subject=Portal Access Request - "+tier+"&body=Name: "+name+"%0AEmail: "+email+"%0ATier: "+tier;
+  }
+}
+</script>
+</body>
+</html>
