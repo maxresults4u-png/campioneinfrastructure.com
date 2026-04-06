@@ -1,1 +1,386 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EBITDA (EBIT) — Official Site</title>
+<style>
+    :root {
+        --bg: #050608;
+        --bg-alt: #0f1116;
+        --accent: #00e0ff;
+        --accent-soft: #00b8d6;
+        --text: #ffffff;
+        --muted: #a0a4b3;
+        --border: #1b1f2a;
+    }
+    * {
+        box-sizing: border-box;
+    }
+    body {
+        margin: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: radial-gradient(circle at top, #151826 0, #050608 55%);
+        color: var(--text);
+    }
+    a {
+        color: inherit;
+    }
+    header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        backdrop-filter: blur(14px);
+        background: linear-gradient(to bottom, rgba(5,6,8,0.96), rgba(5,6,8,0.85));
+        border-bottom: 1px solid var(--border);
+    }
+    .nav {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 12px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+    }
+    .nav-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .nav-logo {
+        width: 40px;
+        height: 40px;
+        border-radius: 999px;
+        background: radial-gradient(circle at 30% 20%, #ffffff 0, #c0c4cf 35%, #7f838f 70%, #3a3d45 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+    .nav-logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+    .nav-title {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.1;
+    }
+    .nav-title span:first-child {
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        color: var(--accent);
+    }
+    .nav-title span:last-child {
+        font-size: 0.9rem;
+        color: var(--muted);
+    }
+    .nav-links {
+        display: flex;
+        gap: 18px;
+        font-size: 0.9rem;
+    }
+    .nav-links a {
+        text-decoration: none;
+        color: var(--muted);
+        padding: 6px 0;
+        border-bottom: 2px solid transparent;
+    }
+    .nav-links a:hover {
+        color: var(--accent);
+        border-bottom-color: var(--accent-soft);
+    }
+    .nav-cta {
+        display: flex;
+        gap: 10px;
+    }
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 9px 18px;
+        border-radius: 999px;
+        border: 1px solid transparent;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        white-space: nowrap;
+    }
+    .btn-primary {
+        background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+        color: #000;
+        box-shadow: 0 0 18px rgba(0, 224, 255, 0.35);
+    }
+    .btn-primary:hover {
+        filter: brightness(1.05);
+    }
+    .btn-outline {
+        background: transparent;
+        color: var(--accent);
+        border-color: var(--accent-soft);
+    }
+    .btn-outline:hover {
+        background: rgba(0, 224, 255, 0.08);
+    }
+
+    main {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 40px 20px 80px;
+    }
+
+    /* Hero */
+    .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 3fr) minmax(0, 2.5fr);
+        gap: 40px;
+        align-items: center;
+        padding: 40px 0 30px;
+    }
+    .hero-kicker {
+        font-size: 0.8rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--accent);
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+    .hero h1 {
+        font-size: clamp(2.4rem, 3.2vw, 3.1rem);
+        margin: 0 0 14px;
+    }
+    .hero h1 span {
+        color: var(--accent);
+    }
+    .hero-sub {
+        font-size: 0.98rem;
+        color: var(--muted);
+        max-width: 520px;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+    .hero-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 18px;
+        font-size: 0.8rem;
+        color: var(--muted);
+        margin-top: 18px;
+    }
+    .hero-meta span {
+        padding: 4px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: rgba(10, 12, 18, 0.8);
+    }
+    .hero-card {
+        border-radius: 18px;
+        border: 1px solid var(--border);
+        background: radial-gradient(circle at top left, #1b2133 0, #090b10 55%);
+        padding: 20px 18px;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+    }
+    .hero-card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 14px;
+    }
+    .hero-card-title {
+        font-size: 0.85rem;
+        color: var(--muted);
+    }
+    .hero-card-token {
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+    .hero-price {
+        font-size: 1.6rem;
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+    .hero-price span {
+        font-size: 0.8rem;
+        color: var(--muted);
+        margin-left: 6px;
+    }
+    .hero-price-placeholder {
+        color: var(--muted);
+        font-size: 0.9rem;
+    }
+    .hero-card-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.8rem;
+        color: var(--muted);
+        margin-top: 10px;
+    }
+    .hero-card-row span:last-child {
+        color: var(--accent);
+    }
+
+    /* Sections */
+    section {
+        padding: 40px 0 10px;
+        border-top: 1px solid rgba(18, 22, 32, 0.9);
+        margin-top: 30px;
+    }
+    section:first-of-type {
+        border-top: none;
+        margin-top: 0;
+    }
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 16px;
+        margin-bottom: 18px;
+    }
+    .section-header h2 {
+        font-size: 1.2rem;
+        margin: 0;
+    }
+    .section-header p {
+        margin: 0;
+        font-size: 0.85rem;
+        color: var(--muted);
+    }
+    .section-body {
+        font-size: 0.95rem;
+        color: var(--muted);
+        line-height: 1.7;
+    }
+    .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        font-size: 0.75rem;
+        color: var(--muted);
+    }
+    .pill-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 999px;
+        background: var(--accent);
+        box-shadow: 0 0 8px rgba(0, 224, 255, 0.6);
+    }
+
+    .grid-2 {
+        display: grid;
+        grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+        gap: 26px;
+    }
+    .card {
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        background: var(--bg-alt);
+        padding: 18px 18px 16px;
+    }
+    .card h3 {
+        margin: 0 0 10px;
+        font-size: 0.98rem;
+    }
+    .card p {
+        margin: 0 0 10px;
+        font-size: 0.88rem;
+        color: var(--muted);
+    }
+    .card ul {
+        margin: 6px 0 0 18px;
+        padding: 0;
+        font-size: 0.86rem;
+        color: var(--muted);
+    }
+    .card ul li {
+        margin-bottom: 4px;
+    }
+
+    .btn-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 14px;
+    }
+
+    footer {
+        border-top: 1px solid var(--border);
+        padding: 20px;
+        text-align: center;
+        font-size: 0.8rem;
+        color: var(--muted);
+        background: #050608;
+    }
+
+    @media (max-width: 800px) {
+        .hero {
+            grid-template-columns: minmax(0, 1fr);
+        }
+        .nav-links {
+            display: none;
+        }
+        .nav-cta {
+            display: none;
+        }
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <div class="nav">
+        <div class="nav-left">
+            <div class="nav-logo">
+                <!-- Place ebit-logo.png in same folder -->
+                <img src="ebit-logo.png" alt="EBIT logo" />
+            </div>
+            <div class="nav-title">
+                <span>EBITDA • EBIT</span>
+                <span>Infrastructure‑backed XRPL utility token</span>
+            </div>
+        </div>
+        <nav class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#whitepaper">Whitepaper</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#buy">Where to Buy</a>
+            <a href="#about">About</a>
+        </nav>
+        <div class="nav-cta">
+            <a class="btn btn-outline" href="#whitepaper">Whitepaper</a>
+            <a class="btn btn-primary" href="#buy">Get EBIT</a>
+        </div>
+    </div>
+</header>
+
+<main>
+
+    <!-- HERO / HOME -->
+    <section id="home">
+        <div class="hero">
+            <div>
+                <div class="hero-kicker">XRPL • MULTI‑CHAIN • TELEMETRY</div>
+                <h1>EBITDA <span>(EBIT)</span> — infrastructure‑backed utility for real yield.</h1>
+                <p class="hero-sub">
+                    EBIT is a utility‑driven, data‑powered digital asset built on the XRP Ledger and
+                    supported by a multi‑chain backend spanning Bitcoin, Lightning, Cosmos, Stellar,
+                    Chainlink, The Graph, and more. Designed for ISO‑aligned financial telemetry and
+                    automated value flows.
+                </p>
+                <div class="btn-row">
+                    <a class="btn btn-primary" href="#buy">Launch EBIT flow</a>
+                    <a class="btn btn-outline" href="#whitepaper">Read whitepaper</a>
+                </div>
+                <div class="hero-meta">
+                    <span>XRPL native • AMM‑ready</span>
+                    <span>ISO‑20022‑aligned telemetry</span>
+                    <span>Multi‑chain infrastructure backing
