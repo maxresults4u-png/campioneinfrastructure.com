@@ -127,6 +127,7 @@ footer{border-top:1px solid var(--border);padding:10px 28px;display:flex;justify
   <div class="tab" onclick="showTab('stellar')">⭐ STELLAR</div>
   <div class="tab" onclick="showTab('chainlink')">🔗 CHAINLINK</div>
   <div class="tab" onclick="showTab('nodes')">🖥 NODES</div>
+  <div class="tab" onclick="showTab('admin')">🔑 ADMIN</div>
 </div>
 
 <!-- OVERVIEW -->
@@ -407,6 +408,43 @@ footer{border-top:1px solid var(--border);padding:10px 28px;display:flex;justify
   </div>
 </div>
 
+
+<div class="panel" id="panel-admin">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
+    <div style="font-family:var(--head);font-size:18px;font-weight:900;color:var(--green);">API Key Management</div>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <input type="password" id="admin-secret" placeholder="Admin secret..." style="background:rgba(0,0,0,0.3);border:1px solid var(--border);color:var(--text);padding:8px 12px;font-family:var(--mono);font-size:11px;border-radius:4px;outline:none;">
+      <button onclick="loadAdminKeys()" style="background:var(--green);color:#000;border:none;padding:8px 16px;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;border-radius:4px;letter-spacing:1px;">LOAD KEYS</button>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;">
+    <div class="card cg" style="padding:12px 16px;margin:0;text-align:center;"><div style="font-family:var(--mono);font-size:9px;color:var(--muted);">TOTAL KEYS</div><div style="font-family:var(--head);font-size:24px;color:var(--green)" id="adm-total">—</div></div>
+    <div class="card cb" style="padding:12px 16px;margin:0;text-align:center;"><div style="font-family:var(--mono);font-size:9px;color:var(--muted);">ACTIVE</div><div style="font-family:var(--head);font-size:24px;color:var(--blue)" id="adm-active">—</div></div>
+    <div class="card" style="padding:12px 16px;margin:0;text-align:center;border-color:rgba(251,191,36,0.3);"><div style="font-family:var(--mono);font-size:9px;color:var(--muted);">PENDING</div><div style="font-family:var(--head);font-size:24px;color:var(--gold)" id="adm-pending">—</div></div>
+    <div class="card" style="padding:12px 16px;margin:0;text-align:center;"><div style="font-family:var(--mono);font-size:9px;color:var(--muted);">TOTAL REQUESTS</div><div style="font-family:var(--head);font-size:24px;color:var(--text)" id="adm-requests">—</div></div>
+  </div>
+  <div class="stbl" id="adm-table-wrap" style="display:none;">
+    <table class="tx">
+      <thead><tr><th>EMAIL</th><th>NAME</th><th>TIER</th><th>STATUS</th><th>REQ TODAY</th><th>REQ TOTAL</th><th>CREATED</th><th>ACTION</th></tr></thead>
+      <tbody id="adm-keys-tbl"></tbody>
+    </table>
+  </div>
+  <div id="adm-empty" style="text-align:center;padding:40px;color:var(--muted);font-family:var(--mono);font-size:12px;">Enter admin secret and click LOAD KEYS</div>
+  <div style="margin-top:20px;background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:8px;padding:20px;">
+    <div style="font-family:var(--mono);font-size:10px;color:var(--green);letter-spacing:2px;margin-bottom:14px;">ISSUE KEY MANUALLY</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end;">
+      <input type="text" id="new-name" placeholder="Name *" style="background:rgba(0,0,0,0.3);border:1px solid var(--border);color:var(--text);padding:10px;font-family:var(--mono);font-size:11px;border-radius:4px;outline:none;">
+      <input type="email" id="new-email" placeholder="Email *" style="background:rgba(0,0,0,0.3);border:1px solid var(--border);color:var(--text);padding:10px;font-family:var(--mono);font-size:11px;border-radius:4px;outline:none;">
+      <select id="new-tier" style="background:rgba(0,0,0,0.3);border:1px solid var(--border);color:var(--text);padding:10px;font-family:var(--mono);font-size:11px;border-radius:4px;outline:none;">
+        <option value="free">Free</option>
+        <option value="developer">Developer $49/mo</option>
+        <option value="enterprise">Enterprise $149/mo</option>
+      </select>
+      <button onclick="issueKey()" style="background:var(--blue);color:#000;border:none;padding:10px 20px;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;border-radius:4px;white-space:nowrap;">ISSUE KEY</button>
+    </div>
+    <div id="issue-result" style="display:none;margin-top:12px;padding:12px;border-radius:4px;font-family:var(--mono);font-size:11px;"></div>
+  </div>
+</div>
 
 <!-- INCOME -->
 <div class="panel" id="panel-income">
@@ -904,6 +942,78 @@ async function fa(){
     } catch(err){}
   }
   connectLiveWs();
+
+
+async function loadAdminKeys(){
+  const secret = document.getElementById('admin-secret').value;
+  if(!secret){alert('Enter admin secret');return;}
+  try{
+    const r = await fetch('/api/v1/admin/keys', { headers: { 'x-admin-secret': secret } });
+    const d = await r.json();
+    if(!d.success){alert('Error: ' + (d.error||'Invalid secret'));return;}
+    const keys = d.data;
+    window._adminKeys = keys;
+    document.getElementById('adm-total').textContent = keys.length;
+    document.getElementById('adm-active').textContent = keys.filter(k=>k.active===1).length;
+    document.getElementById('adm-pending').textContent = keys.filter(k=>k.active===0).length;
+    document.getElementById('adm-requests').textContent = keys.reduce((s,k)=>s+k.requests_total,0).toLocaleString();
+    const tb = document.getElementById('adm-keys-tbl');
+    tb.innerHTML = '';
+    const tierColors = {free:'var(--green)',developer:'var(--blue)',enterprise:'var(--gold)'};
+    keys.forEach((k,i)=>{
+      const tr = document.createElement('tr');
+      const isActive = k.active === 1;
+      tr.innerHTML = '<td style="color:var(--text);font-size:11px;">'+k.email+'</td>'
+        +'<td style="color:var(--muted);font-size:11px;">'+k.name+'</td>'
+        +'<td><span style="color:'+(tierColors[k.tier]||'var(--text)')+';font-size:10px;font-family:var(--mono);">'+k.tier.toUpperCase()+'</span></td>'
+        +'<td><span class="badge '+(isActive?'bg':'bgo')+'">'+(isActive?'ACTIVE':'PENDING')+'</span></td>'
+        +'<td style="color:var(--blue);font-family:var(--mono);font-size:11px;">'+k.requests_today+'</td>'
+        +'<td style="color:var(--muted);font-family:var(--mono);font-size:11px;">'+k.requests_total+'</td>'
+        +'<td style="color:var(--muted);font-size:10px;">'+(k.created_at||'').slice(0,10)+'</td>'
+        +'<td>'+(isActive
+          ? '<button onclick="toggleKey('+i+',0)" style="background:rgba(239,68,68,0.1);border:1px solid var(--red);color:var(--red);padding:4px 10px;font-family:var(--mono);font-size:9px;cursor:pointer;border-radius:3px;">DEACTIVATE</button>'
+          : '<button onclick="toggleKey('+i+',1)" style="background:rgba(0,255,136,0.1);border:1px solid var(--green);color:var(--green);padding:4px 10px;font-family:var(--mono);font-size:9px;cursor:pointer;border-radius:3px;">ACTIVATE</button>')
+        +'</td>';
+      tb.appendChild(tr);
+    });
+    document.getElementById('adm-table-wrap').style.display = 'block';
+    document.getElementById('adm-empty').style.display = 'none';
+  }catch(e){alert('Error: '+e.message);}
+}
+
+async function toggleKey(idx, activate){
+  const secret = document.getElementById('admin-secret').value;
+  const record = window._adminKeys[idx];
+  if(!record){alert('Key not found');return;}
+  const endpoint = activate ? '/api/v1/admin/activate' : '/api/v1/admin/deactivate';
+  try{
+    const r = await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json','x-admin-secret':secret},body:JSON.stringify({key:record.key})});
+    const d = await r.json();
+    if(d.success){loadAdminKeys();}else{alert('Error: '+(d.error||'unknown'));}
+  }catch(e){alert('Error: '+e.message);}
+}
+
+async function issueKey(){
+  const secret = document.getElementById('admin-secret').value;
+  const name = document.getElementById('new-name').value;
+  const email = document.getElementById('new-email').value;
+  const tier = document.getElementById('new-tier').value;
+  const res = document.getElementById('issue-result');
+  if(!name||!email){alert('Name and email required');return;}
+  try{
+    const r = await fetch('/api/v1/keys/signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,email,tier,company:''})});
+    const d = await r.json();
+    if(d.key){
+      await fetch('/api/v1/admin/activate',{method:'POST',headers:{'Content-Type':'application/json','x-admin-secret':secret},body:JSON.stringify({key:d.key})});
+      res.style.cssText='display:block;background:rgba(0,255,136,0.1);border:1px solid var(--green);color:var(--green);padding:12px;border-radius:4px;';
+      res.textContent='Key issued & activated: '+d.key;
+      loadAdminKeys();
+    }else{
+      res.style.cssText='display:block;background:rgba(239,68,68,0.1);color:var(--red);padding:12px;border-radius:4px;';
+      res.textContent=d.error||'Error issuing key';
+    }
+  }catch(e){res.textContent='Error: '+e.message;res.style.display='block';}
+}
 
 fa();setInterval(fa,30000);
 document.addEventListener("DOMContentLoaded", function(){ setTimeout(loadApiTab, 2000); });

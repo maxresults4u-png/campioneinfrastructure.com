@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="refresh" content="30">
+<title>Campione Infrastructure Status</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#0a0f1e;color:#fff;font-family:monospace;padding:20px;}
+h1{color:#00ff88;font-size:24px;margin-bottom:5px;}
+.subtitle{color:#666;font-size:12px;margin-bottom:30px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;}
+.card{background:#111827;border:1px solid #1f2937;border-radius:12px;padding:20px;}
+.card h2{font-size:12px;color:#9ca3af;letter-spacing:2px;margin-bottom:16px;}
+.item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #1f2937;}
+.item:last-child{border-bottom:none;}
+.label{font-size:14px;color:#d1d5db;}
+.badge{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:bold;}
+.online{background:#064e3b;color:#10b981;}
+.offline{background:#7f1d1d;color:#ef4444;}
+.loading{background:#1f2937;color:#9ca3af;}
+.stat{font-size:13px;color:#60a5fa;}
+.refresh{color:#666;font-size:11px;text-align:center;margin-top:20px;}
+</style>
+</head>
+<body>
+<h1>⚡ Campione Infrastructure</h1>
+<p class="subtitle">Hetzner CCX33 — Hillsboro, OR | Auto-refreshes every 30s</p>
+
+<div class="grid">
+  <div class="card">
+    <h2>BLOCKCHAIN NODES</h2>
+    <div class="item"><span class="label">🌌 Cosmos Hub</span><span class="badge online" id="cosmos">CHECKING...</span></div>
+    <div class="item"><span class="label">💧 XRPL Node</span><span class="badge online" id="xrpl">CHECKING...</span></div>
+    <div class="item"><span class="label">⭐ Stellar Core</span><span class="badge loading" id="stellar">CHECKING...</span></div>
+  </div>
+
+  <div class="card">
+    <h2>SERVICES</h2>
+    <div class="item"><span class="label">🌐 Nginx</span><span class="badge online">ACTIVE</span></div>
+    <div class="item"><span class="label">📊 Graph Node</span><span class="badge online" id="graph">CHECKING...</span></div>
+    <div class="item"><span class="label">🐋 Docker</span><span class="badge online">ACTIVE</span></div>
+  </div>
+
+  <div class="card">
+    <h2>APPLICATIONS</h2>
+    <div class="item"><span class="label">🔗 Blockchain API</span><span class="badge online" id="bapi">CHECKING...</span></div>
+    <div class="item"><span class="label">💧 Ripple Dripple API</span><span class="badge online" id="rdapi">CHECKING...</span></div>
+    <div class="item"><span class="label">🎰 Captain Crypto</span><span class="badge online">GITHUB PAGES</span></div>
+  </div>
+
+  <div class="card">
+    <h2>XRPL LIVE STATS</h2>
+    <div class="item"><span class="label">Last Ledger</span><span class="stat" id="ledger">Loading...</span></div>
+    <div class="item"><span class="label">Total Payments</span><span class="stat" id="payments">Loading...</span></div>
+    <div class="item"><span class="label">Whale Alerts</span><span class="stat" id="whales">Loading...</span></div>
+  </div>
+
+  <div class="card">
+    <h2>SERVER HEALTH</h2>
+    <div class="item"><span class="label">💾 Disk Used</span><span class="stat" id="disk">Loading...</span></div>
+    <div class="item"><span class="label">🧠 RAM Used</span><span class="stat" id="ram">9.3 GB / 30 GB</span></div>
+    <div class="item"><span class="label">📍 Location</span><span class="stat">Hillsboro, OR</span></div>
+  </div>
+
+  <div class="card">
+    <h2>ENDPOINTS</h2>
+    <div class="item"><span class="label">Blockchain API</span><span class="stat" style="font-size:10px">campioneinfrastructure.com/api</span></div>
+    <div class="item"><span class="label">Ripple Dripple</span><span class="stat" style="font-size:10px">api.rippledripple.campione...</span></div>
+    <div class="item"><span class="label">Graph Node</span><span class="stat" style="font-size:10px">port 8000</span></div>
+  </div>
+</div>
+
+<p class="refresh">Last updated: <span id="time"></span></p>
+
+<script>
+async function check() {
+  document.getElementById('time').textContent = new Date().toLocaleTimeString();
+  
+  try {
+    const r = await fetch('/api/api/v1/health');
+    const d = await r.json();
+    document.getElementById('xrpl').textContent = d.xrpl_connected ? 'CONNECTED' : 'OFFLINE';
+    document.getElementById('xrpl').className = 'badge ' + (d.xrpl_connected ? 'online' : 'offline');
+    document.getElementById('bapi').textContent = 'ONLINE';
+    document.getElementById('ledger').textContent = d.xrpl_last_ledger?.toLocaleString();
+  } catch(e) {
+    document.getElementById('bapi').textContent = 'OFFLINE';
+    document.getElementById('bapi').className = 'badge offline';
+  }
+
+  try {
+    const r = await fetch('/api/api/v1/xrpl/stats');
+    const d = await r.json();
+    document.getElementById('payments').textContent = d.data?.totalPayments?.toLocaleString();
+    document.getElementById('whales').textContent = d.data?.whaleAlerts;
+  } catch(e) {}
+
+  try {
+    const r = await fetch('https://api.rippledripple.campioneinfrastructure.com/api/health');
+    const d = await r.json();
+    document.getElementById('rdapi').textContent = d.status === 'healthy' ? 'ONLINE' : 'OFFLINE';
+  } catch(e) {
+    document.getElementById('rdapi').textContent = 'OFFLINE';
+    document.getElementById('rdapi').className = 'badge offline';
+  }
+
+  document.getElementById('cosmos').textContent = 'SYNCED';
+  document.getElementById('graph').textContent = 'RUNNING';
+  document.getElementById('stellar').textContent = 'VULTR';
+  document.getElementById('stellar').className = 'badge loading';
+  document.getElementById('disk').textContent = '120 GB / 226 GB (56%)';
+}
+
+check();
+setInterval(check, 30000);
+</script>
+</body>
+</html>
