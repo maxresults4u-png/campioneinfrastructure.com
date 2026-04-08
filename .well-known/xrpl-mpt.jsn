@@ -1,1 +1,10 @@
 
+{
+  "name": "EBIT",
+  "symbol": "EBIT",
+  "description": "EBIT is a digital asset designed for automated treasury operations, allocation logic, and ecosystem rewards.",
+  "issuer": "rNzBJJkaDVhh17wUyzpLjnL6QEohY4bdX5",
+  "mpt_id": "062A13EF9969F110E3B4FE23619B389B949052231E4196F8",
+  "logo": "https://campioneinfrastructure.com/assets/ebit-logo.png",
+  "website": "https://campioneinfrastructure.com/ebit.html"
+}
