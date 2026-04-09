@@ -19,3 +19,19 @@ ORG_OFFICIAL_EMAIL="maxresults4u@gmail.com"
 ORG_TWITTER="CampioneInfra"
 ISO20022_COMPLIANT="true"
 CLARITY_ACT_READY="true"
+[[CURRENCIES]]
+code = "EBIT"
+issuer = "rNzBJJkaDVhh17wUyzpLjnL6QEohY4bdX5"
+display_decimals = 6
+name = "EBIT"
+symbol = "EBIT"
+description = "EBIT is a digital asset designed for automated treasury operations, allocation logic, and ecosystem rewards."
+icon = "https://campioneinfrastructure.com/ebit-logo.png"
+meta = "https://campioneinfrastructure.com/.well-known/xrpl-mpt.json"
+
+[ISSUER]
+address = "rNzBJJkaDVhh17wUyzpLjnL6QEohY4bdX5"
+domain = "campioneinfrastructure.com"
+
+[WEBSITE]
+url = "https://campioneinfrastructure.com/ebit.html"
