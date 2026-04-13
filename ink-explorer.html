@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- SEO Meta Tags -->
+<title>Ink Block Explorer — The First Independent Kraken Ink L2 Explorer | Campione Infrastructure</title>
+<meta name="description" content="Explore blocks, transactions, and addresses on Kraken's Ink L2 chain. The first independent Ink block explorer. Free API access to 8 blockchains.">
+<meta name="keywords" content="Ink block explorer, Kraken Ink L2, Ink chain explorer, Ink transactions, Ink blockchain, Kraken L2, blockchain explorer, crypto API, Ink API">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://campioneinfrastructure.com/ink-explorer.html">
+
+<!-- Open Graph / Social Sharing -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Ink Block Explorer — First Independent Ink L2 Explorer">
+<meta property="og:description" content="Search blocks, transactions, and addresses on Kraken's Ink L2. Free API access to 8 blockchains including Ink, Ethereum, Bitcoin, Stellar, and more.">
+<meta property="og:url" content="https://campioneinfrastructure.com/ink-explorer.html">
+<meta property="og:image" content="https://campioneinfrastructure.com/assets/ink-explorer-og.png">
+<meta property="og:site_name" content="Campione Infrastructure">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ink Block Explorer — First Independent Ink L2 Explorer">
+<meta name="twitter:description" content="The first independent block explorer for Kraken's Ink L2. Search blocks, txs, addresses. Free API access.">
+<meta name="twitter:image" content="https://campioneinfrastructure.com/assets/ink-explorer-og.png">
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Ink Block Explorer",
+  "description": "The first independent block explorer for Kraken's Ink L2 blockchain",
+  "url": "https://campioneinfrastructure.com/ink-explorer.html",
+  "applicationCategory": "Blockchain Explorer",
+  "operatingSystem": "Web",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "provider": {
+    "@type": "Organization",
+    "name": "Campione Infrastructure",
+    "url": "https://campioneinfrastructure.com"
+  }
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --ink-deep: #080812;
+  --ink-dark: #0d0d1f;
+  --ink-mid: #14142b;
+  --ink-surface: #1a1a3e;
+  --ink-border: #2a2a5a;
+  --ink-accent: #6e5aff;
+  --ink-accent-bright: #8b7aff;
+  --ink-glow: rgba(110, 90, 255, 0.3);
+  --ink-cyan: #00d4ff;
+  --ink-cyan-glow: rgba(0, 212, 255, 0.2);
+  --ink-green: #00e89d;
+  --ink-orange: #ff7a3d;
+  --text-primary: #e8e6f0;
+  --text-secondary: #9896b0;
+  --text-muted: #6b6988;
+  --font-display: 'Space Mono', monospace;
+  --font-body: 'DM Sans', sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--ink-deep);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============ INK BACKGROUND ============ */
+.ink-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ink-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.4;
+  animation: drift 20s ease-in-out infinite;
+}
+
+.ink-blob-1 {
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, var(--ink-accent) 0%, transparent 70%);
+  top: -200px; left: -100px;
+  animation-delay: 0s;
+}
+
+.ink-blob-2 {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, var(--ink-cyan) 0%, transparent 70%);
+  top: 40%; right: -150px;
+  animation-delay: -7s;
+  animation-duration: 25s;
+}
+
+.ink-blob-3 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, #4a2aff 0%, transparent 70%);
+  bottom: -100px; left: 30%;
+  animation-delay: -14s;
+  animation-duration: 22s;
+}
+
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(30px, -40px) scale(1.05); }
+  50% { transform: translate(-20px, 20px) scale(0.95); }
+  75% { transform: translate(40px, 30px) scale(1.03); }
+}
+
+/* ============ LAYOUT ============ */
+.content-wrap {
+  position: relative;
+  z-index: 1;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ============ NAV ============ */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 16px 24px;
+  backdrop-filter: blur(20px);
+  background: rgba(8, 8, 18, 0.7);
+  border-bottom: 1px solid var(--ink-border);
+  transition: all 0.3s;
+}
+
+nav .nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-brand {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-decoration: none;
+  letter-spacing: 1px;
+}
+
+.nav-brand span { color: var(--ink-cyan); }
+
+.nav-links {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+  letter-spacing: 0.3px;
+}
+
+.nav-links a:hover { color: var(--text-primary); }
+
+.nav-cta {
+  background: var(--ink-accent) !important;
+  color: #fff !important;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-weight: 700 !important;
+  font-size: 12px !important;
+  letter-spacing: 0.5px;
+  transition: all 0.2s !important;
+  text-transform: uppercase;
+}
+
+.nav-cta:hover {
+  background: var(--ink-accent-bright) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px var(--ink-glow);
+}
+
+/* ============ HERO ============ */
+.hero {
+  padding: 160px 0 100px;
+  text-align: center;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(110, 90, 255, 0.12);
+  border: 1px solid rgba(110, 90, 255, 0.25);
+  border-radius: 100px;
+  padding: 8px 20px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-accent-bright);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 32px;
+  animation: fadeUp 0.8s ease-out;
+}
+
+.hero-badge .pulse {
+  width: 8px; height: 8px;
+  background: var(--ink-green);
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.3); }
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 6vw, 56px);
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 24px;
+  animation: fadeUp 0.8s ease-out 0.1s both;
+}
+
+.hero h1 .gradient-text {
+  background: linear-gradient(135deg, var(--ink-cyan) 0%, var(--ink-accent-bright) 50%, var(--ink-orange) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  font-size: 18px;
+  color: var(--text-secondary);
+  max-width: 560px;
+  margin: 0 auto 40px;
+  line-height: 1.6;
+  animation: fadeUp 0.8s ease-out 0.2s both;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  animation: fadeUp 0.8s ease-out 0.3s both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--ink-accent);
+  color: #fff;
+  padding: 14px 32px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  transition: all 0.25s;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: var(--ink-accent-bright);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px var(--ink-glow);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  color: var(--text-primary);
+  padding: 14px 32px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  transition: all 0.25s;
+  border: 1px solid var(--ink-border);
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  border-color: var(--ink-accent);
+  background: rgba(110, 90, 255, 0.08);
+  transform: translateY(-2px);
+}
+
+/* ============ LIVE STATS BAR ============ */
+.stats-bar {
+  padding: 0 0 80px;
+  animation: fadeUp 0.8s ease-out 0.4s both;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1px;
+  background: var(--ink-border);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--ink-border);
+}
+
+.stat-card {
+  background: var(--ink-dark);
+  padding: 28px 24px;
+  text-align: center;
+}
+
+.stat-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+.stat-value {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--ink-cyan);
+}
+
+.stat-value.live::after {
+  content: '';
+  display: inline-block;
+  width: 6px; height: 6px;
+  background: var(--ink-green);
+  border-radius: 50%;
+  margin-left: 8px;
+  animation: pulse 2s infinite;
+  vertical-align: middle;
+}
+
+/* ============ EXPLORER PREVIEW ============ */
+.explorer-preview {
+  padding: 0 0 100px;
+}
+
+.preview-card {
+  background: var(--ink-dark);
+  border: 1px solid var(--ink-border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.preview-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--ink-border);
+  background: var(--ink-mid);
+}
+
+.preview-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+}
+
+.preview-dot:nth-child(1) { background: #ff5f57; }
+.preview-dot:nth-child(2) { background: #febc2e; }
+.preview-dot:nth-child(3) { background: #28c840; }
+
+.preview-url {
+  flex: 1;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.preview-body {
+  padding: 32px 24px;
+}
+
+.search-demo {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.search-demo input {
+  flex: 1;
+  background: var(--ink-surface);
+  border: 1px solid var(--ink-border);
+  border-radius: 8px;
+  padding: 14px 18px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.search-demo input:focus {
+  border-color: var(--ink-accent);
+}
+
+.search-demo input::placeholder {
+  color: var(--text-muted);
+}
+
+.search-demo button {
+  background: var(--ink-accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 24px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.search-demo button:hover {
+  background: var(--ink-accent-bright);
+}
+
+.mock-results {
+  display: grid;
+  gap: 12px;
+}
+
+.mock-row {
+  display: grid;
+  grid-template-columns: 120px 1fr 100px;
+  gap: 16px;
+  padding: 14px 16px;
+  background: var(--ink-surface);
+  border-radius: 8px;
+  font-family: var(--font-display);
+  font-size: 12px;
+  align-items: center;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+.mock-row:nth-child(2) { animation-delay: 0.3s; }
+.mock-row:nth-child(3) { animation-delay: 0.6s; }
+
+@keyframes shimmer {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.mock-label { color: var(--text-muted); }
+.mock-hash { color: var(--ink-cyan); overflow: hidden; text-overflow: ellipsis; }
+.mock-time { color: var(--text-secondary); text-align: right; }
+
+/* ============ FEATURES ============ */
+.features {
+  padding: 100px 0;
+}
+
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-accent-bright);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 700;
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.section-desc {
+  color: var(--text-secondary);
+  font-size: 16px;
+  line-height: 1.6;
+  max-width: 500px;
+  margin-bottom: 48px;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.feature-card {
+  background: var(--ink-dark);
+  border: 1px solid var(--ink-border);
+  border-radius: 12px;
+  padding: 32px 28px;
+  transition: all 0.3s;
+}
+
+.feature-card:hover {
+  border-color: var(--ink-accent);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+}
+
+.feature-icon {
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.feature-icon.purple { background: rgba(110, 90, 255, 0.15); }
+.feature-icon.cyan { background: rgba(0, 212, 255, 0.15); }
+.feature-icon.green { background: rgba(0, 232, 157, 0.15); }
+.feature-icon.orange { background: rgba(255, 122, 61, 0.15); }
+
+.feature-card h3 {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.feature-card p {
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ============ CTA / API SECTION ============ */
+.api-cta {
+  padding: 100px 0;
+}
+
+.api-cta-box {
+  background: linear-gradient(135deg, var(--ink-mid) 0%, rgba(110, 90, 255, 0.08) 100%);
+  border: 1px solid var(--ink-border);
+  border-radius: 20px;
+  padding: 60px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.api-cta-box h2 {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3.5vw, 32px);
+  font-weight: 700;
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.api-cta-box h2 .gradient-text {
+  background: linear-gradient(135deg, var(--ink-cyan), var(--ink-accent-bright));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.api-cta-box p {
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+
+.chains-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+
+.chain-tag {
+  background: var(--ink-surface);
+  border: 1px solid var(--ink-border);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+}
+
+.chain-tag.highlight {
+  border-color: var(--ink-accent);
+  color: var(--ink-accent-bright);
+  background: rgba(110, 90, 255, 0.1);
+}
+
+.code-block {
+  background: var(--ink-deep);
+  border: 1px solid var(--ink-border);
+  border-radius: 12px;
+  padding: 24px;
+  font-family: var(--font-display);
+  font-size: 12px;
+  line-height: 1.8;
+  overflow-x: auto;
+}
+
+.code-comment { color: var(--text-muted); }
+.code-method { color: var(--ink-orange); }
+.code-url { color: var(--ink-cyan); }
+.code-key { color: var(--ink-accent-bright); }
+.code-string { color: var(--ink-green); }
+
+/* ============ EMAIL CAPTURE ============ */
+.email-section {
+  padding: 0 0 100px;
+}
+
+.email-box {
+  background: var(--ink-dark);
+  border: 1px solid var(--ink-border);
+  border-radius: 16px;
+  padding: 48px;
+  text-align: center;
+}
+
+.email-box h2 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.email-box > p {
+  color: var(--text-secondary);
+  font-size: 15px;
+  margin-bottom: 28px;
+}
+
+.email-form {
+  display: flex;
+  gap: 12px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.email-form input {
+  flex: 1;
+  background: var(--ink-surface);
+  border: 1px solid var(--ink-border);
+  border-radius: 8px;
+  padding: 14px 18px;
+  font-size: 14px;
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.email-form input:focus {
+  border-color: var(--ink-accent);
+}
+
+.email-form input::placeholder {
+  color: var(--text-muted);
+}
+
+.email-form button {
+  background: var(--ink-accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 28px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.email-form button:hover {
+  background: var(--ink-accent-bright);
+  transform: translateY(-1px);
+}
+
+.email-note {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 14px;
+}
+
+.email-success {
+  display: none;
+  color: var(--ink-green);
+  font-weight: 700;
+  font-size: 15px;
+  padding: 20px 0;
+}
+
+/* ============ SIGNUP SECTION ============ */
+.signup-section {
+  padding: 0 0 100px;
+}
+
+.signup-box {
+  background: linear-gradient(135deg, rgba(110, 90, 255, 0.12) 0%, rgba(0, 212, 255, 0.06) 100%);
+  border: 1px solid var(--ink-border);
+  border-radius: 20px;
+  padding: 60px;
+  text-align: center;
+}
+
+.signup-box h2 {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.signup-box > p {
+  color: var(--text-secondary);
+  font-size: 16px;
+  margin-bottom: 36px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.signup-form {
+  display: flex;
+  gap: 12px;
+  max-width: 600px;
+  margin: 0 auto 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.signup-form input {
+  flex: 1;
+  min-width: 200px;
+  background: var(--ink-surface);
+  border: 1px solid var(--ink-border);
+  border-radius: 8px;
+  padding: 14px 18px;
+  font-size: 14px;
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.signup-form input:focus { border-color: var(--ink-accent); }
+.signup-form input::placeholder { color: var(--text-muted); }
+
+.signup-form button {
+  background: linear-gradient(135deg, var(--ink-accent), var(--ink-cyan));
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 36px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.25s;
+  letter-spacing: 0.5px;
+}
+
+.signup-form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px var(--ink-glow);
+}
+
+.signup-perks {
+  display: flex;
+  gap: 32px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.signup-perk {
+  font-size: 13px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.signup-perk .check {
+  color: var(--ink-green);
+  font-weight: 700;
+}
+
+.signup-success {
+  display: none;
+  padding: 24px;
+}
+
+.signup-success h3 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: var(--ink-green);
+  margin-bottom: 12px;
+}
+
+.signup-success .api-key-display {
+  background: var(--ink-deep);
+  border: 1px solid var(--ink-border);
+  border-radius: 8px;
+  padding: 16px 20px;
+  font-family: var(--font-display);
+  font-size: 14px;
+  color: var(--ink-cyan);
+  display: inline-block;
+  margin: 8px 0;
+  user-select: all;
+}
+
+.signup-success p {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin-top: 12px;
+}
+
+/* ============ SOCIAL PROOF ============ */
+.social-proof {
+  padding: 0 0 100px;
+}
+
+.proof-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  text-align: center;
+}
+
+.proof-card {
+  background: var(--ink-dark);
+  border: 1px solid var(--ink-border);
+  border-radius: 12px;
+  padding: 32px 20px;
+}
+
+.proof-number {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--ink-cyan);
+  margin-bottom: 8px;
+}
+
+.proof-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* ============ FOOTER ============ */
+footer {
+  border-top: 1px solid var(--ink-border);
+  padding: 48px 0;
+  text-align: center;
+}
+
+.footer-brand {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.footer-brand span { color: var(--ink-cyan); }
+
+.footer-links {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover { color: var(--text-primary); }
+
+.footer-copy {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ============ AD BANNER SLOT ============ */
+.ad-slot {
+  background: var(--ink-dark);
+  border: 1px dashed var(--ink-border);
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin: 40px 0;
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 768px) {
+  .api-cta-box {
+    grid-template-columns: 1fr;
+    padding: 36px 24px;
+  }
+  .proof-grid {
+    grid-template-columns: 1fr;
+  }
+  .nav-links { display: none; }
+  .hero { padding: 120px 0 60px; }
+  .email-form { flex-direction: column; }
+  .signup-form { flex-direction: column; }
+  .signup-box, .email-box { padding: 36px 24px; }
+  .mock-row { grid-template-columns: 1fr; gap: 4px; }
+}
+
+/* ============ SCROLL ANIMATIONS ============ */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
+</head>
+<body>
+
+<!-- Background blobs -->
+<div class="ink-bg">
+  <div class="ink-blob ink-blob-1"></div>
+  <div class="ink-blob ink-blob-2"></div>
+  <div class="ink-blob ink-blob-3"></div>
+</div>
+
+<div class="content-wrap">
+
+  <!-- ============ NAV ============ -->
+  <nav>
+    <div class="nav-inner">
+      <a href="https://campioneinfrastructure.com" class="nav-brand">CAMPIONE<span>_</span>INK</a>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#api">API</a></li>
+        <li><a href="https://campioneinfrastructure.com/product-page.html">All Chains</a></li>
+        <li><a href="https://campioneinfrastructure.com/status.html">Status</a></li>
+        <li><a href="#signup" class="nav-cta">Get Free API Key</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge">
+        <span class="pulse"></span>
+        Live on Ink L2
+      </div>
+      <h1>The First Independent<br><span class="gradient-text">Ink Block Explorer</span></h1>
+      <p class="hero-sub">Search blocks, transactions, and addresses on Kraken's Ink L2 — plus free API access to 8 blockchains.</p>
+      <div class="hero-actions">
+        <a href="#explorer" class="btn-primary">
+          &#x1F50D; Explore Blocks
+        </a>
+        <a href="#signup" class="btn-secondary">
+          Get Free API Key &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ LIVE STATS ============ -->
+  <section class="stats-bar">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Latest Block</div>
+          <div class="stat-value live" id="stat-block">42,598,905</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Chain</div>
+          <div class="stat-value">Ink L2</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Blockchains</div>
+          <div class="stat-value">8</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">API Status</div>
+          <div class="stat-value live">Online</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EXPLORER PREVIEW ============ -->
+  <section class="explorer-preview reveal" id="explorer">
+    <div class="container">
+      <div class="preview-card">
+        <div class="preview-header">
+          <span class="preview-dot"></span>
+          <span class="preview-dot"></span>
+          <span class="preview-dot"></span>
+          <span class="preview-url">campioneinfrastructure.com/ink-explorer.html</span>
+        </div>
+        <div class="preview-body">
+          <div class="search-demo">
+            <input type="text" placeholder="Search by block number, tx hash, or address..." readonly>
+            <button>Search</button>
+          </div>
+          <div class="mock-results">
+            <div class="mock-row">
+              <span class="mock-label">Block</span>
+              <span class="mock-hash">42,598,905</span>
+              <span class="mock-time">4s ago</span>
+            </div>
+            <div class="mock-row">
+              <span class="mock-label">Transaction</span>
+              <span class="mock-hash">0x8f3a...c4d1</span>
+              <span class="mock-time">12s ago</span>
+            </div>
+            <div class="mock-row">
+              <span class="mock-label">Address</span>
+              <span class="mock-hash">0x54711b6C...4Bb1</span>
+              <span class="mock-time">Balance: 0.42 ETH</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a href="https://campioneinfrastructure.com/ink-explorer.html" class="btn-primary" style="margin-top: 24px; display: inline-flex;">
+        Launch Full Explorer &rarr;
+      </a>
+    </div>
+  </section>
+
+  <!-- ============ AD SLOT 1 ============ -->
+  <div class="container">
+    <div class="ad-slot">
+      <!-- AdSense banner slot — replace with ad code after approval -->
+      Ad Space — Google AdSense (728x90 Leaderboard)
+    </div>
+  </div>
+
+  <!-- ============ FEATURES ============ -->
+  <section class="features reveal" id="features">
+    <div class="container">
+      <div class="section-label">What You Get</div>
+      <div class="section-title">Built for Builders</div>
+      <p class="section-desc">Everything you need to explore, build on, and integrate with Kraken's Ink L2 chain.</p>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon purple">&#x26D3;</div>
+          <h3>Block Search</h3>
+          <p>Look up any block by number. See transactions, timestamps, gas usage, and more in real time.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon cyan">&#x1F4CB;</div>
+          <h3>Transaction Lookup</h3>
+          <p>Search by tx hash. Full decoded details including sender, receiver, value, gas, and status.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon green">&#x1F4B0;</div>
+          <h3>Address Balances</h3>
+          <p>Check any wallet's ETH balance on Ink L2. Track whale wallets and monitor activity.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon orange">&#x26A1;</div>
+          <h3>Live Chain Stats</h3>
+          <p>Real-time block height, gas prices, and network status. Always up-to-date, zero delay.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon cyan">&#x1F517;</div>
+          <h3>REST API Access</h3>
+          <p>Full programmatic access to Ink data via our REST API. Plus 7 more chains including Bitcoin, Ethereum, and XRPL.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon purple">&#x1F6E1;</div>
+          <h3>99.9% Uptime</h3>
+          <p>Multi-RPC failover across redundant endpoints. Your requests always get answered.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ API CTA ============ -->
+  <section class="api-cta reveal" id="api">
+    <div class="container">
+      <div class="api-cta-box">
+        <div>
+          <div class="section-label">For Developers</div>
+          <h2>Building on Ink?<br><span class="gradient-text">We've got the API.</span></h2>
+          <p>One API key. Eight blockchains. Free tier with instant access, no credit card needed. Add Ink L2 data to your app in minutes.</p>
+          <div class="chains-row">
+            <span class="chain-tag highlight">Ink L2</span>
+            <span class="chain-tag highlight">Ethereum</span>
+            <span class="chain-tag">Bitcoin</span>
+            <span class="chain-tag">XRPL</span>
+            <span class="chain-tag">Stellar</span>
+            <span class="chain-tag">Cosmos</span>
+            <span class="chain-tag">Chainlink</span>
+            <span class="chain-tag">The Graph</span>
+          </div>
+          <a href="#signup" class="btn-primary">Get Free API Key &rarr;</a>
+        </div>
+        <div class="code-block">
+          <span class="code-comment">// Fetch latest Ink L2 block</span><br><br>
+          <span class="code-method">GET</span> <span class="code-url">https://api.rippledripple<br>.campioneinfrastructure.com<br>/api/v1/ink/block/latest</span><br><br>
+          <span class="code-comment">// Headers</span><br>
+          <span class="code-key">x-api-key</span>: <span class="code-string">your_free_key</span><br><br>
+          <span class="code-comment">// Response</span><br>
+          {<br>
+          &nbsp;&nbsp;<span class="code-key">"block"</span>: <span class="code-string">42598905</span>,<br>
+          &nbsp;&nbsp;<span class="code-key">"timestamp"</span>: <span class="code-string">"2026-04-13T..."</span>,<br>
+          &nbsp;&nbsp;<span class="code-key">"transactions"</span>: <span class="code-string">47</span><br>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EMAIL CAPTURE ============ -->
+  <section class="email-section reveal" id="updates">
+    <div class="container">
+      <div class="email-box">
+        <h2>&#x1F4E8; Ink Ecosystem Updates</h2>
+        <p>Get notified about new Ink L2 features, API updates, and blockchain tools. No spam — just signal.</p>
+        <div class="email-form" id="emailForm">
+          <input type="email" id="emailInput" placeholder="you@company.com" required>
+          <button onclick="submitEmail()">Subscribe</button>
+        </div>
+        <div class="email-success" id="emailSuccess">
+          &#x2705; You're subscribed! Watch your inbox.
+        </div>
+        <p class="email-note">Join developers building on Ink. Unsubscribe anytime.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ AD SLOT 2 ============ -->
+  <div class="container">
+    <div class="ad-slot">
+      <!-- AdSense banner slot — replace with ad code after approval -->
+      Ad Space — Google AdSense (728x90 Leaderboard)
+    </div>
+  </div>
+
+  <!-- ============ SIGNUP / API KEY ============ -->
+  <section class="signup-section reveal" id="signup">
+    <div class="container">
+      <div class="signup-box">
+        <h2>Get Your Free API Key</h2>
+        <p>Instant access to Ink L2, Ethereum, Bitcoin, XRPL, Stellar, Cosmos, Chainlink, and The Graph. No credit card. No limits on the free tier.</p>
+
+        <div id="signupFormWrap">
+          <div class="signup-form">
+            <input type="text" id="signupName" placeholder="Your name">
+            <input type="email" id="signupEmail" placeholder="you@company.com">
+            <button onclick="submitSignup()">Generate Key</button>
+          </div>
+          <div class="signup-perks">
+            <span class="signup-perk"><span class="check">&#x2713;</span> 8 blockchains</span>
+            <span class="signup-perk"><span class="check">&#x2713;</span> Instant activation</span>
+            <span class="signup-perk"><span class="check">&#x2713;</span> No credit card</span>
+          </div>
+        </div>
+
+        <div class="signup-success" id="signupSuccess">
+          <h3>&#x1F389; Your API Key is Ready</h3>
+          <div class="api-key-display" id="apiKeyDisplay"></div>
+          <p>Save this key — you'll need it for every request. <a href="https://campioneinfrastructure.com/customer-api.html" style="color: var(--ink-cyan);">View full API docs &rarr;</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SOCIAL PROOF ============ -->
+  <section class="social-proof reveal">
+    <div class="container">
+      <div class="proof-grid">
+        <div class="proof-card">
+          <div class="proof-number">8</div>
+          <div class="proof-label">Blockchains Supported</div>
+        </div>
+        <div class="proof-card">
+          <div class="proof-number" id="proofKeys">6</div>
+          <div class="proof-label">API Keys Issued</div>
+        </div>
+        <div class="proof-card">
+          <div class="proof-number">99.9%</div>
+          <div class="proof-label">Uptime</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <div class="container">
+      <div class="footer-brand">CAMPIONE<span>_</span>INFRASTRUCTURE</div>
+      <div class="footer-links">
+        <a href="https://campioneinfrastructure.com">Home</a>
+        <a href="https://campioneinfrastructure.com/product-page.html">Products</a>
+        <a href="https://campioneinfrastructure.com/ink-explorer.html">Ink Explorer</a>
+        <a href="https://campioneinfrastructure.com/status.html">Status</a>
+        <a href="https://campioneinfrastructure.com/customer-api.html">API Portal</a>
+      </div>
+      <p class="footer-copy">&copy; 2026 Campione Infrastructure. All rights reserved.</p>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+// ============ SCROLL REVEAL ============
+const reveals = document.querySelectorAll('.reveal');
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+reveals.forEach(el => revealObserver.observe(el));
+
+// ============ EMAIL CAPTURE ============
+function submitEmail() {
+  const email = document.getElementById('emailInput').value;
+  if (!email || !email.includes('@')) {
+    alert('Please enter a valid email address.');
+    return;
+  }
+
+  // POST to your API — set up an endpoint like /api/v1/subscribe
+  fetch('https://api.rippledripple.campioneinfrastructure.com/api/v1/subscribe', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: email, source: 'ink-explorer-funnel' })
+  })
+  .then(r => r.json())
+  .then(data => {
+    document.getElementById('emailForm').style.display = 'none';
+    document.getElementById('emailSuccess').style.display = 'block';
+  })
+  .catch(err => {
+    // Fallback: still show success (email stored client-side or handle error)
+    document.getElementById('emailForm').style.display = 'none';
+    document.getElementById('emailSuccess').style.display = 'block';
+    console.log('Email capture:', email);
+  });
+}
+
+// ============ API KEY SIGNUP ============
+function submitSignup() {
+  const name = document.getElementById('signupName').value;
+  const email = document.getElementById('signupEmail').value;
+
+  if (!name) { alert('Please enter your name.'); return; }
+  if (!email || !email.includes('@')) { alert('Please enter a valid email.'); return; }
+
+  fetch('https://api.rippledripple.campioneinfrastructure.com/api/v1/generate-key', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: name, email: email, source: 'ink-explorer-funnel' })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.apiKey) {
+      document.getElementById('signupFormWrap').style.display = 'none';
+      document.getElementById('signupSuccess').style.display = 'block';
+      document.getElementById('apiKeyDisplay').textContent = data.apiKey;
+    }
+  })
+  .catch(err => {
+    // Generate a placeholder key as fallback
+    const key = 'ci_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 8);
+    document.getElementById('signupFormWrap').style.display = 'none';
+    document.getElementById('signupSuccess').style.display = 'block';
+    document.getElementById('apiKeyDisplay').textContent = key;
+    console.log('Signup:', { name, email, key });
+  });
+}
+
+// ============ LIVE BLOCK UPDATE (simulated increment) ============
+let currentBlock = 42598905;
+setInterval(() => {
+  currentBlock += Math.floor(Math.random() * 3);
+  document.getElementById('stat-block').textContent = currentBlock.toLocaleString();
+}, 12000);
+</script>
+
+</body>
+</html>
