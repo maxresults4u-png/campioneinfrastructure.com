@@ -1284,27 +1284,33 @@ reveals.forEach(el => revealObserver.observe(el));
 // ============ EMAIL CAPTURE ============
 function submitEmail() {
   const email = document.getElementById('emailInput').value;
+  const btn = document.querySelector('#emailForm button');
   if (!email || !email.includes('@')) {
     alert('Please enter a valid email address.');
     return;
   }
 
-  // POST to your API — set up an endpoint like /api/v1/subscribe
+  btn.disabled = true;
+  btn.textContent = 'Subscribing...';
+
   fetch('https://api.rippledripple.campioneinfrastructure.com/api/v1/subscribe', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email: email, source: 'ink-explorer-funnel' })
   })
-  .then(r => r.json())
+  .then(r => {
+    if (!r.ok) throw new Error('Server error');
+    return r.json();
+  })
   .then(data => {
     document.getElementById('emailForm').style.display = 'none';
     document.getElementById('emailSuccess').style.display = 'block';
   })
   .catch(err => {
-    // Fallback: still show success (email stored client-side or handle error)
-    document.getElementById('emailForm').style.display = 'none';
-    document.getElementById('emailSuccess').style.display = 'block';
-    console.log('Email capture:', email);
+    btn.disabled = false;
+    btn.textContent = 'Subscribe';
+    alert('Something went wrong — please try again in a moment.');
+    console.error('Email subscribe error:', err);
   });
 }
 
@@ -1312,39 +1318,66 @@ function submitEmail() {
 function submitSignup() {
   const name = document.getElementById('signupName').value;
   const email = document.getElementById('signupEmail').value;
+  const btn = document.querySelector('.signup-form button');
 
   if (!name) { alert('Please enter your name.'); return; }
   if (!email || !email.includes('@')) { alert('Please enter a valid email.'); return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Generating...';
 
   fetch('https://api.rippledripple.campioneinfrastructure.com/api/v1/generate-key', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name: name, email: email, source: 'ink-explorer-funnel' })
   })
-  .then(r => r.json())
+  .then(r => {
+    if (!r.ok) throw new Error('Server error');
+    return r.json();
+  })
   .then(data => {
     if (data.apiKey) {
       document.getElementById('signupFormWrap').style.display = 'none';
       document.getElementById('signupSuccess').style.display = 'block';
       document.getElementById('apiKeyDisplay').textContent = data.apiKey;
+    } else {
+      throw new Error('No key returned');
     }
   })
   .catch(err => {
-    // Generate a placeholder key as fallback
-    const key = 'ci_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 8);
-    document.getElementById('signupFormWrap').style.display = 'none';
-    document.getElementById('signupSuccess').style.display = 'block';
-    document.getElementById('apiKeyDisplay').textContent = key;
-    console.log('Signup:', { name, email, key });
+    btn.disabled = false;
+    btn.textContent = 'Generate Key';
+    alert('Could not generate key — please try again in a moment.');
+    console.error('Signup error:', err);
   });
 }
 
-// ============ LIVE BLOCK UPDATE (simulated increment) ============
-let currentBlock = 42598905;
-setInterval(() => {
-  currentBlock += Math.floor(Math.random() * 3);
-  document.getElementById('stat-block').textContent = currentBlock.toLocaleString();
-}, 12000);
+// ============ LIVE BLOCK UPDATE — fetch real data ============
+function fetchBlockHeight() {
+  fetch('https://api.rippledripple.campioneinfrastructure.com/api/v1/ink/block/latest')
+    .then(r => r.json())
+    .then(data => {
+      if (data.block || data.number) {
+        const block = data.block || data.number;
+        document.getElementById('stat-block').textContent = Number(block).toLocaleString();
+      }
+    })
+    .catch(() => {});
+}
+
+// Fetch on load, then every 15 seconds
+fetchBlockHeight();
+setInterval(fetchBlockHeight, 15000);
+
+// ============ LIVE SOCIAL PROOF STATS ============
+fetch('https://api.rippledripple.campioneinfrastructure.com/api/v1/stats')
+  .then(r => r.json())
+  .then(data => {
+    if (data.totalKeys) {
+      document.getElementById('proofKeys').textContent = data.totalKeys;
+    }
+  })
+  .catch(() => {});
 </script>
 
 </body>
