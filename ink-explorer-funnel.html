@@ -1163,7 +1163,7 @@ footer {
         </div>
         <div class="code-block">
           <span class="code-comment">// Fetch latest Ink L2 block</span><br><br>
-          <span class="code-method">GET</span> <span class="code-url">https://api.rippledripple<br>.campioneinfrastructure.com<br>/api/v1/ink/block/latest</span><br><br>
+          <span class="code-method">GET</span> <span class="code-url">https://campioneinfrastructure.com<br>/api/v1/ink/block/latest</span><br><br>
           <span class="code-comment">// Headers</span><br>
           <span class="code-key">x-api-key</span>: <span class="code-string">your_free_key</span><br><br>
           <span class="code-comment">// Response</span><br>
@@ -1293,7 +1293,7 @@ function submitEmail() {
   btn.disabled = true;
   btn.textContent = 'Subscribing...';
 
-  fetch('https://api.rippledripple.campioneinfrastructure.com/api/v1/subscribe', {
+  fetch('https://campioneinfrastructure.com/api/v1/subscribe', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email: email, source: 'ink-explorer-funnel' })
@@ -1326,7 +1326,7 @@ function submitSignup() {
   btn.disabled = true;
   btn.textContent = 'Generating...';
 
-  fetch('https://api.rippledripple.campioneinfrastructure.com/api/v1/generate-key', {
+  fetch('https://campioneinfrastructure.com/api/v1/generate-key', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name: name, email: email, source: 'ink-explorer-funnel' })
@@ -1354,7 +1354,7 @@ function submitSignup() {
 
 // ============ LIVE BLOCK UPDATE — fetch real data ============
 function fetchBlockHeight() {
-  fetch('https://api.rippledripple.campioneinfrastructure.com/api/v1/ink/block/latest')
+  fetch('https://campioneinfrastructure.com/api/v1/ink/block/latest')
     .then(r => r.json())
     .then(data => {
       if (data.block || data.number) {
@@ -1370,7 +1370,7 @@ fetchBlockHeight();
 setInterval(fetchBlockHeight, 15000);
 
 // ============ LIVE SOCIAL PROOF STATS ============
-fetch('https://api.rippledripple.campioneinfrastructure.com/api/v1/stats')
+fetch('https://campioneinfrastructure.com/api/v1/stats')
   .then(r => r.json())
   .then(data => {
     if (data.totalKeys) {
