@@ -1,1 +1,350 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Subscribe — ISO 20022 Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#060610;color:#d0cee6;font-family:'JetBrains Mono',monospace;min-height:100vh}
+a{text-decoration:none;color:#00d4ff}
+.wrap{max-width:800px;margin:0 auto;padding:20px}
+.card{background:#0a0a1a;border:1px solid #151530;border-radius:10px;padding:20px;margin-bottom:14px}
+.lbl{font-size:8px;color:#4a4870;letter-spacing:2px;font-weight:700;margin-bottom:8px}
+.plan{cursor:pointer;transition:border-color 0.2s}
+.plan:hover,.plan.sel{border-color:#00d4ff}
+.plan.sel{box-shadow:0 0 20px rgba(0,212,255,0.08)}
+.coin{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:6px;border:1px solid #151530;cursor:pointer;font-size:11px;transition:all 0.2s;background:#0a0a1a}
+.coin:hover,.coin.sel{border-color:#00d4ff;color:#e8e6f0}
+.coin.sel{background:#0d0d25}
+.btn{background:linear-gradient(135deg,#00d4ff,#2eff8c);color:#060610;border:none;padding:12px 28px;border-radius:7px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;width:100%;margin-top:14px}
+.btn:disabled{opacity:0.4;cursor:not-allowed}
+.reward-badge{display:inline-block;background:rgba(46,255,140,0.1);border:1px solid rgba(46,255,140,0.2);color:#2eff8c;padding:3px 10px;border-radius:4px;font-size:10px;font-weight:700}
+.inp{width:100%;padding:10px 14px;background:#060610;border:1px solid #1e1e3a;border-radius:6px;color:#e8e6f0;font-family:inherit;font-size:12px;outline:none}
+.inp:focus{border-color:#00d4ff}
+#checkout{display:none}
+#success{display:none}
+.copy-btn{background:#1e1e3a;border:1px solid #2a2a5a;color:#9896b0;padding:4px 10px;border-radius:4px;font-size:9px;cursor:pointer;font-family:inherit}
+.copy-btn:hover{color:#e8e6f0;border-color:#00d4ff}
+.pulse{animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.status-dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div style="padding:6px 20px;border-bottom:1px solid #12122a;display:flex;gap:6px;background:#0a0a18">
+  <a href="/" style="font-size:9px;color:#9896b0;padding:4px 10px;border-radius:4px;border:1px solid #2a2a5a;text-decoration:none">HOME</a>
+  <a href="/iso20022-dashboard.html" style="font-size:9px;color:#00d4ff;padding:4px 10px;border-radius:4px;border:1px solid #2a2a5a;text-decoration:none">ISO 20022</a>
+  <a href="/ink-explorer.html" style="font-size:9px;color:#9896b0;padding:4px 10px;border-radius:4px;border:1px solid #2a2a5a;text-decoration:none">INK EXPLORER</a>
+  <a href="/ebit.html" style="font-size:9px;color:#2eff8c;padding:4px 10px;border-radius:4px;border:1px solid #2a2a5a;text-decoration:none">EBIT</a>
+  <a href="/customer-api.html" style="font-size:9px;color:#9896b0;padding:4px 10px;border-radius:4px;border:1px solid #2a2a5a;text-decoration:none">DOCS</a>
+</div>
+
+<div class="wrap">
+
+<!-- HEADER -->
+<div style="text-align:center;padding:30px 0 20px">
+  <div style="font-size:18px;font-weight:800;color:#e8e6f0;margin-bottom:6px">Subscribe with Crypto</div>
+  <div style="font-size:11px;color:#6b6988">Pay with XRP, XLM, or EBIT — earn loyalty rewards</div>
+</div>
+
+<!-- STEP 1: CHOOSE PLAN -->
+<div id="step1">
+  <div class="lbl">CHOOSE YOUR PLAN</div>
+
+  <div class="card plan" onclick="selectPlan('analyst_monthly',this)" data-plan="analyst_monthly">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <div style="font-size:14px;font-weight:700;color:#e8e6f0">Analyst</div>
+        <div style="font-size:9px;color:#6b6988;margin-top:2px">Real-time node data, whale alerts, cross-exchange arb</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:20px;font-weight:800;color:#00d4ff">$29<span style="font-size:10px;color:#6b6988">/mo</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card plan" onclick="selectPlan('analyst_annual',this)" data-plan="analyst_annual">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <div style="font-size:14px;font-weight:700;color:#e8e6f0">Analyst Annual <span class="reward-badge">SAVE 29%</span></div>
+        <div style="font-size:9px;color:#6b6988;margin-top:2px">Everything in Analyst — billed annually</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:20px;font-weight:800;color:#00d4ff">$249<span style="font-size:10px;color:#6b6988">/yr</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card plan" onclick="selectPlan('institutional_monthly',this)" data-plan="institutional_monthly">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <div style="font-size:14px;font-weight:700;color:#e8e6f0">Institutional</div>
+        <div style="font-size:9px;color:#6b6988;margin-top:2px">Full arbitrage suite, ODL corridors, triangular arb, CSV export</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:20px;font-weight:800;color:#f0c000">$99<span style="font-size:10px;color:#6b6988">/mo</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card plan" onclick="selectPlan('institutional_annual',this)" data-plan="institutional_annual">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <div style="font-size:14px;font-weight:700;color:#e8e6f0">Institutional Annual <span class="reward-badge">SAVE 24%</span></div>
+        <div style="font-size:9px;color:#6b6988;margin-top:2px">Everything in Institutional — billed annually</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:20px;font-weight:800;color:#f0c000">$899<span style="font-size:10px;color:#6b6988">/yr</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CURRENCY -->
+  <div class="lbl" style="margin-top:18px">PAY WITH</div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <div class="coin" onclick="selectCoin('xrp',this)">
+      <span style="color:#00d4ff;font-weight:800">XRP</span>
+      <span style="color:#6b6988;font-size:9px">5% EBIT reward</span>
+    </div>
+    <div class="coin" onclick="selectCoin('xlm',this)">
+      <span style="color:#f0c000;font-weight:800">XLM</span>
+      <span style="color:#6b6988;font-size:9px">5% EBIT reward</span>
+    </div>
+    <div class="coin" onclick="selectCoin('ebit',this)">
+      <span style="color:#2eff8c;font-weight:800">EBIT</span>
+      <span style="color:#6b6988;font-size:9px">10% EBIT reward</span>
+    </div>
+  </div>
+
+  <!-- EMAIL -->
+  <div class="lbl" style="margin-top:18px">YOUR EMAIL</div>
+  <input type="email" id="email" class="inp" placeholder="you@example.com">
+
+  <button class="btn" id="payBtn" onclick="createPayment()" disabled>SELECT A PLAN AND CURRENCY</button>
+</div>
+
+<!-- STEP 2: CHECKOUT / PAYMENT INSTRUCTIONS -->
+<div id="checkout">
+  <div class="card" style="text-align:center;border-color:#00d4ff30">
+    <div style="font-size:10px;color:#4a4870;margin-bottom:14px">SEND EXACT AMOUNT TO COMPLETE SUBSCRIPTION</div>
+
+    <div style="font-size:36px;font-weight:800;color:#e8e6f0;margin-bottom:4px" id="payAmount">—</div>
+    <div style="font-size:12px;color:#00d4ff;font-weight:700;margin-bottom:20px" id="payCurrency">—</div>
+
+    <div class="card" style="background:#060610;text-align:left">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <div style="font-size:9px;color:#4a4870">SEND TO</div>
+        <button class="copy-btn" onclick="copyText('payWallet')">COPY</button>
+      </div>
+      <div style="font-size:11px;color:#e8e6f0;word-break:break-all;font-weight:600" id="payWallet">—</div>
+    </div>
+
+    <div class="card" style="background:#060610;text-align:left">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <div style="font-size:9px;color:#ff6b6b;font-weight:700">DESTINATION TAG (REQUIRED)</div>
+        <button class="copy-btn" onclick="copyText('payTag')">COPY</button>
+      </div>
+      <div style="font-size:22px;color:#ff6b6b;font-weight:800" id="payTag">—</div>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;margin-top:14px;padding:12px;background:#060610;border-radius:6px;border:1px solid #12122a">
+      <div style="text-align:left">
+        <div style="font-size:9px;color:#4a4870">YOUR REWARD</div>
+        <div style="font-size:14px;font-weight:800;color:#2eff8c" id="payReward">—</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:9px;color:#4a4870">PAYMENT ID</div>
+        <div style="font-size:10px;color:#6b6988" id="payId">—</div>
+      </div>
+    </div>
+
+    <div style="margin-top:14px;padding:12px;background:rgba(255,107,107,0.06);border:1px solid rgba(255,107,107,0.15);border-radius:6px">
+      <div style="font-size:10px;color:#ff6b6b;font-weight:700">IMPORTANT</div>
+      <div style="font-size:9px;color:#9896b0;margin-top:4px">
+        Send the EXACT amount shown above with the correct destination tag.
+        Incorrect amounts or missing tags may delay activation.
+        Payment expires in 30 minutes.
+      </div>
+    </div>
+
+    <div style="margin-top:16px;display:flex;align-items:center;justify-content:center;gap:8px">
+      <span class="status-dot pulse" style="background:#f0c000" id="statusDot"></span>
+      <span style="font-size:11px;color:#f0c000;font-weight:600" id="statusText">Waiting for payment...</span>
+    </div>
+
+    <div style="margin-top:14px;font-size:9px;color:#4a4870">
+      After sending, your subscription will be activated within a few minutes.
+      You'll receive your API key via email.
+    </div>
+  </div>
+
+  <button class="btn" style="background:#1e1e3a;color:#9896b0;margin-top:10px" onclick="location.reload()">CANCEL — START OVER</button>
+</div>
+
+<!-- STEP 3: SUCCESS -->
+<div id="success">
+  <div class="card" style="text-align:center;border-color:rgba(46,255,140,0.3)">
+    <div style="font-size:36px;margin-bottom:10px">&#x2705;</div>
+    <div style="font-size:18px;font-weight:800;color:#2eff8c;margin-bottom:6px">Payment Confirmed!</div>
+    <div style="font-size:11px;color:#9896b0;margin-bottom:16px">Your subscription is now active.</div>
+
+    <div class="card" style="background:#060610;text-align:left">
+      <div style="font-size:9px;color:#4a4870;margin-bottom:6px">YOUR API KEY</div>
+      <div style="font-size:13px;color:#00d4ff;font-weight:700;word-break:break-all" id="successKey">—</div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:14px">
+      <a href="/iso20022-dashboard.html" class="btn" style="text-align:center;display:block;text-decoration:none">GO TO DASHBOARD</a>
+      <a href="/customer-api.html" class="btn" style="text-align:center;display:block;background:linear-gradient(135deg,#1e1e3a,#2a2a5a);color:#e8e6f0;text-decoration:none">API DOCS</a>
+    </div>
+  </div>
+</div>
+
+<!-- REWARD INFO -->
+<div class="card" style="margin-top:10px;background:linear-gradient(135deg,rgba(46,255,140,0.03),rgba(0,212,255,0.03))">
+  <div class="lbl">HOW CRYPTO REWARDS WORK</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:8px">
+    <div style="background:#060610;border-radius:6px;padding:12px;border:1px solid #12122a;text-align:center">
+      <div style="font-size:9px;color:#00d4ff;font-weight:700">PAY WITH XRP</div>
+      <div style="font-size:18px;font-weight:800;color:#e8e6f0;margin-top:4px">5%</div>
+      <div style="font-size:8px;color:#4a4870;margin-top:2px">back in EBIT</div>
+    </div>
+    <div style="background:#060610;border-radius:6px;padding:12px;border:1px solid #12122a;text-align:center">
+      <div style="font-size:9px;color:#f0c000;font-weight:700">PAY WITH XLM</div>
+      <div style="font-size:18px;font-weight:800;color:#e8e6f0;margin-top:4px">5%</div>
+      <div style="font-size:8px;color:#4a4870;margin-top:2px">back in EBIT</div>
+    </div>
+    <div style="background:#060610;border-radius:6px;padding:12px;border:1px solid #12122a;text-align:center">
+      <div style="font-size:9px;color:#2eff8c;font-weight:700">PAY WITH EBIT</div>
+      <div style="font-size:18px;font-weight:800;color:#e8e6f0;margin-top:4px">10%</div>
+      <div style="font-size:8px;color:#4a4870;margin-top:2px">back in EBIT</div>
+    </div>
+  </div>
+  <div style="margin-top:12px;font-size:9px;color:#4a4870;text-align:center">
+    EBIT rewards are credited to your account after payment confirmation.
+    <a href="/ebit.html" style="color:#2eff8c">Learn more about EBIT →</a>
+  </div>
+</div>
+
+</div>
+
+<!-- FOOTER -->
+<div style="border-top:1px solid #12122a;padding:14px 20px;text-align:center;margin-top:20px">
+  <div style="font-size:9px;color:#4a4870">CAMPIONE INFRASTRUCTURE — 9 Blockchains</div>
+  <div style="font-size:8px;color:#2a2a4a;margin-top:4px">Powered by <a href="/status.html" style="color:#2a2a4a">MaxResults4U Business Solutions</a></div>
+</div>
+
+<script>
+var selectedPlan = '';
+var selectedCoin = '';
+var paymentId = '';
+var pollTimer = null;
+
+function selectPlan(plan, el) {
+  selectedPlan = plan;
+  document.querySelectorAll('.plan').forEach(function(p) { p.classList.remove('sel'); });
+  el.classList.add('sel');
+  updateBtn();
+}
+
+function selectCoin(coin, el) {
+  selectedCoin = coin;
+  document.querySelectorAll('.coin').forEach(function(c) { c.classList.remove('sel'); });
+  el.classList.add('sel');
+  updateBtn();
+}
+
+function updateBtn() {
+  var btn = document.getElementById('payBtn');
+  if (selectedPlan && selectedCoin) {
+    var names = {analyst_monthly:'Analyst $29/mo',analyst_annual:'Analyst $249/yr',institutional_monthly:'Institutional $99/mo',institutional_annual:'Institutional $899/yr'};
+    btn.textContent = 'PAY FOR ' + names[selectedPlan] + ' WITH ' + selectedCoin.toUpperCase();
+    btn.disabled = false;
+  } else {
+    btn.textContent = 'SELECT A PLAN AND CURRENCY';
+    btn.disabled = true;
+  }
+}
+
+async function createPayment() {
+  var email = document.getElementById('email').value.trim();
+  if (!email || !email.includes('@')) {
+    alert('Please enter a valid email address');
+    return;
+  }
+
+  var btn = document.getElementById('payBtn');
+  btn.disabled = true;
+  btn.textContent = 'CREATING PAYMENT...';
+
+  try {
+    var res = await fetch('/api/v1/pay/create', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({plan: selectedPlan, currency: selectedCoin, email: email})
+    });
+    var data = await res.json();
+
+    if (!data.success) {
+      alert('Error: ' + (data.error || 'Payment creation failed'));
+      btn.disabled = false;
+      updateBtn();
+      return;
+    }
+
+    paymentId = data.paymentId;
+
+    document.getElementById('payAmount').textContent = data.instructions.amount;
+    document.getElementById('payCurrency').textContent = data.instructions.currency;
+    document.getElementById('payWallet').textContent = data.instructions.sendTo;
+    document.getElementById('payTag').textContent = data.instructions.destinationTag;
+    document.getElementById('payReward').textContent = data.reward.amount;
+    document.getElementById('payId').textContent = data.paymentId;
+
+    document.getElementById('step1').style.display = 'none';
+    document.getElementById('checkout').style.display = 'block';
+
+    startPolling();
+
+  } catch (e) {
+    alert('Network error. Please try again.');
+    btn.disabled = false;
+    updateBtn();
+  }
+}
+
+function startPolling() {
+  pollTimer = setInterval(async function() {
+    try {
+      var res = await fetch('/api/v1/pay/status/' + paymentId);
+      var data = await res.json();
+      if (data.status === 'confirmed') {
+        clearInterval(pollTimer);
+        document.getElementById('statusDot').style.background = '#2eff8c';
+        document.getElementById('statusDot').classList.remove('pulse');
+        document.getElementById('statusText').style.color = '#2eff8c';
+        document.getElementById('statusText').textContent = 'Payment confirmed!';
+        setTimeout(function() {
+          document.getElementById('checkout').style.display = 'none';
+          document.getElementById('success').style.display = 'block';
+        }, 2000);
+      }
+    } catch (e) {}
+  }, 5000);
+}
+
+function copyText(id) {
+  var text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    event.target.textContent = 'COPIED!';
+    setTimeout(function() { event.target.textContent = 'COPY'; }, 2000);
+  });
+}
+</script>
+</body>
+</html>
