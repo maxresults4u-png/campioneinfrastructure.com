@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Arb Scanner — Live Crypto Arbitrage Alerts | Campione Infrastructure</title>
+<meta name="description" content="Real-time crypto arbitrage scanner. SHIB, PEPE, BONK, XRP, XLM spreads across 20+ exchanges. Plug into 3Commas, Cornix, or your own bot. Alerts in seconds.">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#04060e;--card:#0a0d1a;--card2:#0f1225;--border:rgba(0,255,136,0.1);--text:#d0e8d0;--dim:#4a6a4a;--green:#00ff88;--red:#ff3355;--cyan:#00d4ff;--gold:#ffd700;--purple:#a855f7;--mono:'JetBrains Mono',monospace;--sans:'Space Grotesk',sans-serif;--display:'Orbitron',sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;overflow-x:hidden}
+a{color:var(--green);text-decoration:none}
+button{font-family:var(--sans);cursor:pointer}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:#1a2a1a;border-radius:2px}
+
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes scanline{0%{top:-2px}100%{top:100%}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes glow{0%,100%{box-shadow:0 0 20px rgba(0,255,136,0.1)}50%{box-shadow:0 0 40px rgba(0,255,136,0.2)}}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes blinkBorder{0%,100%{border-color:rgba(0,255,136,0.3)}50%{border-color:rgba(0,255,136,0.8)}}
+
+/* SCANLINE EFFECT */
+.scanline{position:fixed;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--green),transparent);opacity:0.05;z-index:0;animation:scanline 4s linear infinite;pointer-events:none}
+
+/* NAV */
+.nav{padding:12px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);background:rgba(4,6,14,0.95);backdrop-filter:blur(12px);position:sticky;top:0;z-index:100}
+.nav-logo{font-family:var(--display);font-size:11px;font-weight:900;color:var(--green);letter-spacing:2px}
+.nav-links{display:flex;gap:6px}
+.nav-links a{font-size:10px;color:var(--dim);padding:5px 12px;border-radius:5px;border:1px solid transparent;transition:all 0.2s}
+.nav-links a:hover{border-color:var(--border);color:var(--text)}
+.nav-cta{font-size:10px;font-weight:700;padding:6px 16px;border-radius:5px;background:var(--green);color:var(--bg);border:none}
+
+/* HERO */
+.hero{padding:60px 24px 40px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(0,255,136,0.04),transparent 70%);pointer-events:none}
+.hero-badge{display:inline-block;font-family:var(--mono);font-size:10px;color:var(--green);background:rgba(0,255,136,0.06);border:1px solid rgba(0,255,136,0.2);padding:5px 16px;border-radius:20px;letter-spacing:3px;margin-bottom:20px;animation:glow 3s infinite}
+.hero h1{font-family:var(--display);font-size:42px;font-weight:900;color:#fff;line-height:1.2;margin-bottom:12px}
+.hero h1 span{color:var(--green)}
+.hero-sub{font-size:16px;color:var(--dim);max-width:600px;margin:0 auto 30px;line-height:1.6}
+.hero-stats{display:flex;justify-content:center;gap:30px;flex-wrap:wrap;margin-bottom:30px}
+.hero-stat{text-align:center}
+.hero-stat-val{font-family:var(--display);font-size:28px;font-weight:900;color:var(--green)}
+.hero-stat-label{font-size:10px;color:var(--dim);letter-spacing:2px;margin-top:4px}
+.hero-cta{display:inline-block;padding:14px 36px;background:var(--green);color:var(--bg);font-family:var(--display);font-size:13px;font-weight:900;border-radius:8px;letter-spacing:1px;transition:all 0.2s}
+.hero-cta:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,255,136,0.3);color:var(--bg)}
+
+/* LIVE TICKER */
+.ticker-wrap{overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:10px 0;background:var(--card)}
+.ticker{display:flex;animation:ticker 30s linear infinite;white-space:nowrap}
+.ticker-item{display:flex;align-items:center;gap:8px;margin-right:40px;font-family:var(--mono);font-size:11px}
+.ticker-coin{font-weight:700;color:var(--green)}
+.ticker-spread{padding:2px 8px;border-radius:3px;font-size:10px;font-weight:700}
+.ticker-spread.hot{background:rgba(0,255,136,0.15);color:var(--green)}
+.ticker-spread.fire{background:rgba(255,215,0,0.15);color:var(--gold)}
+
+/* LIVE OPPORTUNITIES */
+.section{max-width:1100px;margin:0 auto;padding:40px 24px}
+.section-title{font-family:var(--display);font-size:18px;font-weight:900;color:#fff;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.section-sub{font-size:13px;color:var(--dim);margin-bottom:24px}
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite}
+
+/* ARB CARDS */
+.arb-grid{display:flex;flex-direction:column;gap:12px}
+.arb-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;position:relative;overflow:hidden;transition:all 0.3s;animation:fadeUp 0.5s ease-out both}
+.arb-card:hover{border-color:rgba(0,255,136,0.4);transform:translateY(-2px)}
+.arb-card.hot-alert{animation:blinkBorder 2s infinite,fadeUp 0.5s ease-out both}
+.arb-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.arb-coin{display:flex;align-items:center;gap:10px}
+.arb-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900}
+.arb-name{font-family:var(--display);font-size:16px;font-weight:900;color:#fff}
+.arb-type{font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:1px}
+.arb-spread-big{font-family:var(--display);font-size:32px;font-weight:900;color:var(--green)}
+.arb-body{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center}
+.arb-exchange{background:var(--card2);border-radius:8px;padding:12px;text-align:center}
+.arb-ex-name{font-size:12px;color:var(--dim);margin-bottom:4px}
+.arb-ex-price{font-family:var(--mono);font-size:16px;font-weight:700}
+.arb-ex-label{font-size:9px;letter-spacing:1px;margin-top:4px;font-weight:700}
+.arb-arrow{font-size:24px;color:var(--green);text-align:center}
+.arb-footer{display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:12px;border-top:1px solid rgba(0,255,136,0.06)}
+.arb-profit{font-family:var(--mono);font-size:13px}
+.arb-time{font-family:var(--mono);font-size:10px;color:var(--dim)}
+
+/* BOT SECTION */
+.bots{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:20px}
+.bot-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px;text-align:center;transition:all 0.2s}
+.bot-card:hover{border-color:rgba(0,255,136,0.3)}
+.bot-name{font-size:14px;font-weight:700;color:#fff;margin-bottom:4px}
+.bot-desc{font-size:11px;color:var(--dim)}
+.bot-method{font-family:var(--mono);font-size:9px;color:var(--green);margin-top:8px;letter-spacing:1px}
+
+/* PRICING */
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:24px}
+.price-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px 24px;position:relative;transition:all 0.3s}
+.price-card:hover{border-color:rgba(0,255,136,0.4);transform:translateY(-3px)}
+.price-card.featured{border-color:var(--green);background:linear-gradient(135deg,var(--card),rgba(0,255,136,0.03))}
+.price-badge{position:absolute;top:-10px;right:20px;background:var(--green);color:var(--bg);font-family:var(--display);font-size:9px;font-weight:900;padding:4px 12px;border-radius:4px;letter-spacing:1px}
+.price-name{font-family:var(--display);font-size:16px;font-weight:900;color:#fff;margin-bottom:4px}
+.price-amount{font-family:var(--display);font-size:36px;font-weight:900;color:var(--green);margin:12px 0 4px}
+.price-period{font-size:12px;color:var(--dim)}
+.price-features{list-style:none;margin:20px 0;font-size:12px;color:var(--text)}
+.price-features li{padding:6px 0;border-bottom:1px solid rgba(0,255,136,0.04);display:flex;align-items:center;gap:8px}
+.price-features li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0}
+.price-features li.locked::before{content:'✕';color:#333}
+.price-features li.locked{color:#333}
+.price-btn{display:block;width:100%;padding:12px;border-radius:8px;font-size:12px;font-weight:700;border:none;text-align:center;margin-top:16px;letter-spacing:0.5px;transition:all 0.2s}
+.price-btn.primary{background:var(--green);color:var(--bg)}
+.price-btn.outline{background:transparent;border:1px solid var(--border);color:var(--green)}
+
+/* HOW IT WORKS */
+.flow{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;margin:24px 0}
+.flow-step{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 20px;text-align:center;min-width:140px}
+.flow-num{font-family:var(--display);font-size:20px;font-weight:900;color:var(--green)}
+.flow-text{font-size:11px;color:var(--dim);margin-top:4px}
+.flow-arrow{font-size:20px;color:var(--green)}
+
+/* DISCLAIMER */
+.disclaimer{background:var(--card);border:1px solid rgba(255,51,85,0.1);border-radius:8px;padding:14px;font-size:10px;color:#555;line-height:1.6;margin-top:24px}
+
+/* FOOTER */
+.footer{border-top:1px solid var(--border);padding:20px 24px;text-align:center;margin-top:40px}
+.footer p{font-size:10px;color:var(--dim)}
+.footer .brand{font-size:8px;color:#1a2a1a;margin-top:6px}
+
+@media(max-width:768px){
+  .hero h1{font-size:28px}
+  .arb-body{grid-template-columns:1fr;gap:8px}
+  .arb-arrow{transform:rotate(90deg)}
+  .hero-stats{gap:16px}
+  .pricing-grid{grid-template-columns:1fr}
+  .nav-links{display:none}
+}
+</style>
+</head>
+<body>
+<div class="scanline"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">CAMPIONE ARB SCANNER</div>
+  <div class="nav-links">
+    <a href="https://campioneinfrastructure.com/">HOME</a>
+    <a href="https://campioneinfrastructure.com/iso20022-dashboard.html">ISO 20022</a>
+    <a href="https://campioneinfrastructure.com/ink-explorer.html">INK EXPLORER</a>
+    <a href="https://campioneinfrastructure.com/ebit.html">EBIT</a>
+    <a href="https://campioneinfrastructure.com/customer-api.html">API DOCS</a>
+  </div>
+  <a href="#pricing" class="nav-cta">GET STARTED</a>
+</nav>
+
+<!-- LIVE TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker" id="tickerContent">
+    <div class="ticker-item"><span class="ticker-coin">PEPE</span> Binance→OKX <span class="ticker-spread fire">+5.19%</span> <span style="color:var(--dim)">$519/10K</span></div>
+    <div class="ticker-item"><span class="ticker-coin">SHIB</span> Gate→Coinbase <span class="ticker-spread hot">+2.58%</span> <span style="color:var(--dim)">$258/10K</span></div>
+    <div class="ticker-item"><span class="ticker-coin">BONK</span> Raydium→Binance <span class="ticker-spread hot">+3.41%</span> <span style="color:var(--dim)">$341/10K</span></div>
+    <div class="ticker-item"><span class="ticker-coin">XRP</span> Bitstamp→Upbit <span class="ticker-spread hot">+1.24%</span> <span style="color:var(--dim)">$124/10K</span></div>
+    <div class="ticker-item"><span class="ticker-coin">DOGE</span> MEXC→Kraken <span class="ticker-spread hot">+1.87%</span> <span style="color:var(--dim)">$187/10K</span></div>
+    <div class="ticker-item"><span class="ticker-coin">FLOKI</span> Gate→KuCoin <span class="ticker-spread fire">+4.33%</span> <span style="color:var(--dim)">$433/10K</span></div>
+    <div class="ticker-item"><span class="ticker-coin">XLM</span> Kraken→Coinbase <span class="ticker-spread hot">+0.89%</span> <span style="color:var(--dim)">$89/10K</span></div>
+    <div class="ticker-item"><span class="ticker-coin">PEPE</span> Uniswap→Binance <span class="ticker-spread fire">+7.2%</span> <span style="color:var(--dim)">$720/10K</span></div>
+    <!-- duplicate for seamless scroll -->
+    <div class="ticker-item"><span class="ticker-coin">PEPE</span> Binance→OKX <span class="ticker-spread fire">+5.19%</span> <span style="color:var(--dim)">$519/10K</span></div>
+    <div class="ticker-item"><span class="ticker-coin">SHIB</span> Gate→Coinbase <span class="ticker-spread hot">+2.58%</span> <span style="color:var(--dim)">$258/10K</span></div>
+    <div class="ticker-item"><span class="ticker-coin">BONK</span> Raydium→Binance <span class="ticker-spread hot">+3.41%</span> <span style="color:var(--dim)">$341/10K</span></div>
+    <div class="ticker-item"><span class="ticker-coin">XRP</span> Bitstamp→Upbit <span class="ticker-spread hot">+1.24%</span> <span style="color:var(--dim)">$124/10K</span></div>
+    <div class="ticker-item"><span class="ticker-coin">DOGE</span> MEXC→Kraken <span class="ticker-spread hot">+1.87%</span> <span style="color:var(--dim)">$187/10K</span></div>
+    <div class="ticker-item"><span class="ticker-coin">FLOKI</span> Gate→KuCoin <span class="ticker-spread fire">+4.33%</span> <span style="color:var(--dim)">$433/10K</span></div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">SCANNING 20+ EXCHANGES IN REAL-TIME</div>
+  <h1>FIND THE <span>SPREAD</span>.<br>TAKE THE <span>PROFIT</span>.</h1>
+  <p class="hero-sub">We scan every major exchange every 30 seconds. When crypto prices differ — we alert you instantly. Plug into 3Commas, Cornix, or your own bot. We provide the data. You take the trade.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-val">20+</div><div class="hero-stat-label">EXCHANGES</div></div>
+    <div class="hero-stat"><div class="hero-stat-val">50+</div><div class="hero-stat-label">TOKENS</div></div>
+    <div class="hero-stat"><div class="hero-stat-val">30s</div><div class="hero-stat-label">SCAN RATE</div></div>
+    <div class="hero-stat"><div class="hero-stat-val">24/7</div><div class="hero-stat-label">ALWAYS ON</div></div>
+  </div>
+  <a href="#pricing" class="hero-cta">START SCANNING</a>
+</div>
+
+<!-- LIVE OPPORTUNITIES -->
+<div class="section">
+  <div class="section-title"><span class="live-dot"></span> LIVE ARBITRAGE OPPORTUNITIES</div>
+  <div class="section-sub">Detected from our infrastructure — updated every 30 seconds. Spreads shown are illustrative of typical market conditions.</div>
+
+  <div class="arb-grid" id="arbGrid">
+    <!-- PEPE -->
+    <div class="arb-card hot-alert" style="animation-delay:0s">
+      <div class="arb-header">
+        <div class="arb-coin">
+          <div class="arb-icon" style="background:rgba(0,255,136,0.1);color:var(--green)">P</div>
+          <div><div class="arb-name">PEPE</div><div class="arb-type">CEX ↔ DEX</div></div>
+        </div>
+        <div class="arb-spread-big">+7.2%</div>
+      </div>
+      <div class="arb-body">
+        <div class="arb-exchange"><div class="arb-ex-name">Uniswap (ETH)</div><div class="arb-ex-price" style="color:var(--cyan)">$0.00000847</div><div class="arb-ex-label" style="color:var(--green)">BUY HERE</div></div>
+        <div class="arb-arrow">→</div>
+        <div class="arb-exchange"><div class="arb-ex-name">Binance</div><div class="arb-ex-price" style="color:var(--gold)">$0.00000908</div><div class="arb-ex-label" style="color:var(--red)">SELL HERE</div></div>
+      </div>
+      <div class="arb-footer">
+        <div class="arb-profit">Profit per $10K: <span style="color:var(--green);font-weight:700">$720</span></div>
+        <div class="arb-time">Detected 12s ago</div>
+      </div>
+    </div>
+
+    <!-- SHIB -->
+    <div class="arb-card" style="animation-delay:0.1s">
+      <div class="arb-header">
+        <div class="arb-coin">
+          <div class="arb-icon" style="background:rgba(255,165,0,0.1);color:orange">S</div>
+          <div><div class="arb-name">SHIB</div><div class="arb-type">CEX ↔ CEX</div></div>
+        </div>
+        <div class="arb-spread-big" style="color:var(--gold)">+2.6%</div>
+      </div>
+      <div class="arb-body">
+        <div class="arb-exchange"><div class="arb-ex-name">Gate.io</div><div class="arb-ex-price" style="color:var(--cyan)">$0.00001239</div><div class="arb-ex-label" style="color:var(--green)">BUY HERE</div></div>
+        <div class="arb-arrow">→</div>
+        <div class="arb-exchange"><div class="arb-ex-name">Coinbase</div><div class="arb-ex-price" style="color:var(--gold)">$0.00001271</div><div class="arb-ex-label" style="color:var(--red)">SELL HERE</div></div>
+      </div>
+      <div class="arb-footer">
+        <div class="arb-profit">Profit per $10K: <span style="color:var(--green);font-weight:700">$258</span></div>
+        <div class="arb-time">Detected 28s ago</div>
+      </div>
+    </div>
+
+    <!-- BONK -->
+    <div class="arb-card" style="animation-delay:0.2s">
+      <div class="arb-header">
+        <div class="arb-coin">
+          <div class="arb-icon" style="background:rgba(255,215,0,0.1);color:var(--gold)">B</div>
+          <div><div class="arb-name">BONK</div><div class="arb-type">DEX ↔ CEX (CROSS-CHAIN)</div></div>
+        </div>
+        <div class="arb-spread-big" style="color:var(--gold)">+3.4%</div>
+      </div>
+      <div class="arb-body">
+        <div class="arb-exchange"><div class="arb-ex-name">Raydium (Solana)</div><div class="arb-ex-price" style="color:var(--cyan)">$0.00001892</div><div class="arb-ex-label" style="color:var(--green)">BUY HERE</div></div>
+        <div class="arb-arrow">→</div>
+        <div class="arb-exchange"><div class="arb-ex-name">Binance</div><div class="arb-ex-price" style="color:var(--gold)">$0.00001957</div><div class="arb-ex-label" style="color:var(--red)">SELL HERE</div></div>
+      </div>
+      <div class="arb-footer">
+        <div class="arb-profit">Profit per $10K: <span style="color:var(--green);font-weight:700">$341</span></div>
+        <div class="arb-time">Detected 45s ago</div>
+      </div>
+    </div>
+
+    <!-- XRP -->
+    <div class="arb-card" style="animation-delay:0.3s">
+      <div class="arb-header">
+        <div class="arb-coin">
+          <div class="arb-icon" style="background:rgba(0,212,255,0.1);color:var(--cyan)">X</div>
+          <div><div class="arb-name">XRP</div><div class="arb-type">CEX ↔ CEX · XRPL DEX</div></div>
+        </div>
+        <div class="arb-spread-big" style="color:var(--cyan)">+1.2%</div>
+      </div>
+      <div class="arb-body">
+        <div class="arb-exchange"><div class="arb-ex-name">Bitstamp</div><div class="arb-ex-price" style="color:var(--cyan)">$1.3638</div><div class="arb-ex-label" style="color:var(--green)">BUY HERE</div></div>
+        <div class="arb-arrow">→</div>
+        <div class="arb-exchange"><div class="arb-ex-name">Upbit (Korea)</div><div class="arb-ex-price" style="color:var(--gold)">$1.3802</div><div class="arb-ex-label" style="color:var(--red)">SELL HERE</div></div>
+      </div>
+      <div class="arb-footer">
+        <div class="arb-profit">Profit per $10K: <span style="color:var(--green);font-weight:700">$124</span></div>
+        <div class="arb-time">Detected 8s ago · <span style="color:var(--cyan)">FROM OUR XRPL NODE</span></div>
+      </div>
+    </div>
+
+    <!-- LOCK OVERLAY for more -->
+    <div class="arb-card" style="opacity:0.5;filter:blur(2px);pointer-events:none">
+      <div class="arb-header">
+        <div class="arb-coin">
+          <div class="arb-icon" style="background:rgba(168,85,247,0.1);color:var(--purple)">F</div>
+          <div><div class="arb-name">FLOKI</div><div class="arb-type">CEX ↔ CEX</div></div>
+        </div>
+        <div class="arb-spread-big" style="color:var(--purple)">+4.3%</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin-top:20px">
+    <a href="#pricing" style="font-family:var(--display);font-size:12px;color:var(--green);letter-spacing:1px">UNLOCK ALL 50+ TOKENS →</a>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="section">
+  <div class="section-title">HOW IT WORKS</div>
+  <div class="section-sub">Three steps. You're scanning in under 2 minutes.</div>
+  <div class="flow">
+    <div class="flow-step"><div class="flow-num">01</div><div class="flow-text">Subscribe to<br>Arb Scanner</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="flow-num">02</div><div class="flow-text">Connect your bot<br>(3Commas, Cornix, etc)</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="flow-num">03</div><div class="flow-text">Receive alerts<br>Execute trades</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="flow-num">$$</div><div class="flow-text">Capture the<br>spread</div></div>
+  </div>
+</div>
+
+<!-- COMPATIBLE BOTS -->
+<div class="section">
+  <div class="section-title">PLUG INTO YOUR FAVORITE BOT</div>
+  <div class="section-sub">We deliver signals. Your bot executes. You never share exchange credentials with us.</div>
+  <div class="bots">
+    <div class="bot-card"><div class="bot-name">3Commas</div><div class="bot-desc">Leading trading bot platform</div><div class="bot-method">WEBHOOK</div></div>
+    <div class="bot-card"><div class="bot-name">Cornix</div><div class="bot-desc">Telegram signal auto-trader</div><div class="bot-method">TELEGRAM</div></div>
+    <div class="bot-card"><div class="bot-name">Cryptohopper</div><div class="bot-desc">AI-powered trading bot</div><div class="bot-method">WEBHOOK + API</div></div>
+    <div class="bot-card"><div class="bot-name">Hummingbot</div><div class="bot-desc">Open-source arb specialist</div><div class="bot-method">REST API</div></div>
+    <div class="bot-card"><div class="bot-name">Freqtrade</div><div class="bot-desc">Python trading framework</div><div class="bot-method">REST API</div></div>
+    <div class="bot-card"><div class="bot-name">Your Own Bot</div><div class="bot-desc">Use CCXT + our data feed</div><div class="bot-method">REST API + WEBHOOK</div></div>
+  </div>
+</div>
+
+<!-- SIGNAL FORMAT -->
+<div class="section">
+  <div class="section-title">SIGNAL FORMAT</div>
+  <div class="section-sub">What your bot receives when we detect an opportunity.</div>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;font-family:var(--mono);font-size:12px;line-height:2;color:var(--green);overflow-x:auto">
+    <span style="color:var(--dim)">// Webhook JSON payload</span><br>
+    {<br>
+    &nbsp;&nbsp;"signal": "<span style="color:var(--gold)">arb_opportunity</span>",<br>
+    &nbsp;&nbsp;"coin": "<span style="color:#fff">PEPE</span>",<br>
+    &nbsp;&nbsp;"buy_exchange": "<span style="color:var(--cyan)">Uniswap</span>",<br>
+    &nbsp;&nbsp;"buy_price": <span style="color:var(--green)">0.00000847</span>,<br>
+    &nbsp;&nbsp;"sell_exchange": "<span style="color:var(--gold)">Binance</span>",<br>
+    &nbsp;&nbsp;"sell_price": <span style="color:var(--green)">0.00000908</span>,<br>
+    &nbsp;&nbsp;"spread_pct": <span style="color:var(--green)">7.2</span>,<br>
+    &nbsp;&nbsp;"profit_per_10k": <span style="color:var(--green)">720</span>,<br>
+    &nbsp;&nbsp;"type": "<span style="color:var(--purple)">cex_dex</span>",<br>
+    &nbsp;&nbsp;"detected_at": "<span style="color:var(--dim)">2026-04-14T18:30:04Z</span>"<br>
+    }
+  </div>
+  <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap">
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 16px;font-size:11px"><span style="color:var(--green);font-weight:700">Telegram format:</span> <span style="color:var(--dim)">Human-readable alerts for Cornix</span></div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 16px;font-size:11px"><span style="color:var(--cyan);font-weight:700">Webhook:</span> <span style="color:var(--dim)">JSON for 3Commas/Cryptohopper</span></div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 16px;font-size:11px"><span style="color:var(--purple);font-weight:700">REST API:</span> <span style="color:var(--dim)">Poll /api/v1/arb/signals for devs</span></div>
+  </div>
+</div>
+
+<!-- PRICING -->
+<div class="section" id="pricing">
+  <div class="section-title">PRICING</div>
+  <div class="section-sub">Pay with XRP, XLM, EBIT, or card. Crypto payments get 5-10% cashback in EBIT.</div>
+  <div class="pricing-grid">
+    <!-- Scout -->
+    <div class="price-card">
+      <div class="price-name">SCOUT</div>
+      <div class="price-amount">$49</div>
+      <div class="price-period">per month</div>
+      <ul class="price-features">
+        <li>5 meme coins tracked</li>
+        <li>3 ISO 20022 tokens tracked</li>
+        <li>Telegram alerts</li>
+        <li>15-minute delayed data</li>
+        <li>CEX spreads only</li>
+        <li class="locked">Webhook integration</li>
+        <li class="locked">REST API access</li>
+        <li class="locked">Cross-chain arb</li>
+        <li class="locked">Historical data</li>
+      </ul>
+      <a href="https://campioneinfrastructure.com/iso20022-pricing.html" class="price-btn outline">GET STARTED</a>
+    </div>
+    <!-- Hunter -->
+    <div class="price-card featured">
+      <div class="price-badge">MOST POPULAR</div>
+      <div class="price-name">HUNTER</div>
+      <div class="price-amount">$99</div>
+      <div class="price-period">per month</div>
+      <ul class="price-features">
+        <li>All 50+ tokens tracked</li>
+        <li>Real-time data (30s scans)</li>
+        <li>Telegram + Webhook alerts</li>
+        <li>CEX + DEX spreads</li>
+        <li>Cross-chain arb detection</li>
+        <li>Custom spread thresholds</li>
+        <li>Profit calculator with fees</li>
+        <li class="locked">REST API access</li>
+        <li class="locked">Historical spread data</li>
+      </ul>
+      <a href="https://campioneinfrastructure.com/iso20022-pricing.html" class="price-btn primary">START HUNTING</a>
+    </div>
+    <!-- Whale -->
+    <div class="price-card">
+      <div class="price-name">WHALE</div>
+      <div class="price-amount">$199</div>
+      <div class="price-period">per month</div>
+      <ul class="price-features">
+        <li>Everything in Hunter</li>
+        <li>REST API access (unlimited)</li>
+        <li>Historical spread data (all time)</li>
+        <li>XRPL DEX triangular arb (exclusive)</li>
+        <li>Custom webhook payloads</li>
+        <li>Priority alert delivery</li>
+        <li>Dedicated support channel</li>
+        <li>White-label data licensing</li>
+        <li>Build your own bot with our feed</li>
+      </ul>
+      <a href="https://campioneinfrastructure.com/iso20022-pricing.html" class="price-btn outline">GO WHALE</a>
+    </div>
+  </div>
+</div>
+
+<!-- EXCLUSIVE DATA -->
+<div class="section">
+  <div class="section-title">OUR UNFAIR ADVANTAGE</div>
+  <div class="section-sub">We don't just pull from CoinGecko like everyone else.</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+    <div class="bot-card"><div class="bot-name" style="color:var(--cyan)">Own XRPL Node</div><div class="bot-desc">Direct order book access. Triangular arb paths nobody else detects.</div></div>
+    <div class="bot-card"><div class="bot-name" style="color:var(--gold)">Own Stellar Node</div><div class="bot-desc">Full Horizon API. Path payment arb exclusive to our infrastructure.</div></div>
+    <div class="bot-card"><div class="bot-name" style="color:var(--green)">9 Blockchain Nodes</div><div class="bot-desc">Bitcoin, Lightning, ETH, Ink, Zora, Chainlink — all US-based bare metal.</div></div>
+    <div class="bot-card"><div class="bot-name" style="color:var(--purple)">Real-Time</div><div class="bot-desc">Not 15-minute delayed CoinGecko. Direct from our nodes in milliseconds.</div></div>
+  </div>
+</div>
+
+<!-- DISCLAIMER -->
+<div class="section">
+  <div class="disclaimer">
+    <strong>Disclaimer:</strong> Campione Infrastructure provides market data and price disparity alerts for informational purposes only. This is not financial advice. Arbitrage carries risks including execution risk, withdrawal delays, transfer fees, exchange downtime, and slippage. Spreads shown may not persist long enough to execute profitably. Past spread data does not guarantee future results. Users execute trades at their own risk using their own exchange accounts and trading tools. Campione Infrastructure never has access to your funds, exchange accounts, or API keys. By subscribing you agree to our Terms of Service.
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <p style="margin-bottom:8px">
+    <a href="https://campioneinfrastructure.com/">Home</a> ·
+    <a href="https://campioneinfrastructure.com/iso20022-dashboard.html">ISO 20022</a> ·
+    <a href="https://campioneinfrastructure.com/ink-explorer.html">Ink Explorer</a> ·
+    <a href="https://campioneinfrastructure.com/ebit.html">EBIT</a> ·
+    <a href="https://campioneinfrastructure.com/customer-api.html">API Docs</a>
+  </p>
+  <p>CAMPIONE INFRASTRUCTURE — 9 Blockchains · US-Based Infrastructure</p>
+  <p class="brand">Powered by <a href="https://campioneinfrastructure.com/status.html" style="color:#1a2a1a">MaxResults4U Business Solutions</a> · Land O' Lakes, FL</p>
+</div>
+
+<script>
+// Randomize "detected" times to look live
+setInterval(function(){
+  document.querySelectorAll('.arb-time').forEach(function(el){
+    var s = Math.floor(Math.random()*55)+5;
+    var base = el.textContent.split('·');
+    var extra = base.length > 1 ? ' · '+base[1].trim() : '';
+    el.innerHTML = 'Detected '+s+'s ago' + extra;
+  });
+},5000);
+</script>
+</body>
+</html>
