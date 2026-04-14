@@ -1,1 +1,304 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ISO 20022 Command Center — Campione Infrastructure</title>
+<meta name="description" content="Track all 8 ISO 20022 compliant tokens. Live arbitrage data, whale alerts, XRPL and Stellar node metrics. SWIFT deadline countdown.">
+<meta name="keywords" content="ISO 20022, XRP, XLM, SWIFT, blockchain API, crypto arbitrage, whale alerts, XRPL, Stellar">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#060610;color:#d0cee6;font-family:'JetBrains Mono',monospace;min-height:100vh}
+button{font-family:inherit;cursor:pointer}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#1e1e3a;border-radius:2px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes burn{0%{color:#ff6b6b}50%{color:#f0c000}100%{color:#ff6b6b}}
+.card{background:#0a0a1a;border:1px solid #151530;border-radius:10px;padding:18px 16px;position:relative}
+.lbl{font-size:8px;color:#4a4870;letter-spacing:2px;font-weight:700;margin-bottom:6px}
+.lock{position:absolute;inset:0;background:rgba(6,6,16,0.88);backdrop-filter:blur(4px);display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:10px;z-index:2}
+.bar-bg{width:100%;height:5px;background:#12122a;border-radius:3px}
+.bar-fill{height:100%;border-radius:3px;transition:width 0.8s}
+.tab{background:transparent;border:1px solid transparent;color:#4a4870;padding:5px 11px;border-radius:5px;font-size:9px;font-weight:600;white-space:nowrap;letter-spacing:0.5px}
+.tab.active{background:#1e1e3a;border-color:#2a2a5a;color:#e8e6f0}
+.grid-row{display:grid;gap:6px;padding:7px 0;border-bottom:1px solid #0a0a1a;font-size:10px;align-items:center}
+a{text-decoration:none}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div style="padding:12px 20px;border-bottom:1px solid #12122a;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;background:#0a0a18;position:sticky;top:0;z-index:10">
+  <div style="display:flex;align-items:center;gap:10px">
+    <div style="width:34px;height:34px;border-radius:8px;background:linear-gradient(135deg,#00d4ff,#f0c000,#2eff8c);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#060610">ISO</div>
+    <div>
+      <div style="font-size:12px;font-weight:800;color:#e8e6f0;letter-spacing:0.5px">ISO 20022 COMMAND CENTER</div>
+      <div style="font-size:8px;color:#4a4870;letter-spacing:2px">CAMPIONE INFRASTRUCTURE — LIVE NODE DATA</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center">
+    <div style="display:flex;align-items:center;gap:4px;background:#0d0d20;border:1px solid #1e1e3a;border-radius:5px;padding:4px 10px">
+      <span style="width:5px;height:5px;border-radius:50%;background:#00e89d;animation:pulse 2s infinite"></span>
+      <span style="font-size:9px;color:#00e89d;font-weight:700">LIVE</span>
+    </div>
+    <a href="/ink-explorer-funnel.html#signup" style="background:linear-gradient(135deg,#00d4ff,#f0c000);color:#060610;padding:6px 14px;border-radius:6px;font-size:10px;font-weight:800;letter-spacing:0.5px">FREE API KEY</a>
+  </div>
+</div>
+
+<!-- TOP METRICS -->
+<div id="topMetrics" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:1px;background:#12122a;border-bottom:1px solid #12122a"></div>
+
+<!-- SWIFT COUNTDOWN -->
+<div style="padding:22px 20px;border-bottom:1px solid #12122a;text-align:center;background:linear-gradient(135deg,rgba(0,212,255,0.03),rgba(240,192,0,0.03))">
+  <div class="lbl" style="margin-bottom:10px">SWIFT ISO 20022 MANDATORY DEADLINE</div>
+  <div id="countdown" style="display:flex;justify-content:center;gap:14px"></div>
+  <div style="font-size:9px;color:#4a4870;margin-top:8px">November 2026 — All SWIFT messages must use ISO 20022</div>
+</div>
+
+<!-- TABS -->
+<div style="padding:8px 20px;border-bottom:1px solid #0f0f25;display:flex;gap:3px;overflow-x:auto" id="tabBar"></div>
+
+<!-- CONTENT -->
+<div id="content" style="padding:14px 20px"></div>
+
+<!-- CTA -->
+<div style="margin:6px 20px 16px;padding:20px 18px;background:linear-gradient(135deg,#0d0d20,rgba(46,255,140,0.04));border:1px solid #1e1e3a;border-radius:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+  <div>
+    <div style="font-size:12px;font-weight:700;color:#e8e6f0;margin-bottom:3px">Pay with XRP, XLM, or EBIT — earn rewards</div>
+    <div style="font-size:9px;color:#6b6988">Up to 10% cashback in EBIT. Real-time arbitrage, whale alerts, and ODL data.</div>
+  </div>
+  <a href="/iso20022-pricing.html" style="background:linear-gradient(135deg,#00d4ff,#2eff8c);color:#060610;padding:9px 22px;border-radius:6px;font-size:10px;font-weight:800">SUBSCRIBE WITH CRYPTO</a>
+</div>
+
+<!-- FOOTER -->
+<div style="border-top:1px solid #12122a;padding:14px 20px;text-align:center">
+  <div style="font-size:9px;color:#4a4870">CAMPIONE INFRASTRUCTURE — Full XRP + Stellar Nodes — 9 Blockchains</div>
+  <div style="font-size:8px;color:#2a2a4a;margin-top:4px">Powered by MaxResults4U Business Solutions</div>
+</div>
+
+<!-- AD SLOT -->
+<div style="margin:0 20px 20px;background:#0a0a1a;border:1px dashed #151530;border-radius:8px;padding:16px;text-align:center;font-size:10px;color:#2a2a4a;min-height:90px;display:flex;align-items:center;justify-content:center">
+  Ad Space — Google AdSense
+</div>
+
+<script>
+var API = '';
+var SWIFT = new Date('2026-11-01T00:00:00Z');
+var currentTab = 'ebit';
+var tokenData = [];
+var ebitData = {};
+var swiftData = {};
+
+var TABS = [
+  {id:'ebit',label:'EBIT ECONOMY',icon:'\u25C8'},
+  {id:'overview',label:'ISO TOKENS',icon:'\u25C9'},
+  {id:'arbitrage',label:'ARBITRAGE',icon:'\u26A1'},
+  {id:'nodes',label:'NODE DATA',icon:'\u2B21'},
+  {id:'whales',label:'WHALES',icon:'\u25B2'},
+  {id:'odl',label:'ODL',icon:'\u2194'},
+  {id:'scores',label:'SCORES',icon:'\u25C6'}
+];
+
+var EXCHANGES = ['Binance','Kraken','Coinbase','Bitstamp','Upbit','Bybit'];
+var CORRIDORS = [
+  {route:'USD \u2192 MXN',vol:'12.4M',spread:0.34},{route:'USD \u2192 PHP',vol:'8.7M',spread:0.28},
+  {route:'USD \u2192 BRL',vol:'6.2M',spread:0.41},{route:'EUR \u2192 USD',vol:'5.1M',spread:0.12},
+  {route:'JPY \u2192 USD',vol:'4.8M',spread:0.22},{route:'USD \u2192 INR',vol:'1.8M',spread:0.52}
+];
+
+function fmt(n){return n>=1e9?'$'+(n/1e9).toFixed(2)+'B':n>=1e6?'$'+(n/1e6).toFixed(1)+'M':n>=1e3?'$'+(n/1e3).toFixed(1)+'K':'$'+n.toFixed(2)}
+function pct(n){return(n>=0?'+':'')+n.toFixed(2)+'%'}
+function rng(a,b){return a+Math.random()*(b-a)}
+
+// Countdown
+function updateCountdown(){
+  var n=Date.now(),d=Math.max(0,Math.ceil((SWIFT-n)/864e5)),h=Math.floor((SWIFT-n)/36e5)%24,m=Math.floor((SWIFT-n)/6e4)%60,s=Math.floor((SWIFT-n)/1e3)%60;
+  var el=document.getElementById('countdown');
+  el.innerHTML=[{v:d,l:'DAYS'},{v:h,l:'HRS'},{v:m,l:'MIN'},{v:s,l:'SEC'}].map(function(u){
+    return '<div style="text-align:center"><div style="font-size:30px;font-weight:800;color:#e8e6f0;font-variant-numeric:tabular-nums;text-shadow:0 0 20px rgba(0,212,255,0.1)">'+String(u.v).padStart(2,'0')+'</div><div style="font-size:7px;color:#4a4870;letter-spacing:3px;margin-top:2px">'+u.l+'</div></div>';
+  }).join('');
+}
+
+// Top metrics
+function updateTopMetrics(){
+  var xrp=tokenData.find(function(t){return t.symbol==='XRP'})||{};
+  var xlm=tokenData.find(function(t){return t.symbol==='XLM'})||{};
+  var ebitPrice=ebitData.ebit?0.000142:0;
+  var ebitBurned=ebitData.ebit?ebitData.ebit.totalBurned:0;
+  var ebitMcap=(100000000-ebitBurned)*ebitPrice;
+  var items=[
+    {l:'EBIT PRICE',v:'$'+ebitPrice.toFixed(6),c:'#2eff8c'},
+    {l:'EBIT BURNED',v:(ebitBurned||0).toLocaleString(),c:'#ff6b6b'},
+    {l:'XRP',v:xrp.price?'$'+xrp.price.toFixed(3):'--',c:'#00d4ff'},
+    {l:'XLM',v:xlm.price?'$'+xlm.price.toFixed(4):'--',c:'#f0c000'},
+    {l:'CHAINS',v:'9',c:'#c850ff'},
+    {l:'SWIFT',v:swiftData.daysLeft?swiftData.daysLeft+'d':'--',c:'#c850ff'}
+  ];
+  document.getElementById('topMetrics').innerHTML=items.map(function(s){
+    return '<div style="background:#0a0a18;padding:10px 12px;text-align:center"><div style="font-size:7px;color:#4a4870;letter-spacing:2px;margin-bottom:2px">'+s.l+'</div><div style="font-size:13px;font-weight:700;color:'+s.c+';font-variant-numeric:tabular-nums">'+s.v+'</div></div>';
+  }).join('');
+}
+
+// Tabs
+function renderTabs(){
+  document.getElementById('tabBar').innerHTML=TABS.map(function(t){
+    return '<button class="tab'+(currentTab===t.id?' active':'')+'" onclick="switchTab(\''+t.id+'\')">'+t.icon+' '+t.label+'</button>';
+  }).join('');
+}
+
+function switchTab(id){currentTab=id;renderTabs();renderContent()}
+
+function lockHTML(tier){
+  return '<div class="lock"><div style="font-size:22px;margin-bottom:6px">&#x1F512;</div><div style="font-size:10px;color:#9896b0;font-weight:700">'+(tier==='analyst'?'ANALYST \u2014 $29/mo':'INSTITUTIONAL \u2014 $99/mo')+'</div><div style="font-size:9px;color:#4a4870;margin:4px 0 10px">'+(tier==='analyst'?'Real-time data + whale alerts':'Full arbitrage + ODL corridors')+'</div><a href="/iso20022-pricing.html" style="background:linear-gradient(135deg,#00d4ff,#f0c000);color:#060610;padding:7px 18px;border-radius:5px;font-size:9px;font-weight:800">UPGRADE NOW</a></div>';
+}
+
+function barHTML(v,c){return '<div class="bar-bg"><div class="bar-fill" style="width:'+v+'%;background:'+c+'"></div></div>'}
+
+// Content renderer
+function renderContent(){
+  var el=document.getElementById('content');
+  var h='';
+
+  if(currentTab==='ebit'){
+    var eb=ebitData.ebit||{totalSupply:100000000,totalBurned:0};
+    var circ=eb.totalSupply-eb.totalBurned;
+    var holders=87;
+    var rewards=ebitData.rewards||{totalIssued:0};
+    h+='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px">';
+    [{l:'TOTAL SUPPLY',v:'100,000,000',s:'Fixed cap',c:'#2eff8c'},{l:'BURNED',v:(eb.totalBurned||0).toLocaleString(),s:'Permanently removed',c:'#ff6b6b'},{l:'CIRCULATING',v:circ.toLocaleString(),s:'Active supply',c:'#e8e6f0'},{l:'PRICE',v:'$0.000142',s:'Via XRPL AMM',c:'#2eff8c'},{l:'HOLDERS',v:holders,s:'Unique trustlines',c:'#f0c000'},{l:'REWARDS ISSUED',v:(rewards.totalIssued||0).toLocaleString(),s:'EBIT distributed',c:'#c850ff'}].forEach(function(s){
+      h+='<div class="card"><div class="lbl">'+s.l+'</div><div style="font-size:18px;font-weight:800;color:'+s.c+';font-variant-numeric:tabular-nums">'+s.v+'</div><div style="font-size:9px;color:#4a4870;margin-top:2px">'+s.s+'</div></div>';
+    });
+    h+='</div>';
+    h+='<div class="card" style="margin-top:12px"><div class="lbl">EBIT / XRP AMM POOL</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:8px"><div><div style="font-size:9px;color:#4a4870">POOL EBIT</div><div style="font-size:16px;font-weight:800;color:#2eff8c">48.2M</div></div><div><div style="font-size:9px;color:#4a4870">POOL XRP</div><div style="font-size:16px;font-weight:800;color:#00d4ff">45.2</div></div><div><div style="font-size:9px;color:#4a4870">RATE</div><div style="font-size:14px;font-weight:800;color:#e8e6f0">1 XRP = 1,066,371 EBIT</div></div></div><div style="margin-top:12px;padding:10px 12px;background:#060610;border-radius:6px;border:1px solid #12122a;font-size:9px;color:#4a4870">AMM: rpa3Hp7qZg3uaJ49Cs7aj5dbuwd6KPDTco — Treasury: rJvkpJYfftNdGN1CkLK2C6JypUciu2yNwM</div></div>';
+    h+='<div class="card" style="margin-top:12px"><div class="lbl">LOYALTY REWARDS PROGRAM</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-top:8px">';
+    [{m:'Pay with XRP',r:'5% back',c:'#00d4ff'},{m:'Pay with XLM',r:'5% back',c:'#f0c000'},{m:'Pay with EBIT',r:'10% back',c:'#2eff8c'},{m:'Pay with Fiat',r:'0%',c:'#4a4870'}].forEach(function(r){
+      h+='<div style="background:#060610;border-radius:6px;padding:10px;border:1px solid #12122a;text-align:center"><div style="font-size:9px;color:'+r.c+';font-weight:700;margin-bottom:4px">'+r.m+'</div><div style="font-size:16px;font-weight:800;color:#e8e6f0">'+r.r+'</div><div style="font-size:8px;color:#4a4870;margin-top:2px">in EBIT</div></div>';
+    });
+    h+='</div></div>';
+    h+='<div class="card" style="margin-top:12px"><div class="lbl">THE EBIT FLYWHEEL</div>';
+    [{s:'1',t:'User subscribes with XRP/XLM/EBIT',c:'#00d4ff'},{s:'2',t:'User receives 5-10% cashback in EBIT',c:'#2eff8c'},{s:'3',t:'2% of EBIT payments are burned',c:'#ff6b6b'},{s:'4',t:'User discovers Captain Crypto Slots, buys more EBIT',c:'#f0c000'},{s:'5',t:'5% house edge on every slot bet is burned',c:'#ff6b6b'},{s:'6',t:'Supply shrinks, AMM price adjusts up',c:'#2eff8c'},{s:'7',t:'More users want EBIT rewards, cycle repeats',c:'#c850ff'}].forEach(function(s){
+      h+='<div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:#060610;border-radius:6px;border:1px solid #12122a;margin-top:6px"><div style="width:24px;height:24px;border-radius:50%;background:'+s.c+'20;border:1px solid '+s.c+'40;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:'+s.c+';flex-shrink:0">'+s.s+'</div><div style="font-size:10px;color:#9896b0">'+s.t+'</div></div>';
+    });
+    h+='</div>';
+    h+='<div class="card" style="margin-top:12px"><div class="lbl">BURN SOURCES</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px">';
+    [{s:'Captain Crypto Slots',r:'5% house edge',c:'#ff6b6b'},{s:'Subscription Payments',r:'2% processing',c:'#f0c000'},{s:'Treasury Burns',r:'Quarterly',c:'#c850ff'}].forEach(function(b){
+      h+='<div style="background:#060610;border-radius:6px;padding:12px;border:1px solid #12122a"><div style="font-size:10px;color:'+b.c+';font-weight:700;margin-bottom:4px">'+b.s+'</div><div style="font-size:14px;font-weight:800;color:#e8e6f0">'+b.r+'</div></div>';
+    });
+    h+='</div></div>';
+  }
+
+  else if(currentTab==='overview'){
+    tokenData.forEach(function(t,i){
+      h+='<div class="card" style="display:grid;grid-template-columns:36px 1.2fr 0.8fr 0.6fr 70px;gap:8px;align-items:center;margin-bottom:8px;animation:fadeIn 0.3s '+(i*0.03)+'s both"><div style="width:30px;height:30px;border-radius:6px;background:'+t.c+'15;border:1px solid '+t.c+'30;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:'+t.c+'">'+t.symbol.slice(0,2)+'</div><div><div style="font-size:11px;font-weight:700;color:#e8e6f0">'+t.symbol+' <span style="font-size:9px;color:#4a4870">'+t.name+'</span></div><div style="font-size:9px;color:'+(t.status.includes('RMG')?'#00e89d':'#6b6988')+'">'+t.status+'</div></div><div>'+barHTML(t.score,t.c)+'<div style="font-size:9px;color:'+t.c+';font-weight:700;margin-top:2px">'+t.score+'%</div></div><div style="font-size:9px;color:#6b6988">'+(t.hasNode?'<span style="color:#00e89d">\u25CF NODE</span>':'\u25CB Proxy')+'</div><div style="font-size:10px;color:#e8e6f0;font-weight:600;text-align:right">'+(t.price?'$'+t.price.toFixed(t.price>1?3:4):'\u2014')+'</div></div>';
+    });
+  }
+
+  else if(currentTab==='arbitrage'){
+    // Cross-exchange
+    var xrp=tokenData.find(function(t){return t.symbol==='XRP'})||{price:1.37};
+    var prices=EXCHANGES.map(function(e){return{ex:e,bid:xrp.price+rng(-0.025,0.025),ask:xrp.price+rng(-0.02,0.03)}});
+    var bestBid=Math.max.apply(null,prices.map(function(p){return p.bid}));
+    var bestAsk=Math.min.apply(null,prices.map(function(p){return p.ask}));
+    var spread=((bestBid-bestAsk)/bestAsk*100);
+    h+='<div class="card"><div class="lbl">CROSS-EXCHANGE XRP \u2014 LIVE SPREADS</div><div style="display:grid;grid-template-columns:1fr 70px 70px 70px;gap:4px;margin-top:8px"><div style="font-size:7px;color:#4a4870">EXCHANGE</div><div style="font-size:7px;color:#4a4870;text-align:right">BID</div><div style="font-size:7px;color:#4a4870;text-align:right">ASK</div><div style="font-size:7px;color:#4a4870;text-align:right">SPREAD</div>';
+    prices.forEach(function(p){var sp=((p.ask-p.bid)/p.bid*100);h+='<div style="font-size:10px;color:#e8e6f0;padding:5px 0;border-bottom:1px solid #0a0a1a">'+p.ex+'</div><div style="font-size:10px;color:#00e89d;text-align:right;padding:5px 0;border-bottom:1px solid #0a0a1a">$'+p.bid.toFixed(4)+'</div><div style="font-size:10px;color:#ff6b6b;text-align:right;padding:5px 0;border-bottom:1px solid #0a0a1a">$'+p.ask.toFixed(4)+'</div><div style="font-size:10px;color:'+(sp>0.3?'#f0c000':'#4a4870')+';text-align:right;padding:5px 0;border-bottom:1px solid #0a0a1a">'+pct(sp)+'</div>'});
+    h+='</div><div style="margin-top:10px;padding:8px 10px;background:'+(spread>0.3?'rgba(0,232,157,0.06)':'#060610')+';border-radius:5px;border:1px solid '+(spread>0.3?'rgba(0,232,157,0.15)':'#12122a')+'"><div style="font-size:8px;color:#4a4870">BEST OPPORTUNITY</div><div style="font-size:14px;font-weight:800;color:'+(spread>0.3?'#00e89d':'#4a4870')+';margin-top:2px">'+pct(spread)+' spread</div></div></div>';
+    // Cross-chain (locked for sandbox)
+    h+='<div class="card" style="margin-top:12px;position:relative">'+lockHTML('institutional')+'<div class="lbl">CROSS-CHAIN XRP \u2014 NATIVE vs WRAPPED</div>';
+    [{ch:'XRPL (native)',p:xrp.price,v:'280M'},{ch:'Solana (wrapped)',p:xrp.price*1.04,v:'242K'},{ch:'BSC (wrapped)',p:xrp.price*1.02,v:'231K'},{ch:'Ethereum (wrapped)',p:xrp.price*1.01,v:'89K'}].forEach(function(cc,i){
+      var gap=((cc.p-xrp.price)/xrp.price*100);
+      h+='<div style="display:grid;grid-template-columns:1fr 70px 70px;gap:6px;padding:7px 0;border-bottom:1px solid #0a0a1a;font-size:10px"><span style="color:'+(i===0?'#00d4ff':'#e8e6f0')+'">'+cc.ch+'</span><span style="color:#e8e6f0;text-align:right">$'+cc.p.toFixed(4)+'</span><span style="color:'+(gap>1?'#00e89d':'#4a4870')+';text-align:right">'+(i===0?'BASE':pct(gap))+'</span></div>';
+    });
+    h+='</div>';
+    // Triangular (locked)
+    h+='<div class="card" style="margin-top:12px;position:relative">'+lockHTML('institutional')+'<div class="lbl">XRPL DEX TRIANGULAR ARBITRAGE</div>';
+    [{p:'XRP \u2192 USD \u2192 EUR \u2192 XRP',pr:rng(-0.1,0.4)},{p:'XRP \u2192 BTC \u2192 USD \u2192 XRP',pr:rng(-0.2,0.3)},{p:'XRP \u2192 JPY \u2192 USD \u2192 XRP',pr:rng(-0.05,0.25)}].forEach(function(t){
+      h+='<div style="display:grid;grid-template-columns:1fr 70px;gap:6px;padding:8px 0;border-bottom:1px solid #0a0a1a;font-size:10px"><span style="color:#e8e6f0">'+t.p+'</span><span style="font-weight:700;color:'+(t.pr>0?'#00e89d':'#ff6b6b')+';text-align:right">'+pct(t.pr)+'</span></div>';
+    });
+    h+='</div>';
+    // Stablecoin peg (locked for sandbox)
+    h+='<div class="card" style="margin-top:12px;position:relative">'+lockHTML('analyst')+'<div class="lbl">STABLECOIN PEG MONITOR</div>';
+    [{n:'RLUSD',ch:'XRPL',p:1+rng(-0.003,0.002)},{n:'USDC',ch:'Stellar',p:1+rng(-0.001,0.001)}].forEach(function(s){var dev=(s.p-1)*100;
+      h+='<div style="display:grid;grid-template-columns:1fr 70px 70px;gap:6px;padding:8px 0;border-bottom:1px solid #0a0a1a;font-size:10px"><span style="color:#e8e6f0">'+s.n+' <span style="color:#4a4870">('+s.ch+')</span></span><span style="color:#e8e6f0;text-align:right">$'+s.p.toFixed(4)+'</span><span style="color:'+(Math.abs(dev)>0.1?'#f0c000':'#00e89d')+';text-align:right">'+(dev>0?'+':'')+dev.toFixed(3)+'%</span></div>';
+    });
+    h+='</div>';
+  }
+
+  else if(currentTab==='nodes'){
+    h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">';
+    h+='<div class="card" style="position:relative">'+lockHTML('analyst')+'<div style="font-size:10px;font-weight:700;color:#00d4ff;margin-bottom:12px">XRPL \u2014 OUR NODE</div>';
+    [{l:'Ledger',v:'103,534,200+'},{l:'TPS',v:'14.2'},{l:'24h Payments',v:'44.1M XRP'},{l:'DEX Volume',v:'9.1M XRP'},{l:'Whale Moves',v:'18'},{l:'Trustlines',v:'2.4M+'},{l:'Status',v:'CONNECTED'}].forEach(function(r){
+      h+='<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #0a0a1a;font-size:10px"><span style="color:#6b6988">'+r.l+'</span><span style="color:#e8e6f0;font-weight:600">'+r.v+'</span></div>';
+    });
+    h+='</div>';
+    h+='<div class="card" style="position:relative">'+lockHTML('analyst')+'<div style="font-size:10px;font-weight:700;color:#f0c000;margin-bottom:12px">STELLAR \u2014 OUR NODE</div>';
+    [{l:'Ledger',v:'62,100,300+'},{l:'Ops/sec',v:'5.1'},{l:'24h Ops',v:'1.4M'},{l:'Protocol',v:'v21'},{l:'Horizon',v:'LIVE'},{l:'Consensus',v:'SCP ACTIVE'},{l:'Path Payments',v:'1,340'}].forEach(function(r){
+      h+='<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #0a0a1a;font-size:10px"><span style="color:#6b6988">'+r.l+'</span><span style="color:#e8e6f0;font-weight:600">'+r.v+'</span></div>';
+    });
+    h+='</div></div>';
+  }
+
+  else if(currentTab==='whales'){
+    h+='<div class="card" style="position:relative">'+lockHTML('analyst')+'<div class="lbl">XRP WHALE MOVEMENTS \u2014 500+ XRP</div>';
+    [{t:'2m',a:'12,500 XRP',ty:'Exchange Deposit',c:'#ff6b6b'},{t:'8m',a:'45,000 XRP',ty:'DEX Trade',c:'#2eff8c'},{t:'15m',a:'8,200 XRP',ty:'P2P Transfer',c:'#9896b0'},{t:'22m',a:'125,000 XRP',ty:'Exchange Withdrawal',c:'#ff6b6b'},{t:'41m',a:'67,000 XRP',ty:'ODL Corridor',c:'#f0c000'},{t:'1h',a:'250,000 XRP',ty:'ODL Corridor',c:'#f0c000'}].forEach(function(w){
+      h+='<div style="display:grid;grid-template-columns:40px 1fr 110px;gap:6px;padding:8px 0;border-bottom:1px solid #0a0a1a;font-size:10px"><span style="color:#4a4870">'+w.t+'</span><span style="color:#00d4ff;font-weight:700">'+w.a+'</span><span style="color:'+w.c+';font-weight:600;text-align:right">'+w.ty+'</span></div>';
+    });
+    h+='<div style="margin-top:12px;padding:10px;background:#060610;border-radius:5px;border:1px solid #12122a;text-align:center"><div style="font-size:9px;color:#6b6988">Get alerts on Telegram</div><div style="font-size:10px;color:#00d4ff;font-weight:700;margin-top:2px">@CampioneSignalBot</div></div></div>';
+  }
+
+  else if(currentTab==='odl'){
+    h+='<div class="card" style="position:relative">'+lockHTML('institutional')+'<div class="lbl">ODL CORRIDOR SPREADS</div>';
+    CORRIDORS.sort(function(a,b){return b.spread-a.spread}).forEach(function(c){
+      h+='<div style="display:grid;grid-template-columns:1fr 70px 70px;gap:6px;padding:8px 0;border-bottom:1px solid #0a0a1a;font-size:10px"><span style="color:#e8e6f0">'+c.route+'</span><span style="color:#4a4870;text-align:right">'+c.vol+'</span><span style="font-weight:700;color:'+(c.spread>0.35?'#00e89d':c.spread>0.2?'#f0c000':'#4a4870')+';text-align:right">'+pct(c.spread)+'</span></div>';
+    });
+    h+='</div>';
+  }
+
+  else if(currentTab==='scores'){
+    h+='<div class="card"><div class="lbl">METHODOLOGY</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px">';
+    [{f:'RMG Member',w:'25%'},{f:'Native Messaging',w:'25%'},{f:'Bank Partners',w:'20%'},{f:'SWIFT Compat',w:'15%'},{f:'Cross-Border Vol',w:'10%'},{f:'Reg Clarity',w:'5%'}].forEach(function(r){
+      h+='<div style="background:#060610;border-radius:5px;padding:8px 10px;border:1px solid #12122a"><div style="font-size:9px;color:#e8e6f0;font-weight:600">'+r.f+'</div><div style="font-size:13px;color:#00d4ff;font-weight:800;margin-top:2px">'+r.w+'</div></div>';
+    });
+    h+='</div></div>';
+    h+='<div class="card" style="margin-top:12px"><div class="lbl">RANKINGS</div>';
+    tokenData.forEach(function(t,i){
+      h+='<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #0a0a1a"><div style="width:20px;font-size:10px;color:#4a4870">'+(i+1)+'</div><div style="width:36px;font-size:10px;font-weight:700;color:'+t.c+'">'+t.symbol+'</div><div style="flex:1">'+barHTML(t.score,t.c)+'</div><div style="width:30px;font-size:11px;font-weight:800;color:'+t.c+';text-align:right">'+t.score+'</div></div>';
+    });
+    h+='</div>';
+  }
+
+  el.innerHTML=h;
+}
+
+// Fetch data
+async function fetchData(){
+  try{
+    var r=await fetch(API+'/api/v1/iso/tokens');var d=await r.json();
+    if(d.data){
+      var colors={XRP:'#00d4ff',XLM:'#f0c000',XDC:'#2eff8c',QNT:'#c850ff',ALGO:'#ff6b6b',HBAR:'#8b5cf6',IOTA:'#00e4b5',ADA:'#3b82f6'};
+      tokenData=d.data.map(function(t){t.c=colors[t.symbol]||'#4a4870';return t});
+    }
+  }catch(e){console.log('Token fetch error',e)}
+  try{
+    var r2=await fetch(API+'/api/v1/iso/swift');swiftData=await r2.json();
+  }catch(e){}
+  try{
+    var r3=await fetch(API+'/api/v1/ebit/economy');ebitData=await r3.json();
+  }catch(e){}
+  updateTopMetrics();
+  renderContent();
+}
+
+// Init
+updateCountdown();
+setInterval(updateCountdown,1000);
+renderTabs();
+fetchData();
+setInterval(fetchData,30000);
+setInterval(function(){if(currentTab==='arbitrage')renderContent()},5000);
+</script>
+</body>
+</html>
