@@ -1,1 +1,233 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Whale Trading Signals — Campione Infrastructure</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#04060e;--card:#0a0d1a;--card2:#0f1225;--border:rgba(0,212,255,0.08);--text:#d0d8e0;--dim:#4a5568;--green:#22c55e;--red:#ef4444;--gold:#f0c000;--cyan:#00d4ff;--mono:'JetBrains Mono',monospace;--sans:'Space Grotesk',sans-serif;--display:'Orbitron',sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;padding:20px}
+.auth{max-width:400px;margin:100px auto;text-align:center}
+.auth input{width:100%;padding:12px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--mono);font-size:13px;margin:12px 0;outline:none}
+.auth button{padding:10px 30px;background:var(--cyan);color:var(--bg);border:none;border-radius:6px;font-family:var(--display);font-size:12px;font-weight:700;cursor:pointer}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.logo{font-family:var(--display);font-size:14px;font-weight:900;color:var(--cyan)}
+.live{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;color:var(--green)}
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.main{display:none}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px}
+.signal-box{background:var(--card);border:2px solid transparent;border-radius:12px;padding:20px;text-align:center}
+.signal-label{font-size:10px;color:var(--dim);letter-spacing:2px;margin-bottom:8px}
+.signal-value{font-family:var(--display);font-size:32px;font-weight:900}
+.strength-bar{height:6px;border-radius:3px;background:#1a1a2e;margin-top:8px}
+.strength-fill{height:100%;border-radius:3px;width:0%;transition:width 0.5s}
+.latest{background:var(--card);border-radius:12px;padding:20px;margin-bottom:16px;border-left:4px solid var(--dim)}
+.latest-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.latest-type{font-family:var(--mono);font-size:14px;font-weight:700}
+.latest-time{font-family:var(--mono);font-size:11px;color:var(--dim)}
+.latest-reason{font-size:13px;color:var(--dim);margin-bottom:8px}
+.latest-amount{font-family:var(--mono);font-size:14px;margin-bottom:4px}
+.latest-entry{font-family:var(--mono);font-size:13px;color:var(--green);line-height:1.6}
+.latest-timeframe{font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:6px}
+.table-wrap{background:var(--card);border-radius:12px;padding:20px;margin-bottom:16px}
+.table-title{font-family:var(--display);font-size:12px;color:var(--text);letter-spacing:1px;margin-bottom:12px}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:9px;color:var(--dim);letter-spacing:1px;padding:8px 6px;border-bottom:1px solid var(--border)}
+td{padding:8px 6px;font-size:11px;border-bottom:1px solid rgba(255,255,255,0.02)}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-family:var(--mono);font-size:10px;font-weight:700}
+.badge-long{background:rgba(34,197,94,0.1);color:var(--green)}
+.badge-short{background:rgba(239,68,68,0.1);color:var(--red)}
+.badge-watch{background:rgba(240,192,0,0.1);color:var(--gold)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.stat{background:var(--card);border-radius:8px;padding:14px;text-align:center}
+.stat-val{font-family:var(--display);font-size:20px;font-weight:900;color:var(--cyan)}
+.stat-label{font-size:9px;color:var(--dim);letter-spacing:1px;margin-top:4px}
+.rules{background:var(--card);border-radius:12px;padding:20px;margin-bottom:16px}
+.rules-title{font-family:var(--display);font-size:12px;margin-bottom:12px}
+.rule{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.02);font-size:12px}
+.rule-label{color:var(--dim)}
+.rule-val{font-family:var(--mono);font-weight:600}
+.disclaimer{font-size:9px;color:#2a2a4a;text-align:center;margin-top:20px;line-height:1.6}
+.nav-links{display:flex;gap:8px}
+.nav-links a{font-size:10px;color:var(--dim);padding:4px 10px;border:1px solid var(--border);border-radius:4px;text-decoration:none}
+@media(max-width:768px){.grid3{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<div class="auth" id="authPanel">
+  <div style="font-family:var(--display);font-size:18px;font-weight:900;color:var(--cyan);margin-bottom:8px">🐋 WHALE SIGNALS</div>
+  <div style="font-size:13px;color:var(--dim);margin-bottom:16px">Admin access required</div>
+  <input type="password" id="secretInput" placeholder="Enter admin secret..." onkeypress="if(event.key==='Enter')authenticate()">
+  <br><button onclick="authenticate()">UNLOCK</button>
+</div>
+
+<div class="main" id="mainPanel">
+  <div class="header">
+    <div>
+      <div class="logo">🐋 WHALE TRADING SIGNALS</div>
+      <div style="font-size:11px;color:var(--dim);margin-top:4px">XRPL Node → Exchange Classification → Signal Generation</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px">
+      <div class="nav-links">
+        <a href="/status.html">STATUS</a>
+        <a href="/arb-scanner.html">ARB SCANNER</a>
+        <a href="/iso20022-dashboard.html">ISO 20022</a>
+      </div>
+      <div class="live"><span class="live-dot"></span> <span id="statusText">CONNECTING...</span></div>
+    </div>
+  </div>
+
+  <div class="rules">
+    <div class="rules-title">📋 APEX MBT RULES</div>
+    <div class="rule"><span class="rule-label">Product</span><span class="rule-val" style="color:var(--gold)">MBT (Micro Bitcoin)</span></div>
+    <div class="rule"><span class="rule-label">Profit Target</span><span class="rule-val" style="color:var(--green)">$1,500</span></div>
+    <div class="rule"><span class="rule-label">Max Drawdown (EOD)</span><span class="rule-val" style="color:var(--red)">$1,000</span></div>
+    <div class="rule"><span class="rule-label">Daily Loss Limit</span><span class="rule-val" style="color:var(--red)">$500</span></div>
+    <div class="rule"><span class="rule-label">Max Risk Per Trade</span><span class="rule-val">$250 (50 pts x $5)</span></div>
+    <div class="rule"><span class="rule-label">Max Contracts</span><span class="rule-val">4 mini / 40 micro</span></div>
+    <div class="rule"><span class="rule-label">Tick Value</span><span class="rule-val">$5 per index point</span></div>
+  </div>
+
+  <div class="grid3">
+    <div class="signal-box" id="sigMainBox">
+      <div class="signal-label">OVERALL SIGNAL</div>
+      <div class="signal-value" id="sigMain">—</div>
+      <div class="strength-bar"><div class="strength-fill" id="sigFill"></div></div>
+    </div>
+    <div class="signal-box">
+      <div class="signal-label">BULLISH SCORE</div>
+      <div class="signal-value" id="sigBull" style="color:var(--green)">0</div>
+      <div style="font-size:10px;color:var(--dim);margin-top:4px">Exchange withdrawals</div>
+    </div>
+    <div class="signal-box">
+      <div class="signal-label">BEARISH SCORE</div>
+      <div class="signal-value" id="sigBear" style="color:var(--red)">0</div>
+      <div style="font-size:10px;color:var(--dim);margin-top:4px">Exchange deposits</div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-val" id="statWhales">0</div><div class="stat-label">WHALES / HR</div></div>
+    <div class="stat"><div class="stat-val" id="statStrong">0</div><div class="stat-label">STRONG SIGNALS</div></div>
+    <div class="stat"><div class="stat-val" id="statExchanges">13</div><div class="stat-label">EXCHANGES TRACKED</div></div>
+    <div class="stat"><div class="stat-val" id="statTotal">0</div><div class="stat-label">TOTAL SIGNALS</div></div>
+  </div>
+
+  <div class="latest" id="latestPanel">
+    <div class="latest-header">
+      <div class="latest-type" id="latestType">WAITING FOR WHALE SIGNAL...</div>
+      <div class="latest-time" id="latestTime">—</div>
+    </div>
+    <div class="latest-reason" id="latestReason">Monitoring XRPL for transactions over 50,000 XRP to/from known exchange wallets...</div>
+    <div class="latest-amount" id="latestAmount"></div>
+    <div class="latest-entry" id="latestEntry"></div>
+    <div class="latest-timeframe" id="latestTimeframe"></div>
+  </div>
+
+  <div class="table-wrap">
+    <div class="table-title">RECENT WHALE SIGNALS</div>
+    <div style="max-height:400px;overflow-y:auto">
+      <table>
+        <thead><tr>
+          <th>TIME</th><th>SIGNAL</th><th style="text-align:right">AMOUNT</th><th>USD VALUE</th><th>EXCHANGE</th><th>DIRECTION</th><th style="text-align:center">STRENGTH</th><th>TIMEFRAME</th><th>ENTRY NOTE</th>
+        </tr></thead>
+        <tbody id="sigTbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <div class="table-title">SIGNAL LOGIC</div>
+    <div class="rule"><span class="rule-label">🔴 SHORT — Whale deposits to exchange</span><span class="rule-val" style="color:var(--red)">Sell pressure → BTC follows</span></div>
+    <div class="rule"><span class="rule-label">🟢 LONG — Whale withdraws from exchange</span><span class="rule-val" style="color:var(--green)">Supply squeeze → BTC follows</span></div>
+    <div class="rule"><span class="rule-label">🟡 WATCH — Exchange to exchange</span><span class="rule-val" style="color:var(--gold)">Internal transfer</span></div>
+    <div class="rule"><span class="rule-label">⚪ WATCH — Wallet to wallet</span><span class="rule-val">Unknown intent</span></div>
+    <div style="margin-top:12px;font-size:11px;color:var(--dim)">
+      <strong>Why XRP whales predict BTC:</strong> XRP is thinner and moves first. When whales dump XRP on exchanges, risk-off sentiment hits BTC 15-60 minutes later.
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    Data from Campione Infrastructure XRPL full node · 13 exchange wallets tracked · Not financial advice · Trade at your own risk<br>
+    Powered by MaxResults4U Business Solutions
+  </div>
+</div>
+
+<script>
+var secret = '';
+function authenticate() {
+  secret = document.getElementById('secretInput').value;
+  if (!secret) return;
+  document.getElementById('authPanel').style.display = 'none';
+  document.getElementById('mainPanel').style.display = 'block';
+  loadSignals();
+  setInterval(loadSignals, 10000);
+}
+async function loadSignals() {
+  try {
+    var r = await fetch('/api/v1/signals/quick', { headers: { 'x-admin-secret': secret } });
+    var d = await r.json();
+    if (!d.success) return;
+    document.getElementById('statusText').textContent = 'LIVE · ' + (d.whales1h || 0) + ' whales/hr · ' + new Date().toLocaleTimeString();
+    var main = document.getElementById('sigMain');
+    var box = document.getElementById('sigMainBox');
+    var fill = document.getElementById('sigFill');
+    main.textContent = d.overall || 'NO DATA';
+    if (d.overall === 'LONG') { main.style.color = '#22c55e'; box.style.borderColor = 'rgba(34,197,94,0.5)'; box.style.background = 'rgba(34,197,94,0.03)'; fill.style.background = '#22c55e'; }
+    else if (d.overall === 'SHORT') { main.style.color = '#ef4444'; box.style.borderColor = 'rgba(239,68,68,0.5)'; box.style.background = 'rgba(239,68,68,0.03)'; fill.style.background = '#ef4444'; }
+    else { main.style.color = '#6b7280'; box.style.borderColor = 'rgba(107,114,128,0.2)'; box.style.background = 'var(--card)'; fill.style.background = '#6b7280'; }
+    fill.style.width = Math.min(100, (d.strength || 0) * 20) + '%';
+    document.getElementById('sigBull').textContent = d.bullish || 0;
+    document.getElementById('sigBear').textContent = d.bearish || 0;
+    document.getElementById('statWhales').textContent = d.whales1h || 0;
+    if (d.latest) {
+      var lp = document.getElementById('latestPanel');
+      var lt = document.getElementById('latestType');
+      if (d.latest.signal === 'SHORT') { lp.style.borderLeftColor = '#ef4444'; lt.style.color = '#ef4444'; lt.textContent = '🔴 SHORT — ' + d.latest.exchange; }
+      else if (d.latest.signal === 'LONG') { lp.style.borderLeftColor = '#22c55e'; lt.style.color = '#22c55e'; lt.textContent = '🟢 LONG — ' + d.latest.exchange; }
+      else { lp.style.borderLeftColor = '#f0c000'; lt.style.color = '#f0c000'; lt.textContent = '🟡 WATCH — ' + (d.latest.exchange || 'Unknown'); }
+      document.getElementById('latestTime').textContent = new Date(d.latest.time).toLocaleTimeString();
+      var amt = parseFloat(d.latest.amount);
+      document.getElementById('latestAmount').textContent = amt.toLocaleString() + ' XRP (~$' + (amt * 1.37).toLocaleString(undefined, { maximumFractionDigits: 0 }) + ')';
+      document.getElementById('latestEntry').textContent = d.latest.entry || '';
+      document.getElementById('latestTimeframe').textContent = d.latest.timeframe ? 'Timeframe: ' + d.latest.timeframe : '';
+    }
+  } catch (e) { console.log('Signal error:', e); }
+  try {
+    var r2 = await fetch('/api/v1/signals/trading', { headers: { 'x-admin-secret': secret } });
+    var d2 = await r2.json();
+    if (!d2.success) return;
+    document.getElementById('statStrong').textContent = (d2.stats.strongShorts + d2.stats.strongLongs) || 0;
+    document.getElementById('statExchanges').textContent = d2.stats.exchangeWalletsTracked || 0;
+    document.getElementById('statTotal').textContent = d2.stats.totalSignals || 0;
+    var tbody = document.getElementById('sigTbody');
+    tbody.innerHTML = '';
+    (d2.recentSignals || []).forEach(function (s) {
+      var tr = document.createElement('tr');
+      var sc = s.signal === 'SHORT' ? '#ef4444' : s.signal === 'LONG' ? '#22c55e' : '#f0c000';
+      var badge = s.signal === 'SHORT' ? 'badge-short' : s.signal === 'LONG' ? 'badge-long' : 'badge-watch';
+      var stars = '';
+      for (var i = 0; i < 5; i++) stars += i < s.strength ? '●' : '○';
+      var amt = parseFloat(s.amount);
+      var usd = (amt * 1.37).toLocaleString(undefined, { maximumFractionDigits: 0 });
+      tr.innerHTML = '<td style="font-family:var(--mono);font-size:10px;color:var(--dim)">' + new Date(s.timestamp * 1000).toLocaleTimeString() + '</td>'
+        + '<td><span class="badge ' + badge + '">' + s.signal + '</span></td>'
+        + '<td style="text-align:right;font-family:var(--mono)">' + amt.toLocaleString() + ' XRP</td>'
+        + '<td style="font-family:var(--mono);color:var(--dim)">$' + usd + '</td>'
+        + '<td>' + (s.receiverExchange || s.senderExchange || '—') + '</td>'
+        + '<td style="font-size:10px;color:var(--dim)">' + (s.direction || '—') + '</td>'
+        + '<td style="text-align:center;font-family:var(--mono);font-size:9px;color:' + sc + '">' + stars + '</td>'
+        + '<td style="font-family:var(--mono);font-size:10px;color:var(--dim)">' + (s.timeframe || '—') + '</td>'
+        + '<td style="font-size:10px;color:var(--green);max-width:200px">' + (s.entryNote || '—') + '</td>';
+      tbody.appendChild(tr);
+    });
+  } catch (e) { }
+}
+</script>
+</body>
+</html>
