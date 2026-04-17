@@ -3,289 +3,417 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Blockchain API — Campione Infrastructure</title>
-
-<!-- Google AdSense Loader -->
-<script async 
-    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7644929080786634"
-    crossorigin="anonymous">
-</script>
-
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=JetBrains+Mono:wght@400;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-/* your CSS continues here */
-
-:root{--bg:#0a0a0f;--card:#0f0f1a;--border:#1e2035;--text:#e2e8f0;--muted:#4b5563;--dim:#2a2a3d;--blue:#38bdf8;--green:#00ff88;--gold:#fbbf24;--red:#ef4444;--purple:#a78bfa;--orange:#f7931a;}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;}
-nav{display:flex;align-items:center;justify-content:space-between;padding:18px 40px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(10,10,15,0.95);backdrop-filter:blur(10px);z-index:100;}
-.logo{font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;color:var(--blue);letter-spacing:2px;text-decoration:none;}
-.logo span{color:var(--green);}
-.nav-links{display:flex;gap:24px;}
-.nav-links a{color:var(--muted);text-decoration:none;font-size:13px;}
+:root{--bg:#0a0e17;--bg2:#111827;--card:#151d2e;--code:#0d1117;--accent:#00e5a0;--accentDim:rgba(0,229,160,0.15);--accentGlow:rgba(0,229,160,0.3);--text:#e8edf5;--muted:#7b8ba3;--dim:#4a5568;--border:#1e293b;--blue:#38bdf8;}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;min-height:100vh;overflow-x:hidden;}
+
+/* NAV */
+nav{display:flex;justify-content:space-between;align-items:center;padding:18px 40px;border-bottom:1px solid var(--border);background:rgba(10,14,23,0.95);backdrop-filter:blur(10px);position:sticky;top:0;z-index:100;}
+.nav-brand{font-weight:700;font-size:1.1rem;letter-spacing:-0.5px;color:var(--accent);text-decoration:none;}
+.nav-links{display:flex;gap:28px;list-style:none;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:0.85rem;font-weight:500;transition:color 0.2s;}
 .nav-links a:hover{color:var(--text);}
-.nav-cta{background:var(--blue);color:#000;padding:8px 20px;border-radius:6px;font-weight:700;font-size:13px;text-decoration:none;}
-.ticker{background:rgba(56,189,248,0.05);border-bottom:1px solid var(--border);padding:8px 0;overflow:hidden;white-space:nowrap;}
-.ticker-inner{display:inline-flex;gap:40px;animation:tick 30s linear infinite;}
-@keyframes tick{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-.ti{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;}
-.ti span{color:var(--green);}
-.hero{text-align:center;padding:90px 40px 70px;max-width:900px;margin:0 auto;}
-.hbadge{display:inline-block;background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);color:var(--green);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;padding:5px 14px;border-radius:20px;margin-bottom:24px;}
-.hero h1{font-family:'Orbitron',sans-serif;font-size:52px;font-weight:900;line-height:1.1;margin-bottom:20px;background:linear-gradient(135deg,var(--text) 0%,var(--blue) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.hero p{font-size:18px;color:var(--muted);line-height:1.7;max-width:650px;margin:0 auto 36px;}
-.btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
-.bp{background:var(--blue);color:#000;padding:14px 32px;border-radius:8px;font-weight:700;font-size:15px;text-decoration:none;}
-.bs{background:transparent;color:var(--text);padding:14px 32px;border-radius:8px;font-weight:600;font-size:15px;text-decoration:none;border:1px solid var(--border);}
-.statsbar{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--border);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
-.sc{background:var(--card);padding:20px;text-align:center;}
-.sc .lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--muted);margin-bottom:6px;}
-.sc .val{font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900;}
-section{max-width:1100px;margin:0 auto;padding:70px 40px;}
-.stag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--blue);margin-bottom:12px;}
-.stitle{font-family:'Orbitron',sans-serif;font-size:34px;font-weight:900;margin-bottom:14px;}
-.ssub{color:var(--muted);font-size:16px;line-height:1.7;max-width:600px;}
-.chains{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px;}
-.cc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;transition:border-color 0.2s;}
-.cc:hover{border-color:var(--blue);}
-.ci{font-size:28px;margin-bottom:12px;}
-.cn{font-family:'Orbitron',sans-serif;font-size:14px;font-weight:900;margin-bottom:8px;}
-.cd{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:14px;}
-.ep{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--green);background:rgba(0,255,136,0.07);border:1px solid rgba(0,255,136,0.15);padding:4px 8px;border-radius:4px;margin-bottom:4px;display:block;}
-.ep.dim{color:var(--gold);background:rgba(251,191,36,0.07);border-color:rgba(251,191,36,0.15);}
-.wsdemo{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;margin-top:40px;}
-.wsh{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
-.wst{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--blue);}
-.wsbadge{display:flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--green);}
-.wsdot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-.wsfeed{background:rgba(0,0,0,0.4);border-radius:6px;padding:14px;height:200px;overflow-y:auto;font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1.9;}
-.pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px;}
-.pc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:30px;position:relative;}
-.pc.feat{border-color:var(--blue);background:rgba(56,189,248,0.05);}
-.pbadge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--blue);color:#000;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:1px;padding:4px 12px;border-radius:10px;}
-.ptier{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:10px;}
-.pamt{font-family:'Orbitron',sans-serif;font-size:42px;font-weight:900;margin-bottom:4px;}
-.pamt span{font-size:16px;color:var(--muted);}
-.pdesc{font-size:13px;color:var(--muted);margin-bottom:20px;}
-.pf{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:28px;}
-.pf li{font-size:13px;display:flex;align-items:center;gap:8px;}
-.pf li::before{content:"✓";color:var(--green);font-weight:700;}
-.pf li.no::before{content:"✗";color:var(--dim);}
-.pf li.no{color:var(--muted);}
-.pbtn{display:block;text-align:center;padding:12px;border-radius:8px;font-weight:700;font-size:14px;text-decoration:none;}
-.pbtn.p{background:var(--blue);color:#000;}
-.pbtn.o{border:1px solid var(--border);color:var(--text);}
-.comp-table{width:100%;border-collapse:collapse;margin-top:30px;}
-.comp-table th{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--muted);padding:12px 16px;text-align:left;border-bottom:1px solid var(--border);}
-.comp-table td{padding:14px 16px;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.03);}
-.comp-table .us{color:var(--green);font-weight:700;}
-.comp-table .no{color:var(--muted);}
-.comp-table .hl{background:rgba(56,189,248,0.05);}
-.cta-sec{text-align:center;padding:80px 40px;background:rgba(56,189,248,0.03);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
-.cta-sec h2{font-family:'Orbitron',sans-serif;font-size:36px;font-weight:900;margin-bottom:16px;}
-.cta-sec p{color:var(--muted);font-size:16px;margin-bottom:32px;}
-footer{padding:30px 40px;text-align:center;border-top:1px solid var(--border);}
-footer p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;}
-@media(max-width:768px){.chains,.pricing{grid-template-columns:1fr;}.statsbar{grid-template-columns:repeat(2,1fr);}.hero h1{font-size:32px;}nav{padding:14px 20px;}.nav-links{display:none;}}
+.nav-cta{background:var(--accent);color:var(--bg);padding:8px 20px;border-radius:6px;font-weight:600;font-size:0.85rem;text-decoration:none;transition:all 0.2s;cursor:pointer;}
+.nav-cta:hover{box-shadow:0 0 20px var(--accentGlow);}
+
+/* STATUS BAR */
+.status-bar{display:flex;justify-content:center;gap:24px;padding:10px 40px;background:var(--bg2);border-bottom:1px solid var(--border);overflow-x:auto;}
+.si{display:flex;align-items:center;gap:6px;font-size:0.7rem;font-family:'JetBrains Mono',monospace;color:var(--muted);white-space:nowrap;}
+.sd{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s ease infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+
+/* HERO */
+.hero{max-width:900px;margin:0 auto;padding:80px 40px 40px;text-align:center;}
+.hero-badge{display:inline-block;padding:4px 14px;border-radius:20px;border:1px solid var(--accent);color:var(--accent);font-size:0.75rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:24px;background:var(--accentDim);}
+.hero h1{font-size:3.4rem;font-weight:800;letter-spacing:-1.5px;line-height:1.1;margin-bottom:20px;}
+.hero h1 .ac{color:var(--accent);}
+.hero p{font-size:1.15rem;color:var(--muted);line-height:1.6;max-width:600px;margin:0 auto 36px;font-weight:300;}
+.chains{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:40px;}
+.chain{padding:5px 12px;border-radius:6px;background:var(--card);border:1px solid var(--border);font-size:0.8rem;font-weight:500;color:var(--muted);}
+
+/* DEMO */
+.demo-section{max-width:700px;margin:0 auto 50px;padding:0 40px;}
+.demo-label{font-size:0.75rem;color:var(--accent);font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;}
+.demo-box{background:var(--code);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.demo-hdr{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:rgba(30,41,59,0.5);border-bottom:1px solid var(--border);}
+.dots{display:flex;gap:6px;}
+.dots span{width:10px;height:10px;border-radius:50%;}
+.dots span:nth-child(1){background:#ff5f57;}
+.dots span:nth-child(2){background:#febc2e;}
+.dots span:nth-child(3){background:#28c840;}
+.demo-tab{font-size:0.7rem;color:var(--dim);font-family:'JetBrains Mono',monospace;}
+.demo-body{padding:20px;font-family:'JetBrains Mono',monospace;font-size:0.82rem;line-height:1.8;}
+.dp{color:var(--accent);}
+.dc{color:var(--text);}
+.dr{color:var(--muted);margin-top:8px;padding:12px;background:rgba(0,229,160,0.05);border-radius:6px;border-left:3px solid var(--accent);}
+.dk{color:#7dd3fc;}
+.dv{color:var(--accent);}
+.ds{color:#fbbf24;}
+.di{color:var(--dim);font-style:italic;}
+
+/* CTA */
+.cta-section{text-align:center;padding:0 40px 40px;}
+.cta-btn{display:inline-block;background:var(--accent);color:var(--bg);padding:16px 40px;border-radius:8px;font-weight:700;font-size:1.05rem;text-decoration:none;transition:all 0.2s;letter-spacing:-0.3px;border:none;cursor:pointer;font-family:'Outfit',sans-serif;}
+.cta-btn:hover{box-shadow:0 0 30px var(--accentGlow);transform:translateY(-2px);}
+.cta-sub{margin-top:12px;font-size:0.8rem;color:var(--dim);}
+.cta-sub strong{color:var(--muted);}
+
+/* STATS */
+.stats{display:flex;justify-content:center;gap:50px;padding:50px 40px 30px;max-width:700px;margin:0 auto;}
+.stat-v{font-size:1.8rem;font-weight:800;color:var(--accent);letter-spacing:-1px;text-align:center;}
+.stat-l{font-size:0.7rem;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-top:2px;text-align:center;}
+
+/* TIERS */
+.tiers{display:flex;justify-content:center;gap:20px;max-width:750px;margin:40px auto 0;padding:0 40px;}
+.tier{flex:1;padding:24px;background:var(--card);border:1px solid var(--border);border-radius:10px;text-align:center;transition:all 0.2s;}
+.tier:hover{border-color:var(--accent);}
+.tier-n{font-size:0.75rem;color:var(--dim);text-transform:uppercase;letter-spacing:1px;font-weight:600;margin-bottom:6px;}
+.tier-p{font-size:1.8rem;font-weight:800;letter-spacing:-1px;margin-bottom:4px;}
+.tier-p .per{font-size:0.8rem;font-weight:400;color:var(--dim);}
+.tier-d{font-size:0.78rem;color:var(--muted);line-height:1.5;margin-bottom:16px;}
+.tier-btn{display:inline-block;padding:10px 24px;border-radius:6px;font-size:0.8rem;font-weight:600;text-decoration:none;transition:all 0.2s;cursor:pointer;border:none;font-family:'Outfit',sans-serif;}
+.tier-btn-free{background:var(--accentDim);color:var(--accent);border:1px solid var(--accent);}
+.tier-btn-free:hover{background:var(--accent);color:var(--bg);}
+.tier-btn-dev{background:var(--accent);color:var(--bg);}
+.tier-btn-dev:hover{box-shadow:0 0 20px var(--accentGlow);}
+.tier-btn-ent{background:var(--accentDim);color:var(--accent);border:1px solid var(--accent);}
+.tier-btn-ent:hover{background:var(--accent);color:var(--bg);}
+.tier.pop{border-color:var(--accent);background:linear-gradient(180deg,rgba(0,229,160,0.08),var(--card));}
+.tier.pop .tier-n{color:var(--accent);}
+
+/* COMPARISON */
+.comp-section{max-width:750px;margin:60px auto 0;padding:0 40px;}
+.comp-title{text-align:center;font-size:1.5rem;font-weight:700;margin-bottom:8px;}
+.comp-sub{text-align:center;font-size:0.85rem;color:var(--muted);margin-bottom:24px;}
+.comp-table{width:100%;border-collapse:collapse;font-size:0.8rem;}
+.comp-table th{padding:10px 12px;text-align:left;border-bottom:2px solid var(--border);color:var(--muted);font-weight:600;font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;}
+.comp-table th:first-child{color:var(--text);}
+.comp-table th.us{color:var(--accent);}
+.comp-table td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--muted);}
+.comp-table td:first-child{color:var(--text);font-weight:500;}
+.comp-table td.yes{color:var(--accent);font-weight:600;}
+.comp-table td.no{color:var(--dim);}
+.comp-table td.price{color:var(--accent);font-weight:700;}
+.comp-table tr:hover td{background:rgba(0,229,160,0.03);}
+
+/* CHAINS DETAIL */
+.chains-section{max-width:750px;margin:60px auto 0;padding:0 40px;}
+.chains-title{text-align:center;font-size:1.5rem;font-weight:700;margin-bottom:8px;}
+.chains-sub{text-align:center;font-size:0.85rem;color:var(--muted);margin-bottom:24px;}
+.chain-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;}
+.chain-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;transition:border-color 0.2s;}
+.chain-card:hover{border-color:var(--accent);}
+.chain-icon{font-size:1.5rem;margin-bottom:8px;}
+.chain-name{font-weight:700;font-size:0.95rem;margin-bottom:4px;}
+.chain-desc{font-size:0.75rem;color:var(--muted);line-height:1.4;margin-bottom:10px;}
+.chain-endpoints{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--dim);line-height:1.8;}
+.chain-endpoints span{color:var(--blue);}
+
+/* FOOTER */
+.footer{text-align:center;padding:30px;border-top:1px solid var(--border);margin-top:60px;font-size:0.7rem;color:var(--dim);}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .hero h1{font-size:2.2rem;}
+  .hero{padding:50px 20px 30px;}
+  .demo-section,.comp-section,.chains-section{padding:0 20px;}
+  .tiers{flex-direction:column;padding:0 20px;}
+  .stats{gap:30px;}
+  nav{padding:15px 20px;}
+  .nav-links{display:none;}
+  .status-bar{gap:16px;padding:10px 20px;}
+  .chain-grid{grid-template-columns:1fr;}
+}
 </style>
 </head>
 <body>
+
+<!-- NAV -->
 <nav>
-  <a href="/" class="logo">CAMPIONE<span>.</span></a>
+  <a href="https://campioneinfrastructure.com/" class="nav-brand">CAMPIONE INFRASTRUCTURE</a>
   <div class="nav-links">
-    <a href="/#nodes">Nodes</a>
-    <a href="/#services">Services</a>
-    <a href="/payments.html">Pricing</a>
-    <a href="/status.html">Live Status</a>
+    <a href="#demo">Try It</a>
+    <a href="#pricing">Pricing</a>
+    <a href="https://campioneinfrastructure.com/customer-api.html">Docs</a>
+    <a href="https://campioneinfrastructure.com/iso20022-dashboard.html">ISO 20022</a>
+    <a href="https://campioneinfrastructure.com/ebit.html">EBIT Token</a>
   </div>
-  <a href="#pricing" class="nav-cta">Get API Key</a>
+  <a class="nav-cta" onclick="openSignup('free')">Get Free Key</a>
 </nav>
-<div class="ticker">
-  <div class="ticker-inner">
-    <span class="ti">BITCOIN <span id="tk-btc">SYNCED</span></span>
-    <span class="ti">XRPL LEDGER <span id="tk-xrpl">—</span></span>
-    <span class="ti">COSMOS <span>ACTIVE</span></span>
-    <span class="ti">STELLAR <span>SYNCING</span></span>
-    <span class="ti">CHAINLINK <span>26/26 PASSING</span></span>
-    <span class="ti">PAYMENTS <span id="tk-pay">—</span></span>
-    <span class="ti">DEX TRADES <span id="tk-dex">—</span></span>
-    <span class="ti">BITCOIN <span>SYNCED</span></span>
-    <span class="ti">XRPL LEDGER <span id="tk-xrpl2">—</span></span>
-    <span class="ti">COSMOS <span>ACTIVE</span></span>
-    <span class="ti">STELLAR <span>SYNCING</span></span>
-    <span class="ti">CHAINLINK <span>26/26 PASSING</span></span>
-    <span class="ti">PAYMENTS <span id="tk-pay2">—</span></span>
-    <span class="ti">DEX TRADES <span id="tk-dex2">—</span></span>
-  </div>
+
+<!-- STATUS BAR -->
+<div class="status-bar">
+  <div class="si"><span class="sd"></span>Bitcoin <span id="s-btc">—</span></div>
+  <div class="si"><span class="sd"></span>XRPL <span id="s-led">—</span></div>
+  <div class="si"><span class="sd"></span>Stellar Syncing</div>
+  <div class="si"><span class="sd"></span>Chainlink 26/26</div>
+  <div class="si"><span class="sd"></span>Lightning Active</div>
+  <div class="si"><span class="sd"></span>Ethereum Live</div>
+  <div class="si"><span class="sd"></span>Payments <span id="s-pay">—</span></div>
 </div>
+
+<!-- HERO -->
 <div class="hero">
-  <div class="hbadge">LIVE BLOCKCHAIN DATA API</div>
-  <h1>One API.<br>Five Blockchains.<br>Real-Time.</h1>
-  <p>XRPL · Bitcoin · Cosmos · Stellar · Chainlink — REST + WebSocket streaming. The multi-chain data infrastructure your app needs.</p>
-  <div class="btns">
-    <a href="#pricing" class="bp">Get API Key — $49/mo</a>
-    <a href="/status.html" class="bs">View Live Status</a>
-  </div>
-</div>
-<div class="statsbar">
-  <div class="sc"><div class="lbl">XRPL PAYMENTS</div><div class="val" style="color:var(--blue)" id="s-pay">—</div></div>
-  <div class="sc"><div class="lbl">DEX TRADES</div><div class="val" style="color:var(--green)" id="s-dex">—</div></div>
-  <div class="sc"><div class="lbl">BITCOIN BLOCK</div><div class="val" style="color:var(--orange)" id="s-btc">—</div></div>
-  <div class="sc"><div class="lbl">COSMOS BLOCK</div><div class="val" style="color:var(--purple)" id="s-cos">—</div></div>
-  <div class="sc"><div class="lbl">XRPL LEDGER</div><div class="val" style="color:var(--text)" id="s-led">—</div></div>
-</div>
-<section id="chains">
-  <div class="stag">SUPPORTED CHAINS</div>
-  <div class="stitle">Everything Your App Needs</div>
-  <div class="ssub">Full node access across 5 blockchains. Real data from our own nodes — not third-party resellers.</div>
+  <div class="hero-badge">Free Tier — No Credit Card</div>
+  <h1>One API.<br><span class="ac">Nine Blockchains.</span><br>Real-Time.</h1>
+  <p>Real data from real nodes. Not resold third-party feeds. Connect to Bitcoin, XRPL, Ethereum, Stellar, Cosmos, Lightning, Chainlink, and more — one key, one endpoint.</p>
   <div class="chains">
-    <div class="cc"><div class="ci">💧</div><div class="cn" style="color:var(--blue)">XRP LEDGER</div><div class="cd">Live payments, DEX trades, whale alerts, AMM pools.</div><span class="ep">GET /api/v1/xrpl/payments</span><span class="ep">GET /api/v1/xrpl/trades</span><span class="ep">GET /api/v1/xrpl/whales</span><span class="ep">WSS xrpl.payment · xrpl.trade · xrpl.whale</span></div>
-    <div class="cc"><div class="ci">₿</div><div class="cn" style="color:var(--orange)">BITCOIN</div><div class="cd">Live mempool transactions, fee estimates, block data.</div><span class="ep">GET /api/v1/bitcoin/status</span><span class="ep">GET /api/v1/bitcoin/transactions</span><span class="ep">WSS bitcoin.mempool</span></div>
-    <div class="cc"><div class="ci">⚡</div><div class="cn" style="color:var(--gold)">LIGHTNING NETWORK</div><div class="cd">LND node status, wallet balance, channel info, routing fees.</div><span class="ep">GET /api/v1/lightning/status</span><span class="ep">GET /api/v1/lightning/balance</span><span class="ep">GET /api/v1/lightning/forwarding</span></div>
-    <div class="cc"><div class="ci">🪐</div><div class="cn" style="color:var(--purple)">COSMOS HUB</div><div class="cd">Live block stream, transaction history, IBC data.</div><span class="ep">GET /api/v1/cosmos/status</span><span class="ep">GET /api/v1/cosmos/transactions</span><span class="ep">WSS cosmos.block</span></div>
-    <div class="cc"><div class="ci">⭐</div><div class="cn" style="color:var(--blue)">STELLAR</div><div class="cd">Stellar Horizon node. Remittance, CBDCs, cross-border payments.</div><span class="ep">GET /api/v1/stellar/status</span><span class="ep">GET /api/v1/stellar/transactions</span><span class="ep dim">SSE streaming — coming soon</span></div>
-    <div class="cc"><div class="ci">🔗</div><div class="cn" style="color:var(--green)">CHAINLINK</div><div class="cd">Live oracle price feeds, health checks. 26/26 passing.</div><span class="ep">GET /api/v1/chainlink/health</span><span class="ep">GET /api/v1/chainlink/prices</span><span class="ep">GET /api/v1/chainlink/deviations</span></div>
+    <span class="chain">₿ Bitcoin</span>
+    <span class="chain">💧 XRPL</span>
+    <span class="chain">⟠ Ethereum</span>
+    <span class="chain">⭐ Stellar</span>
+    <span class="chain">🪐 Cosmos</span>
+    <span class="chain">⚡ Lightning</span>
+    <span class="chain">🔗 Chainlink</span>
+    <span class="chain">🔵 Ink L2</span>
   </div>
-</section>
-<section style="background:rgba(0,0,0,0.3);max-width:100%;padding:70px 0;">
-  <div style="max-width:1100px;margin:0 auto;padding:0 40px;">
-    <div class="stag">WEBSOCKET STREAMING</div>
-    <div class="stitle">Connect Once. Receive Everything.</div>
-    <div class="ssub">One persistent WebSocket connection delivers real-time data from all 5 chains. No polling. No delays.</div>
-    <div class="wsdemo">
-      <div class="wsh">
-        <div class="wst">wss://campioneinfrastructure.com/ws</div>
-        <div class="wsbadge"><div class="wsdot" id="ws-dot" style="background:var(--muted)"></div><span id="ws-status">CONNECTING...</span></div>
+</div>
+
+<!-- LIVE DEMO -->
+<div class="demo-section" id="demo">
+  <div class="demo-label">Try it right now — no key needed</div>
+  <div class="demo-box">
+    <div class="demo-hdr">
+      <div class="dots"><span></span><span></span><span></span></div>
+      <div class="demo-tab">terminal</div>
+    </div>
+    <div class="demo-body">
+      <div><span class="dp">$</span> <span class="dc">curl campioneinfrastructure.com/api/v1/bitcoin/status</span></div>
+      <div class="dr" id="demo-btc">
+        {<br>
+        &nbsp;&nbsp;<span class="dk">"success"</span>: <span class="dv">true</span>,<br>
+        &nbsp;&nbsp;<span class="dk">"blocks"</span>: <span class="dv" id="demo-btc-block">945,463</span>,<br>
+        &nbsp;&nbsp;<span class="dk">"synced"</span>: <span class="dv">true</span>,<br>
+        &nbsp;&nbsp;<span class="dk">"network"</span>: <span class="ds">"mainnet"</span><br>
+        }
       </div>
-      <div class="wsfeed" id="ws-feed"><div style="color:var(--muted)">Connecting to live stream...</div></div>
-    </div>
-    <div style="margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);">Connect: <span style="color:var(--blue)">const ws = new WebSocket('wss://campioneinfrastructure.com/ws')</span></div>
-  </div>
-</section>
-<section id="pricing">
-  <div class="stag">PRICING</div>
-  <div class="stitle">Simple, Transparent Pricing</div>
-  <div class="ssub">One subscription. All 5 chains. No per-chain fees. Cancel anytime.</div>
-  <div class="pricing">
-    <div class="pc">
-      <div class="ptier">FREE</div>
-      <div class="pamt">$0<span>/mo</span></div>
-      <div class="pdesc">Try the API. No credit card required.</div>
-      <ul class="pf"><li>1,000 requests/day</li><li>All 5 blockchains</li><li>REST API access</li><li class="no">WebSocket streaming</li><li class="no">Webhooks</li><li class="no">SLA guarantee</li></ul>
-      <a href="#" class="pbtn o" onclick="openSignup('free');return false;">Get Free Key</a>
-    </div>
-    <div class="pc feat">
-      <div class="pbadge">MOST POPULAR</div>
-      <div class="ptier">DEVELOPER</div>
-      <div class="pamt">$49<span>/mo</span></div>
-      <div class="pdesc">Everything you need to build.</div>
-      <ul class="pf"><li>Unlimited requests</li><li>All 5 blockchains</li><li>REST API access</li><li>WebSocket streaming</li><li class="no">Webhooks</li><li class="no">SLA guarantee</li></ul>
-      <a href="#" class="pbtn p" onclick="openSignup('developer');return false;">Get API Key</a>
-    </div>
-    <div class="pc">
-      <div class="ptier">ENTERPRISE</div>
-      <div class="pamt">$149<span>/mo</span></div>
-      <div class="pdesc">For teams and production apps.</div>
-      <ul class="pf"><li>Unlimited requests</li><li>All 5 blockchains</li><li>REST API access</li><li>WebSocket streaming</li><li>Webhook alerts</li><li>99.9% SLA guarantee</li></ul>
-      <a href="#" class="pbtn o" onclick="openSignup('enterprise');return false;">Get API Key</a>
+      <div style="margin-top:20px"><span class="dp">$</span> <span class="dc">curl campioneinfrastructure.com/api/v1/xrpl/stats</span></div>
+      <div class="dr" id="demo-xrpl">
+        {<br>
+        &nbsp;&nbsp;<span class="dk">"success"</span>: <span class="dv">true</span>,<br>
+        &nbsp;&nbsp;<span class="dk">"connected"</span>: <span class="dv">true</span>,<br>
+        &nbsp;&nbsp;<span class="dk">"lastLedger"</span>: <span class="dv" id="demo-xrpl-ledger">103,618,958</span>,<br>
+        &nbsp;&nbsp;<span class="dk">"totalPayments"</span>: <span class="dv" id="demo-xrpl-pay">349,813</span>,<br>
+        &nbsp;&nbsp;<span class="dk">"dexTrades"</span>: <span class="dv" id="demo-xrpl-dex">1,000</span><br>
+        }
+      </div>
+      <div style="margin-top:20px" class="di"># WebSocket streaming on all chains</div>
+      <div><span class="dp">$</span> <span class="dc">wscat -c wss://campioneinfrastructure.com/ws</span></div>
     </div>
   </div>
-</section>
-<section>
-  <div class="stag">COMPETITION</div>
-  <div class="stitle">Why Campione Wins</div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <button class="cta-btn" onclick="openSignup('free')">Get Your Free API Key</button>
+  <div class="cta-sub">1,000 requests/day · All 9 chains · <strong>Instant activation</strong></div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div><div class="stat-v">9</div><div class="stat-l">Blockchains</div></div>
+  <div><div class="stat-v">50+</div><div class="stat-l">Endpoints</div></div>
+  <div><div class="stat-v">99.9%</div><div class="stat-l">Uptime</div></div>
+  <div><div class="stat-v">$0</div><div class="stat-l">To Start</div></div>
+</div>
+
+<!-- PRICING -->
+<div class="tiers" id="pricing">
+  <div class="tier">
+    <div class="tier-n">Free</div>
+    <div class="tier-p">$0 <span class="per">/mo</span></div>
+    <div class="tier-d">1,000 req/day<br>All 9 chains<br>REST + WebSocket</div>
+    <button class="tier-btn tier-btn-free" onclick="openSignup('free')">Get Free Key</button>
+  </div>
+  <div class="tier pop">
+    <div class="tier-n">Developer</div>
+    <div class="tier-p">$49 <span class="per">/mo</span></div>
+    <div class="tier-d">Unlimited requests<br>All 9 chains<br>Priority support</div>
+    <a href="https://buy.stripe.com/28E5kD18kcMOeIW0rU0Fi00" target="_blank" class="tier-btn tier-btn-dev">Get API Key</a>
+  </div>
+  <div class="tier">
+    <div class="tier-n">Enterprise</div>
+    <div class="tier-p">$149 <span class="per">/mo</span></div>
+    <div class="tier-d">Unlimited requests<br>Dedicated support<br>99.9% SLA</div>
+    <a href="https://buy.stripe.com/cNi14neZa146bwKcaC0Fi01" target="_blank" class="tier-btn tier-btn-ent">Get API Key</a>
+  </div>
+</div>
+
+<!-- SUPPORTED CHAINS DETAIL -->
+<div class="chains-section">
+  <div class="chains-title">Everything Your App Needs</div>
+  <div class="chains-sub">Full node access across 9 blockchains. Real data from our own nodes.</div>
+  <div class="chain-grid">
+    <div class="chain-card">
+      <div class="chain-icon">💧</div>
+      <div class="chain-name">XRP Ledger</div>
+      <div class="chain-desc">Live payments, DEX trades, whale alerts, AMM pools, EBIT token stats.</div>
+      <div class="chain-endpoints"><span>GET</span> /api/v1/xrpl/payments<br><span>GET</span> /api/v1/xrpl/trades<br><span>GET</span> /api/v1/xrpl/whales<br><span>GET</span> /api/v1/ebit/stats</div>
+    </div>
+    <div class="chain-card">
+      <div class="chain-icon">₿</div>
+      <div class="chain-name">Bitcoin</div>
+      <div class="chain-desc">Live mempool, fee estimates, block data from our full node.</div>
+      <div class="chain-endpoints"><span>GET</span> /api/v1/bitcoin/status<br><span>GET</span> /api/v1/bitcoin/transactions<br><span>WSS</span> bitcoin.mempool</div>
+    </div>
+    <div class="chain-card">
+      <div class="chain-icon">⟠</div>
+      <div class="chain-name">Ethereum</div>
+      <div class="chain-desc">Live blocks, gas prices, wallet balances, transaction lookups.</div>
+      <div class="chain-endpoints"><span>GET</span> /api/v1/ethereum/status<br><span>GET</span> /api/v1/ethereum/gas<br><span>GET</span> /api/v1/ethereum/balance/:addr</div>
+    </div>
+    <div class="chain-card">
+      <div class="chain-icon">⚡</div>
+      <div class="chain-name">Lightning Network</div>
+      <div class="chain-desc">LND node status, wallet balance, channel info, routing fees.</div>
+      <div class="chain-endpoints"><span>GET</span> /api/v1/lightning/status<br><span>GET</span> /api/v1/lightning/balance<br><span>GET</span> /api/v1/lightning/forwarding</div>
+    </div>
+    <div class="chain-card">
+      <div class="chain-icon">⭐</div>
+      <div class="chain-name">Stellar</div>
+      <div class="chain-desc">Horizon node. Remittance, CBDCs, cross-border payments.</div>
+      <div class="chain-endpoints"><span>GET</span> /api/v1/stellar/status<br><span>GET</span> /api/v1/stellar/transactions</div>
+    </div>
+    <div class="chain-card">
+      <div class="chain-icon">🪐</div>
+      <div class="chain-name">Cosmos Hub</div>
+      <div class="chain-desc">Block stream, transaction history, IBC data.</div>
+      <div class="chain-endpoints"><span>GET</span> /api/v1/cosmos/status<br><span>GET</span> /api/v1/cosmos/transactions</div>
+    </div>
+    <div class="chain-card">
+      <div class="chain-icon">🔗</div>
+      <div class="chain-name">Chainlink</div>
+      <div class="chain-desc">Live oracle price feeds, health checks. 26/26 passing.</div>
+      <div class="chain-endpoints"><span>GET</span> /api/v1/chainlink/health<br><span>GET</span> /api/v1/chainlink/prices<br><span>GET</span> /api/v1/chainlink/deviations</div>
+    </div>
+    <div class="chain-card">
+      <div class="chain-icon">🔵</div>
+      <div class="chain-name">Ink (Kraken L2)</div>
+      <div class="chain-desc">Kraken Ink Layer 2 — blocks, gas, balances. Day-1 support.</div>
+      <div class="chain-endpoints"><span>GET</span> /api/v1/ink/status<br><span>GET</span> /api/v1/ink/gas<br><span>GET</span> /api/v1/ink/balance/:addr</div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPARISON -->
+<div class="comp-section">
+  <div class="comp-title">Why Campione Wins</div>
+  <div class="comp-sub">More chains, lower price, real nodes.</div>
   <table class="comp-table">
-    <thead><tr><th>FEATURE</th><th>CAMPIONE</th><th>QUICKNODE</th><th>ALCHEMY</th><th>INFURA</th></tr></thead>
+    <thead>
+      <tr>
+        <th>Feature</th>
+        <th class="us">Campione</th>
+        <th>QuickNode</th>
+        <th>Alchemy</th>
+        <th>Infura</th>
+      </tr>
+    </thead>
     <tbody>
-      <tr><td>XRPL</td><td class="us">Included</td><td>$299/mo extra</td><td class="no">None</td><td class="no">None</td></tr>
-      <tr class="hl"><td>Bitcoin</td><td class="us">Included</td><td class="us">Yes</td><td class="us">Yes</td><td class="us">Yes</td></tr>
-      <tr><td>Cosmos Hub</td><td class="us">Included</td><td class="no">None</td><td class="no">None</td><td class="no">None</td></tr>
-      <tr class="hl"><td>Stellar</td><td class="us">Included</td><td class="no">None</td><td class="no">None</td><td class="no">None</td></tr>
-      <tr><td>Chainlink Oracles</td><td class="us">Included</td><td class="no">None</td><td class="no">None</td><td class="no">None</td></tr>
-      <tr class="hl"><td>WebSocket Streaming</td><td class="us">All chains</td><td>Per chain extra</td><td>Limited</td><td>Limited</td></tr>
-      <tr><td>Starting Price</td><td class="us">$49/mo</td><td>$299/mo+</td><td>$49/mo (1 chain)</td><td>$50/mo (1 chain)</td></tr>
+      <tr><td>XRPL</td><td class="yes">Included</td><td class="no">$299/mo</td><td class="no">None</td><td class="no">None</td></tr>
+      <tr><td>Bitcoin</td><td class="yes">Included</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+      <tr><td>Cosmos</td><td class="yes">Included</td><td class="no">None</td><td class="no">None</td><td class="no">None</td></tr>
+      <tr><td>Stellar</td><td class="yes">Included</td><td class="no">None</td><td class="no">None</td><td class="no">None</td></tr>
+      <tr><td>Chainlink Oracles</td><td class="yes">Included</td><td class="no">None</td><td class="no">None</td><td class="no">None</td></tr>
+      <tr><td>WebSocket</td><td class="yes">All chains</td><td class="no">Per chain</td><td class="no">Limited</td><td class="no">Limited</td></tr>
+      <tr><td>Starting Price</td><td class="price">$0/mo</td><td>$299/mo+</td><td>$49/mo (1 chain)</td><td>$50/mo (1 chain)</td></tr>
     </tbody>
   </table>
-</section>
-<div class="cta-sec">
-  <h2>Ready to Build?</h2>
-  <p>Get your API key in minutes. Start with the free tier — no credit card required.</p>
-  <div class="btns">
-    <a href="#" class="bp" onclick="openSignup('developer');return false;">Get API Key — $49/mo</a>
-    <a href="/status.html" class="bs">View Live Dashboard</a>
-  </div>
 </div>
-<footer>
-  <p>CAMPIONE INFRASTRUCTURE | HETZNER CCX33 | <span id="ft-time">—</span> | ALL SYSTEMS OPERATIONAL</p>
-  <p style="margin-top:8px;"><a href="/" style="color:var(--muted);text-decoration:none;margin:0 10px;">Home</a><a href="/payments.html" style="color:var(--muted);text-decoration:none;margin:0 10px;">Pricing</a><a href="/status.html" style="color:var(--muted);text-decoration:none;margin:0 10px;">Status</a><a href="/#contact" style="color:var(--muted);text-decoration:none;margin:0 10px;">Contact</a></p>
-</footer>
-<script>
-async function loadStats(){
-  try{const r=await fetch('/api/v1/xrpl/stats');const d=await r.json();if(d.success){document.getElementById('s-pay').textContent=parseInt(d.data.totalPayments||0).toLocaleString();document.getElementById('s-dex').textContent=parseInt(d.data.dexTrades||0).toLocaleString();document.getElementById('s-led').textContent=parseInt(d.data.lastLedger||0).toLocaleString();['tk-pay','tk-pay2'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=parseInt(d.data.totalPayments||0).toLocaleString();});['tk-dex','tk-dex2'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=parseInt(d.data.dexTrades||0).toLocaleString();});['tk-xrpl','tk-xrpl2'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=parseInt(d.data.lastLedger||0).toLocaleString();});}}catch(e){}
-  try{const r=await fetch('/api/v1/bitcoin/status');const d=await r.json();if(d.success)document.getElementById('s-btc').textContent=parseInt(d.data.blocks||0).toLocaleString();}catch(e){}
-  try{const r=await fetch('/api/v1/cosmos/status');const d=await r.json();if(d.success)document.getElementById('s-cos').textContent=parseInt(d.data.latestBlockHeight||0).toLocaleString();}catch(e){}
-  document.getElementById('ft-time').textContent=new Date().toLocaleTimeString();
-}
-loadStats();setInterval(loadStats,30000);
-const colors={'xrpl.payment':'#38bdf8','xrpl.trade':'#fbbf24','xrpl.whale':'#ef4444','bitcoin.mempool':'#f7931a','cosmos.block':'#a78bfa'};
-let heroWs;
-function connectWs(){
-  try{
-    heroWs=new WebSocket('wss://campioneinfrastructure.com/ws');
-    heroWs.onopen=function(){document.getElementById('ws-dot').style.background='#00ff88';document.getElementById('ws-status').textContent='LIVE';document.getElementById('ws-status').style.color='#00ff88';document.getElementById('ws-feed').innerHTML='';};
-    heroWs.onmessage=function(e){try{const d=JSON.parse(e.data);if(d.type==='connected')return;const feed=document.getElementById('ws-feed');const line=document.createElement('div');const color=colors[d.type]||'#94a3b8';const preview=JSON.stringify(d.data).slice(0,90);line.innerHTML='<span style="color:#4b5563">'+new Date().toLocaleTimeString()+'</span> <span style="color:'+color+';font-weight:600">'+d.type+'</span> <span style="color:#374151">'+preview+'</span>';feed.insertBefore(line,feed.firstChild);while(feed.children.length>20)feed.removeChild(feed.lastChild);}catch(err){}};
-    heroWs.onclose=function(){setTimeout(connectWs,3000);};
-    heroWs.onerror=function(){heroWs.close();};
-  }catch(e){}
-}
-connectWs();
-</script>
 
+<!-- BOTTOM CTA -->
+<div style="text-align:center;padding:60px 40px 20px;">
+  <div style="font-size:1.5rem;font-weight:700;margin-bottom:8px;">Ready to Build?</div>
+  <div style="font-size:0.9rem;color:var(--muted);margin-bottom:24px;">Get your API key in minutes. Start free — no credit card required.</div>
+  <button class="cta-btn" onclick="openSignup('free')">Get Your Free API Key</button>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  Campione Infrastructure · Powered by MaxResults4U Business Solutions · <a href="https://campioneinfrastructure.com" style="color:var(--accent);text-decoration:none;">campioneinfrastructure.com</a>
+</div>
+
+<!-- ============================================================ -->
+<!-- SIGNUP MODAL (from existing site) -->
+<!-- ============================================================ -->
 <div id="signup-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:1000;overflow-y:auto;padding:40px 20px;">
-  <div style="max-width:480px;margin:0 auto;background:#0f0f1a;border:1px solid #1e2035;border-radius:12px;padding:40px;position:relative;">
-    <button onclick="closeSignup()" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#4b5563;font-size:20px;cursor:pointer;">✕</button>
-    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#38bdf8;letter-spacing:3px;text-transform:uppercase;margin-bottom:8px;">Get API Key</div>
-    <div style="font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900;margin-bottom:6px;" id="modal-plan-name">Free Plan</div>
-    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4b5563;margin-bottom:24px;" id="modal-plan-desc">1,000 requests/day · All 5 chains</div>
+  <div style="max-width:440px;margin:60px auto;background:#151d2e;border:1px solid #1e293b;border-radius:16px;padding:36px;position:relative;">
+    <div onclick="closeSignup()" style="position:absolute;top:14px;right:18px;color:#4a5568;cursor:pointer;font-size:24px;line-height:1;">✕</div>
     <div id="signup-form">
-      <input type="text" id="sig-name" placeholder="Your name *" style="width:100%;background:#0a0a0f;border:1px solid #1e2035;color:#e2e8f0;padding:12px;font-family:'JetBrains Mono',monospace;font-size:12px;outline:none;margin-bottom:12px;border-radius:6px;">
-      <input type="email" id="sig-email" placeholder="Email address *" style="width:100%;background:#0a0a0f;border:1px solid #1e2035;color:#e2e8f0;padding:12px;font-family:'JetBrains Mono',monospace;font-size:12px;outline:none;margin-bottom:12px;border-radius:6px;">
-      <input type="text" id="sig-company" placeholder="Company (optional)" style="width:100%;background:#0a0a0f;border:1px solid #1e2035;color:#e2e8f0;padding:12px;font-family:'JetBrains Mono',monospace;font-size:12px;outline:none;margin-bottom:20px;border-radius:6px;">
-      <button onclick="submitSignup()" style="width:100%;background:#38bdf8;color:#000;border:none;padding:14px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:8px;">Generate My API Key</button>
-      <div id="sig-error" style="display:none;color:#ef4444;font-family:'JetBrains Mono',monospace;font-size:11px;margin-top:12px;text-align:center;"></div>
+      <div style="font-family:'Outfit',sans-serif;font-size:22px;font-weight:700;margin-bottom:6px;color:#e8edf5;" id="modal-plan-name">Free Plan</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4a5568;margin-bottom:24px;" id="modal-plan-desc">1,000 requests/day · All 9 chains</div>
+      <input type="text" id="sig-name" placeholder="Your name" style="width:100%;padding:14px;background:rgba(0,0,0,0.3);border:1px solid #1e293b;color:#e8edf5;border-radius:8px;font-size:14px;margin-bottom:12px;outline:none;font-family:'Outfit',sans-serif;">
+      <input type="email" id="sig-email" placeholder="Your email" style="width:100%;padding:14px;background:rgba(0,0,0,0.3);border:1px solid #1e293b;color:#e8edf5;border-radius:8px;font-size:14px;margin-bottom:12px;outline:none;font-family:'Outfit',sans-serif;">
+      <input type="text" id="sig-company" placeholder="Company (optional)" style="width:100%;padding:14px;background:rgba(0,0,0,0.3);border:1px solid #1e293b;color:#e8edf5;border-radius:8px;font-size:14px;margin-bottom:16px;outline:none;font-family:'Outfit',sans-serif;">
+      <div id="sig-error" style="display:none;color:#ef4444;font-size:12px;margin-bottom:12px;"></div>
+      <button onclick="submitSignup()" style="width:100%;background:#00e5a0;color:#0a0e17;border:none;padding:14px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:8px;transition:all 0.2s;">Generate My API Key</button>
     </div>
     <div id="signup-success" style="display:none;text-align:center;">
-      <div style="font-size:32px;margin-bottom:16px;">✅</div>
-      <div style="font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;color:#00ff88;margin-bottom:12px;">Your API Key is Ready!</div>
-      <div style="background:#0a0a0f;border:1px solid rgba(0,255,136,0.3);border-radius:8px;padding:16px;margin-bottom:16px;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#4b5563;margin-bottom:8px;letter-spacing:2px;">YOUR API KEY — COPY THIS NOW</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#00ff88;word-break:break-all;" id="generated-key"></div>
+      <div style="font-size:48px;margin-bottom:12px;">✅</div>
+      <div style="font-family:'Outfit',sans-serif;font-size:20px;font-weight:700;color:#e8edf5;margin-bottom:16px;">Your API Key is Ready!</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#4a5568;margin-bottom:8px;">YOUR API KEY — COPY THIS NOW</div>
+      <div id="generated-key" style="background:#0d1117;padding:16px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:13px;color:#00e5a0;word-break:break-all;margin-bottom:12px;border:1px solid #1e293b;"></div>
+      <button id="copy-key-btn" onclick="copyKey()" style="background:#1e293b;color:#e8edf5;border:none;padding:10px 24px;border-radius:6px;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:12px;margin-bottom:16px;">Copy API Key</button>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#4a5568;margin-bottom:16px;">Use it like this: <span style="color:#7dd3fc;">?key=YOUR_KEY</span> on any endpoint</div>
+      <div id="payment-notice" style="display:none;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);border-radius:8px;padding:16px;margin-bottom:16px;">
+        <div style="color:#f59e0b;font-size:12px;font-weight:600;margin-bottom:8px;">⚠ PAYMENT REQUIRED TO ACTIVATE</div>
+        <div style="color:#7b8ba3;font-size:11px;margin-bottom:12px;">Your key has been reserved. Complete payment to activate it.</div>
+        <a id="payment-link" href="https://campioneinfrastructure.com/payments.html" style="display:inline-block;background:#f59e0b;color:#000;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:700;font-size:12px;">COMPLETE PAYMENT →</a>
       </div>
-      <button onclick="copyKey()" style="background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);color:#00ff88;padding:10px 24px;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;border-radius:6px;margin-bottom:16px;" id="copy-key-btn">Copy API Key</button>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#4b5563;line-height:1.8;">Use it like this:<br><span style="color:#38bdf8;">?key=YOUR_KEY</span> on any endpoint</div>
-      <div id="payment-notice" style="display:none;margin-top:16px;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);border-radius:8px;padding:16px;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#fbbf24;margin-bottom:8px;">⚠ PAYMENT REQUIRED TO ACTIVATE</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#4b5563;margin-bottom:12px;line-height:1.8;">Your key has been reserved. Complete payment to activate it. Kenneth will activate your key within 1 hour of payment confirmation.</div>
-        <a id="payment-link" href="/payments.html" style="display:block;text-align:center;background:#fbbf24;color:#000;padding:10px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:2px;text-decoration:none;border-radius:6px;">COMPLETE PAYMENT →</a>
-      </div>
-      <div style="margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:10px;color:#4b5563;">Free keys are active immediately. Questions: <span style="color:#38bdf8;">kenneth@campioneinfrastructure.com</span></div>
+      <div style="font-size:11px;color:#4a5568;">Free keys are active immediately. Questions: maxresults4ubusinesssolutions@gmail.com</div>
     </div>
   </div>
 </div>
 
+<!-- ============================================================ -->
+<!-- FREE POPUP (5 second delay) -->
+<!-- ============================================================ -->
+<div id="free-popup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:#151d2e;border:1px solid #00e5a0;border-radius:16px;padding:40px;max-width:500px;text-align:center;position:relative;">
+    <div onclick="document.getElementById('free-popup').style.display='none'" style="position:absolute;top:12px;right:16px;color:#4a5568;cursor:pointer;font-size:24px;">✕</div>
+    <div style="font-size:48px;margin-bottom:16px;">🚀</div>
+    <div style="font-family:'Outfit',sans-serif;font-size:22px;font-weight:700;color:#00e5a0;margin-bottom:12px;">Get Your Free API Key</div>
+    <div style="color:#7b8ba3;font-size:14px;margin-bottom:20px;line-height:1.6;">9 blockchains. Real-time data. No credit card required.<br>XRPL • Bitcoin • Ethereum • Ink • Cosmos • Stellar • Chainlink • Lightning</div>
+    <input type="text" id="popup-name" placeholder="Your name" style="width:100%;padding:14px;background:rgba(0,0,0,0.3);border:1px solid #1e293b;color:#e8edf5;border-radius:8px;font-size:14px;margin-bottom:12px;text-align:center;outline:none;font-family:'Outfit',sans-serif;">
+    <input type="email" id="popup-email" placeholder="Enter your email" style="width:100%;padding:14px;background:rgba(0,0,0,0.3);border:1px solid #1e293b;color:#e8edf5;border-radius:8px;font-size:14px;margin-bottom:12px;text-align:center;outline:none;font-family:'Outfit',sans-serif;">
+    <button onclick="popupSignup()" style="width:100%;padding:14px;background:#00e5a0;color:#0a0e17;border:none;border-radius:8px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:1px;">GENERATE MY FREE KEY</button>
+    <div id="popup-result" style="margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#fbbf24;display:none;"></div>
+    <div style="margin-top:16px;font-size:11px;color:#4a5568;">1,000 requests/day • All 9 chains • Instant activation</div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SCRIPTS -->
+<!-- ============================================================ -->
 <script>
-let currentTier = 'free';
-const planInfo = {
-  free: { name: 'Free Plan', desc: '1,000 requests/day · All 5 chains · REST only' },
-  developer: { name: 'Developer Plan — $49/mo', desc: 'Unlimited requests · WebSocket streaming · All 5 chains' },
-  enterprise: { name: 'Enterprise Plan — $149/mo', desc: 'Unlimited · WebSocket · Webhooks · 99.9% SLA' }
+// === LIVE DATA FETCH ===
+(async function(){
+  try{const r=await fetch('/api/v1/xrpl/stats');const d=await r.json();if(d.success){
+    document.getElementById('s-pay').textContent=parseInt(d.data.totalPayments||0).toLocaleString();
+    document.getElementById('s-led').textContent=parseInt(d.data.lastLedger||0).toLocaleString();
+    document.getElementById('demo-xrpl-ledger').textContent=parseInt(d.data.lastLedger||0).toLocaleString();
+    document.getElementById('demo-xrpl-pay').textContent=parseInt(d.data.totalPayments||0).toLocaleString();
+    document.getElementById('demo-xrpl-dex').textContent=parseInt(d.data.dexTrades||0).toLocaleString();
+  }}catch(e){}
+  try{const r=await fetch('/api/v1/bitcoin/status');const d=await r.json();if(d.success){
+    document.getElementById('s-btc').textContent=parseInt(d.data.blocks||0).toLocaleString();
+    document.getElementById('demo-btc-block').textContent=parseInt(d.data.blocks||0).toLocaleString();
+  }}catch(e){}
+})();
+
+// === SIGNUP MODAL ===
+var currentTier = 'free';
+var planInfo = {
+  free: { name: 'Free Plan', desc: '1,000 requests/day · All 9 chains' },
+  developer: { name: 'Developer Plan', desc: 'Unlimited requests · All 9 chains · Priority support' },
+  enterprise: { name: 'Enterprise Plan', desc: 'Unlimited requests · Dedicated support · 99.9% SLA' }
 };
 
 function openSignup(tier) {
-  currentTier = tier;
+  currentTier = tier || 'free';
   document.getElementById('modal-plan-name').textContent = planInfo[tier].name;
   document.getElementById('modal-plan-desc').textContent = planInfo[tier].desc;
   document.getElementById('signup-form').style.display = 'block';
@@ -301,24 +429,24 @@ function closeSignup() {
 }
 
 async function submitSignup() {
-  const name = document.getElementById('sig-name').value.trim();
-  const email = document.getElementById('sig-email').value.trim();
-  const company = document.getElementById('sig-company').value.trim();
-  const errEl = document.getElementById('sig-error');
+  var name = document.getElementById('sig-name').value.trim();
+  var email = document.getElementById('sig-email').value.trim();
+  var company = document.getElementById('sig-company').value.trim();
+  var errEl = document.getElementById('sig-error');
 
   if (!name || !email) { errEl.textContent = 'Please enter your name and email.'; errEl.style.display = 'block'; return; }
 
-  const btn = event.target;
+  var btn = event.target;
   btn.textContent = 'Generating...';
   btn.disabled = true;
 
   try {
-    const r = await fetch('/api/v1/keys/signup', {
+    var r = await fetch('/api/v1/keys/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, company, tier: currentTier })
+      body: JSON.stringify({ name: name, email: email, company: company, tier: currentTier })
     });
-    const d = await r.json();
+    var d = await r.json();
 
     if (d.key) {
       document.getElementById('generated-key').textContent = d.key;
@@ -330,12 +458,10 @@ async function submitSignup() {
       } else {
         document.getElementById('payment-notice').style.display = 'none';
       }
-
-      // Also send to formspree so you get notified
       fetch('https://formspree.io/f/mlgojzyj', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({ type: 'api_key_signup', name, email, company, tier: currentTier, key: d.key })
+        body: JSON.stringify({ type: 'api_key_signup', name: name, email: email, company: company, tier: currentTier, key: d.key })
       });
     } else {
       errEl.textContent = d.error || 'Something went wrong. Try again.';
@@ -352,128 +478,40 @@ async function submitSignup() {
 }
 
 function copyKey() {
-  const key = document.getElementById('generated-key').textContent;
-  navigator.clipboard.writeText(key).then(() => {
+  var key = document.getElementById('generated-key').textContent;
+  navigator.clipboard.writeText(key).then(function() {
     document.getElementById('copy-key-btn').textContent = '✓ Copied!';
-    setTimeout(() => { document.getElementById('copy-key-btn').textContent = 'Copy API Key'; }, 2000);
+    setTimeout(function() { document.getElementById('copy-key-btn').textContent = 'Copy API Key'; }, 2000);
   });
 }
-</script>
 
+// === FREE POPUP (5 second delay) ===
+setTimeout(function(){ document.getElementById('free-popup').style.display = 'flex'; }, 5000);
 
-<div id="signup-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:1000;overflow-y:auto;padding:40px 20px;">
-  <div style="max-width:480px;margin:0 auto;background:#0f0f1a;border:1px solid #1e2035;border-radius:12px;padding:40px;position:relative;">
-    <button onclick="closeSignup()" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#4b5563;font-size:20px;cursor:pointer;">✕</button>
-    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#38bdf8;letter-spacing:3px;text-transform:uppercase;margin-bottom:8px;">Get API Key</div>
-    <div style="font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900;margin-bottom:6px;" id="modal-plan-name">Free Plan</div>
-    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4b5563;margin-bottom:24px;" id="modal-plan-desc">1,000 requests/day · All 5 chains</div>
-    <div id="signup-form">
-      <input type="text" id="sig-name" placeholder="Your name *" style="width:100%;background:#0a0a0f;border:1px solid #1e2035;color:#e2e8f0;padding:12px;font-family:'JetBrains Mono',monospace;font-size:12px;outline:none;margin-bottom:12px;border-radius:6px;">
-      <input type="email" id="sig-email" placeholder="Email address *" style="width:100%;background:#0a0a0f;border:1px solid #1e2035;color:#e2e8f0;padding:12px;font-family:'JetBrains Mono',monospace;font-size:12px;outline:none;margin-bottom:12px;border-radius:6px;">
-      <input type="text" id="sig-company" placeholder="Company (optional)" style="width:100%;background:#0a0a0f;border:1px solid #1e2035;color:#e2e8f0;padding:12px;font-family:'JetBrains Mono',monospace;font-size:12px;outline:none;margin-bottom:20px;border-radius:6px;">
-      <button onclick="submitSignup()" style="width:100%;background:#38bdf8;color:#000;border:none;padding:14px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:8px;">Generate My API Key</button>
-      <div id="sig-error" style="display:none;color:#ef4444;font-family:'JetBrains Mono',monospace;font-size:11px;margin-top:12px;text-align:center;"></div>
-    </div>
-    <div id="signup-success" style="display:none;text-align:center;">
-      <div style="font-size:32px;margin-bottom:16px;">✅</div>
-      <div style="font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;color:#00ff88;margin-bottom:12px;">Your API Key is Ready!</div>
-      <div style="background:#0a0a0f;border:1px solid rgba(0,255,136,0.3);border-radius:8px;padding:16px;margin-bottom:16px;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#4b5563;margin-bottom:8px;letter-spacing:2px;">YOUR API KEY — COPY THIS NOW</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#00ff88;word-break:break-all;" id="generated-key"></div>
-      </div>
-      <button onclick="copyKey()" style="background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);color:#00ff88;padding:10px 24px;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;border-radius:6px;margin-bottom:16px;" id="copy-key-btn">Copy API Key</button>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#4b5563;line-height:1.8;">Use it like this:<br><span style="color:#38bdf8;">?key=YOUR_KEY</span> on any endpoint</div>
-      <div id="payment-notice" style="display:none;margin-top:16px;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);border-radius:8px;padding:16px;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#fbbf24;margin-bottom:8px;">⚠ PAYMENT REQUIRED TO ACTIVATE</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#4b5563;margin-bottom:12px;line-height:1.8;">Your key has been reserved. Complete payment to activate it. Kenneth will activate your key within 1 hour of payment confirmation.</div>
-        <a id="payment-link" href="/payments.html" style="display:block;text-align:center;background:#fbbf24;color:#000;padding:10px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:2px;text-decoration:none;border-radius:6px;">COMPLETE PAYMENT →</a>
-      </div>
-      <div style="margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:10px;color:#4b5563;">Free keys are active immediately. Questions: <span style="color:#38bdf8;">kenneth@campioneinfrastructure.com</span></div>
-    </div>
-  </div>
-</div>
-
-<script>
-let currentTier = 'free';
-const planInfo = {
-  free: { name: 'Free Plan', desc: '1,000 requests/day · All 5 chains · REST only' },
-  developer: { name: 'Developer Plan — $49/mo', desc: 'Unlimited requests · WebSocket streaming · All 5 chains' },
-  enterprise: { name: 'Enterprise Plan — $149/mo', desc: 'Unlimited · WebSocket · Webhooks · 99.9% SLA' }
-};
-
-function openSignup(tier) {
-  currentTier = tier;
-  document.getElementById('modal-plan-name').textContent = planInfo[tier].name;
-  document.getElementById('modal-plan-desc').textContent = planInfo[tier].desc;
-  document.getElementById('signup-form').style.display = 'block';
-  document.getElementById('signup-success').style.display = 'none';
-  document.getElementById('sig-error').style.display = 'none';
-  document.getElementById('signup-modal').style.display = 'block';
-  document.body.style.overflow = 'hidden';
-}
-
-function closeSignup() {
-  document.getElementById('signup-modal').style.display = 'none';
-  document.body.style.overflow = '';
-}
-
-async function submitSignup() {
-  const name = document.getElementById('sig-name').value.trim();
-  const email = document.getElementById('sig-email').value.trim();
-  const company = document.getElementById('sig-company').value.trim();
-  const errEl = document.getElementById('sig-error');
-
-  if (!name || !email) { errEl.textContent = 'Please enter your name and email.'; errEl.style.display = 'block'; return; }
-
-  const btn = event.target;
-  btn.textContent = 'Generating...';
-  btn.disabled = true;
-
+async function popupSignup() {
+  var email = document.getElementById('popup-email').value.trim();
+  var name = document.getElementById('popup-name').value.trim();
+  if (!email || !email.includes('@')) { alert('Enter a valid email'); return; }
   try {
-    const r = await fetch('/api/v1/keys/signup', {
+    var r = await fetch('/api/v1/keys/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, company, tier: currentTier })
+      body: JSON.stringify({ email: email, name: name, tier: 'free' })
     });
-    const d = await r.json();
-
-    if (d.key) {
-      document.getElementById('generated-key').textContent = d.key;
-      document.getElementById('signup-form').style.display = 'none';
-      document.getElementById('signup-success').style.display = 'block';
-      if (d.paymentRequired) {
-        document.getElementById('payment-notice').style.display = 'block';
-        document.getElementById('payment-link').href = d.paymentUrl;
-      } else {
-        document.getElementById('payment-notice').style.display = 'none';
-      }
-
-      // Also send to formspree so you get notified
+    var d = await r.json();
+    if (d.success) {
+      document.getElementById('popup-result').style.display = 'block';
+      document.getElementById('popup-result').innerHTML = '✅ Your API Key:<br><code style="background:#0d1117;padding:8px;display:block;margin-top:8px;word-break:break-all;color:#00e5a0;border-radius:4px;">' + d.key + '</code><br><a href="/customer-api.html?key=' + d.key + '" style="color:#38bdf8;">→ Open API Portal</a>';
       fetch('https://formspree.io/f/mlgojzyj', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({ type: 'api_key_signup', name, email, company, tier: currentTier, key: d.key })
+        body: JSON.stringify({ type: 'popup_signup', name: name, email: email, tier: 'free', key: d.key })
       });
     } else {
-      errEl.textContent = d.error || 'Something went wrong. Try again.';
-      errEl.style.display = 'block';
-      btn.textContent = 'Generate My API Key';
-      btn.disabled = false;
+      document.getElementById('popup-result').style.display = 'block';
+      document.getElementById('popup-result').textContent = d.error || 'Error generating key';
     }
-  } catch(e) {
-    errEl.textContent = 'Connection error. Try again.';
-    errEl.style.display = 'block';
-    btn.textContent = 'Generate My API Key';
-    btn.disabled = false;
-  }
-}
-
-function copyKey() {
-  const key = document.getElementById('generated-key').textContent;
-  navigator.clipboard.writeText(key).then(() => {
-    document.getElementById('copy-key-btn').textContent = '✓ Copied!';
-    setTimeout(() => { document.getElementById('copy-key-btn').textContent = 'Copy API Key'; }, 2000);
-  });
+  } catch(e) { alert('Error: ' + e.message); }
 }
 </script>
 
