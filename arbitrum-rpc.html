@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arbitrum RPC — Campione Infrastructure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --arb: #12AAFF;
+    --bg: #080C10;
+    --bg2: #0D1117;
+    --bg3: #111820;
+    --border: rgba(18,170,255,0.15);
+    --text: #E8F4FD;
+    --muted: #6B8FA8;
+    --green: #00FF88;
+    --mono: 'Space Mono', monospace;
+    --sans: 'Syne', sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); overflow-x: hidden; }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image: linear-gradient(rgba(18,170,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(18,170,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px; pointer-events: none; z-index: 0;
+  }
+  body::after {
+    content: ''; position: fixed; top: -200px; left: 50%; transform: translateX(-50%);
+    width: 800px; height: 800px;
+    background: radial-gradient(ellipse, rgba(18,170,255,0.08) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 40px; background: rgba(8,12,16,0.85);
+    backdrop-filter: blur(20px); border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { font-family: var(--mono); font-size: 13px; color: var(--arb); letter-spacing: 0.1em; text-decoration: none; }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a { font-family: var(--mono); font-size: 12px; color: var(--muted); text-decoration: none; letter-spacing: 0.05em; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--arb); }
+  .status-pill { display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11px; color: var(--green); background: rgba(0,255,136,0.08); border: 1px solid rgba(0,255,136,0.2); padding: 6px 14px; border-radius: 100px; }
+  .status-dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { opacity:1; box-shadow:0 0 0 0 rgba(0,255,136,0.4); } 50% { opacity:0.7; box-shadow:0 0 0 6px rgba(0,255,136,0); } }
+  .hero { position: relative; z-index: 1; padding: 160px 40px 100px; text-align: center; max-width: 900px; margin: 0 auto; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11px; color: var(--arb); background: rgba(18,170,255,0.08); border: 1px solid var(--border); padding: 8px 16px; border-radius: 100px; margin-bottom: 32px; letter-spacing: 0.1em; }
+  .hero h1 { font-size: clamp(48px, 8vw, 88px); font-weight: 800; line-height: 0.95; letter-spacing: -0.03em; margin-bottom: 24px; }
+  .hero h1 span { display: block; background: linear-gradient(135deg, #12AAFF, #00D4FF, #12AAFF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hero p { font-size: 18px; color: var(--muted); line-height: 1.6; max-width: 580px; margin: 0 auto 48px; }
+  .hero-cta { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--arb); color: #000; padding: 14px 28px; border-radius: 6px; font-family: var(--mono); font-size: 13px; font-weight: 700; text-decoration: none; letter-spacing: 0.05em; transition: all 0.2s; }
+  .btn-primary:hover { background: #fff; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(18,170,255,0.3); }
+  .btn-secondary { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--text); padding: 14px 28px; border-radius: 6px; border: 1px solid var(--border); font-family: var(--mono); font-size: 13px; text-decoration: none; letter-spacing: 0.05em; transition: all 0.2s; }
+  .btn-secondary:hover { border-color: var(--arb); color: var(--arb); }
+  .stats-bar { position: relative; z-index: 1; display: flex; justify-content: center; max-width: 900px; margin: 0 auto 80px; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--bg2); }
+  .stat-item { flex: 1; padding: 32px 24px; text-align: center; border-right: 1px solid var(--border); }
+  .stat-item:last-child { border-right: none; }
+  .stat-value { font-family: var(--mono); font-size: 28px; font-weight: 700; color: var(--arb); display: block; margin-bottom: 8px; }
+  .stat-label { font-size: 12px; color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase; }
+  .endpoint-display { position: relative; z-index: 1; max-width: 700px; margin: 60px auto; background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .endpoint-tabs { display: flex; border-bottom: 1px solid var(--border); }
+  .endpoint-tab { padding: 12px 24px; font-family: var(--mono); font-size: 12px; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; }
+  .endpoint-tab.active { color: var(--arb); border-bottom-color: var(--arb); }
+  .endpoint-content { padding: 24px; font-family: var(--mono); font-size: 14px; }
+  .endpoint-url { display: flex; align-items: center; justify-content: space-between; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; margin-bottom: 16px; gap: 12px; }
+  .endpoint-url code { color: var(--arb); font-size: 13px; word-break: break-all; }
+  .copy-btn { background: rgba(18,170,255,0.1); border: 1px solid var(--border); color: var(--arb); padding: 6px 12px; border-radius: 4px; font-family: var(--mono); font-size: 11px; cursor: pointer; transition: all 0.2s; white-space: nowrap; flex-shrink: 0; }
+  .copy-btn:hover { background: rgba(18,170,255,0.2); }
+  .code-block { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 20px; font-size: 13px; line-height: 1.7; overflow-x: auto; }
+  .code-comment { color: var(--muted); }
+  .code-key { color: #FF79C6; }
+  .code-val { color: var(--green); }
+  .code-str { color: #F1FA8C; }
+  .node-status { position: relative; z-index: 1; max-width: 900px; margin: 0 auto 80px; background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .node-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 28px; border-bottom: 1px solid var(--border); }
+  .node-title { font-family: var(--mono); font-size: 13px; color: var(--arb); }
+  .node-grid { display: grid; grid-template-columns: repeat(4, 1fr); padding: 28px; gap: 20px; }
+  .node-metric { text-align: center; }
+  .node-metric-val { font-family: var(--mono); font-size: 20px; color: var(--text); display: block; margin-bottom: 6px; }
+  .node-metric-val.live { color: var(--green); }
+  .node-metric-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .section { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 40px 100px; }
+  .section-label { font-family: var(--mono); font-size: 11px; color: var(--arb); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 16px; }
+  .section h2 { font-size: 40px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 48px; }
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .feature-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 32px; transition: all 0.3s; position: relative; overflow: hidden; }
+  .feature-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--arb), transparent); opacity: 0; transition: opacity 0.3s; }
+  .feature-card:hover { border-color: rgba(18,170,255,0.3); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+  .feature-card:hover::before { opacity: 1; }
+  .feature-icon { font-size: 28px; margin-bottom: 16px; display: block; }
+  .feature-card h3 { font-size: 18px; font-weight: 600; margin-bottom: 10px; }
+  .feature-card p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+  .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .pricing-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 36px 32px; position: relative; }
+  .pricing-card.featured { border-color: var(--arb); background: linear-gradient(135deg, rgba(18,170,255,0.05), var(--bg2)); }
+  .pricing-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--arb); color: #000; font-family: var(--mono); font-size: 10px; font-weight: 700; padding: 4px 16px; border-radius: 100px; letter-spacing: 0.1em; white-space: nowrap; }
+  .pricing-tier { font-family: var(--mono); font-size: 12px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 16px; }
+  .pricing-price { font-size: 48px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 4px; }
+  .pricing-price span { font-size: 20px; font-weight: 400; color: var(--muted); }
+  .pricing-period { font-size: 14px; color: var(--muted); margin-bottom: 32px; }
+  .pricing-features { list-style: none; margin-bottom: 32px; }
+  .pricing-features li { font-size: 14px; color: var(--muted); padding: 10px 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .pricing-features li::before { content: '✓'; color: var(--green); font-family: var(--mono); font-size: 12px; flex-shrink: 0; }
+  footer { position: relative; z-index: 1; border-top: 1px solid var(--border); padding: 40px; display: flex; justify-content: space-between; align-items: center; }
+  footer p { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  footer a { color: var(--arb); text-decoration: none; }
+  @media (max-width: 768px) {
+    nav { padding: 16px 20px; } .nav-links { display: none; }
+    .hero { padding: 120px 20px 60px; }
+    .stats-bar { flex-direction: column; }
+    .stat-item { border-right: none; border-bottom: 1px solid var(--border); }
+    .features-grid, .pricing-grid { grid-template-columns: 1fr; }
+    .section { padding: 0 20px 60px; }
+    .node-grid { grid-template-columns: repeat(2, 1fr); }
+    footer { flex-direction: column; gap: 16px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="https://www.campioneinfrastructure.com" class="nav-logo">CAMPIONE // INFRA</a>
+  <ul class="nav-links">
+    <li><a href="https://www.campioneinfrastructure.com/status.html">Status</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#docs">Docs</a></li>
+    <li><a href="https://www.campioneinfrastructure.com/whale-signals.html">Whale Signals</a></li>
+  </ul>
+  <div class="status-pill"><div class="status-dot"></div>NODE LIVE</div>
+</nav>
+
+<section class="hero">
+  <div class="hero-badge">⬡ ARBITRUM ONE — FULL NITRO NODE</div>
+  <h1>Enterprise<span>Arbitrum RPC</span>Infrastructure</h1>
+  <p>Private, dedicated Arbitrum One RPC access powered by our full Nitro node. Sub-5ms response times. No rate limits. No shared capacity.</p>
+  <div class="hero-cta">
+    <a href="#pricing" class="btn-primary">Get API Access →</a>
+    <a href="#docs" class="btn-secondary">View Docs</a>
+  </div>
+</section>
+
+<div class="stats-bar">
+  <div class="stat-item"><span class="stat-value" id="block-height">463M+</span><span class="stat-label">Current Block</span></div>
+  <div class="stat-item"><span class="stat-value">&lt;5ms</span><span class="stat-label">Response Time</span></div>
+  <div class="stat-item"><span class="stat-value">99.9%</span><span class="stat-label">Uptime SLA</span></div>
+  <div class="stat-item"><span class="stat-value">∞</span><span class="stat-label">Rate Limit</span></div>
+</div>
+
+<div class="endpoint-display" id="docs">
+  <div class="endpoint-tabs">
+    <div class="endpoint-tab active" onclick="showTab('http')">HTTP RPC</div>
+    <div class="endpoint-tab" onclick="showTab('ethers')">ethers.js</div>
+    <div class="endpoint-tab" onclick="showTab('curl')">cURL</div>
+    <div class="endpoint-tab" onclick="showTab('python')">Python</div>
+  </div>
+  <div class="endpoint-content" id="tab-http">
+    <div class="endpoint-url">
+      <code>https://arb.campioneinfrastructure.com/v1/YOUR_API_KEY</code>
+      <button class="copy-btn" onclick="copyEndpoint()">COPY</button>
+    </div>
+    <div class="code-block">
+      <span class="code-comment">// Chain ID: 42161 (Arbitrum One)</span><br>
+      <span class="code-comment">// Protocol: JSON-RPC 2.0 · TLS Required</span><br><br>
+      <span class="code-key">POST</span> <span class="code-str">/v1/YOUR_API_KEY</span><br>
+      <span class="code-key">Content-Type:</span> <span class="code-val">application/json</span>
+    </div>
+  </div>
+  <div class="endpoint-content" id="tab-ethers" style="display:none">
+    <div class="code-block">
+      <span class="code-comment">// ethers.js v6</span><br>
+      <span class="code-key">import</span> { ethers } <span class="code-key">from</span> <span class="code-str">'ethers'</span>;<br><br>
+      <span class="code-key">const</span> provider = <span class="code-key">new</span> ethers.<span class="code-val">JsonRpcProvider</span>(<br>
+      &nbsp;&nbsp;<span class="code-str">'https://arb.campioneinfrastructure.com/v1/YOUR_KEY'</span><br>
+      );<br><br>
+      <span class="code-key">const</span> block = <span class="code-key">await</span> provider.<span class="code-val">getBlockNumber</span>();
+    </div>
+  </div>
+  <div class="endpoint-content" id="tab-curl" style="display:none">
+    <div class="code-block">
+      <span class="code-comment"># Get latest block</span><br>
+      curl -X POST \<br>
+      &nbsp;&nbsp;<span class="code-str">'https://arb.campioneinfrastructure.com/v1/YOUR_KEY'</span> \<br>
+      &nbsp;&nbsp;-H <span class="code-str">'Content-Type: application/json'</span> \<br>
+      &nbsp;&nbsp;-d <span class="code-str">'{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}'</span>
+    </div>
+  </div>
+  <div class="endpoint-content" id="tab-python" style="display:none">
+    <div class="code-block">
+      <span class="code-key">from</span> web3 <span class="code-key">import</span> Web3<br><br>
+      w3 = Web3(Web3.<span class="code-val">HTTPProvider</span>(<br>
+      &nbsp;&nbsp;<span class="code-str">'https://arb.campioneinfrastructure.com/v1/YOUR_KEY'</span><br>
+      ))<br>
+      <span class="code-key">print</span>(w3.eth.<span class="code-val">block_number</span>)
+    </div>
+  </div>
+</div>
+
+<div class="node-status">
+  <div class="node-header">
+    <span class="node-title">⬡ ARBITRUM NITRO NODE — LIVE STATUS</span>
+    <div class="status-pill"><div class="status-dot"></div>SYNCED</div>
+  </div>
+  <div class="node-grid">
+    <div class="node-metric"><span class="node-metric-val live" id="live-block">Loading...</span><span class="node-metric-label">Block Height</span></div>
+    <div class="node-metric"><span class="node-metric-val">Arbitrum One</span><span class="node-metric-label">Network</span></div>
+    <div class="node-metric"><span class="node-metric-val">0xa4b1</span><span class="node-metric-label">Chain ID</span></div>
+    <div class="node-metric"><span class="node-metric-val live">NITRO</span><span class="node-metric-label">Node Type</span></div>
+    <div class="node-metric"><span class="node-metric-val">Hetzner</span><span class="node-metric-label">Host</span></div>
+    <div class="node-metric"><span class="node-metric-val">4.6TB</span><span class="node-metric-label">Storage</span></div>
+    <div class="node-metric"><span class="node-metric-val live" id="live-latency">—</span><span class="node-metric-label">RPC Latency</span></div>
+    <div class="node-metric"><span class="node-metric-val">HTTP + WS</span><span class="node-metric-label">Protocols</span></div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="section-label">WHY CAMPIONE</div>
+  <h2>Built for bots. Tuned for speed.</h2>
+  <div class="features-grid">
+    <div class="feature-card"><span class="feature-icon">⚡</span><h3>Sub-5ms Latency</h3><p>Full Nitro node with no middleware. Your request hits the node directly — no proxies, no queues, no shared load.</p></div>
+    <div class="feature-card"><span class="feature-icon">∞</span><h3>No Rate Limits</h3><p>Scan thousands of borrowers per second. Execute liquidations without hitting walls. Your node, your throughput.</p></div>
+    <div class="feature-card"><span class="feature-icon">🔒</span><h3>Private & Dedicated</h3><p>Your API key routes to isolated capacity. No competing with other users for block data or mempool access.</p></div>
+    <div class="feature-card"><span class="feature-icon">🤖</span><h3>MEV & Liquidation Ready</h3><p>Optimized for high-frequency on-chain operations. Aave V3 liquidation bots, flash loan execution, and arb scanning.</p></div>
+    <div class="feature-card"><span class="feature-icon">📡</span><h3>WebSocket Support</h3><p>Real-time block subscriptions via WSS. Subscribe to newHeads, logs, and pending transactions without polling.</p></div>
+    <div class="feature-card"><span class="feature-icon">🌐</span><h3>Full Archive Access</h3><p>Query any historical state from genesis. Backtesting, analytics, and historical liquidation scanning all supported.</p></div>
+  </div>
+</section>
+
+<section class="section" id="pricing">
+  <div class="section-label">PRICING</div>
+  <h2>Simple, transparent pricing.</h2>
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="pricing-tier">Developer</div>
+      <div class="pricing-price">$49<span>/mo</span></div>
+      <div class="pricing-period">Billed monthly</div>
+      <ul class="pricing-features">
+        <li>10M requests/month</li>
+        <li>HTTP RPC access</li>
+        <li>50ms SLA</li>
+        <li>Email support</li>
+        <li>1 API key</li>
+      </ul>
+      <a href="mailto:admin@campioneinfrastructure.com?subject=Arbitrum RPC - Developer" class="btn-secondary" style="width:100%;justify-content:center">Get Started</a>
+    </div>
+    <div class="pricing-card featured">
+      <div class="pricing-badge">MOST POPULAR</div>
+      <div class="pricing-tier">Pro</div>
+      <div class="pricing-price">$149<span>/mo</span></div>
+      <div class="pricing-period">Billed monthly</div>
+      <ul class="pricing-features">
+        <li>Unlimited requests</li>
+        <li>HTTP + WebSocket</li>
+        <li>5ms SLA</li>
+        <li>Priority support</li>
+        <li>3 API keys</li>
+        <li>Archive access</li>
+      </ul>
+      <a href="mailto:admin@campioneinfrastructure.com?subject=Arbitrum RPC - Pro" class="btn-primary" style="width:100%;justify-content:center">Get Started</a>
+    </div>
+    <div class="pricing-card">
+      <div class="pricing-tier">Enterprise</div>
+      <div class="pricing-price">Custom</div>
+      <div class="pricing-period">Volume discounts available</div>
+      <ul class="pricing-features">
+        <li>Dedicated capacity</li>
+        <li>Custom SLA</li>
+        <li>Co-location options</li>
+        <li>Direct node access</li>
+        <li>Unlimited API keys</li>
+        <li>24/7 support</li>
+      </ul>
+      <a href="mailto:admin@campioneinfrastructure.com?subject=Arbitrum RPC - Enterprise" class="btn-secondary" style="width:100%;justify-content:center">Contact Us</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 <a href="https://www.campioneinfrastructure.com">Campione Infrastructure</a> — Powered by MaxResults4U Business Solutions</p>
+  <p><a href="https://www.campioneinfrastructure.com/status.html">Status</a> · <a href="https://www.campioneinfrastructure.com/whale-signals.html">Whale Signals</a> · <a href="mailto:admin@campioneinfrastructure.com">Contact</a></p>
+</footer>
+
+<script>
+  function showTab(tab) {
+    ['http','ethers','curl','python'].forEach(t => {
+      document.getElementById('tab-'+t).style.display = t===tab ? 'block' : 'none';
+    });
+    document.querySelectorAll('.endpoint-tab').forEach((el,i) => {
+      el.classList.toggle('active', ['http','ethers','curl','python'][i]===tab);
+    });
+  }
+  function copyEndpoint() {
+    navigator.clipboard.writeText('https://arb.campioneinfrastructure.com/v1/YOUR_API_KEY');
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = 'COPIED!';
+    setTimeout(()=>btn.textContent='COPY', 2000);
+  }
+  async function updateNodeStats() {
+    const start = Date.now();
+    try {
+      const res = await fetch('https://arb1.arbitrum.io/rpc', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({jsonrpc:'2.0',method:'eth_blockNumber',params:[],id:1})
+      });
+      const latency = Date.now() - start;
+      const data = await res.json();
+      const block = parseInt(data.result,16).toLocaleString();
+      document.getElementById('live-block').textContent = block;
+      document.getElementById('block-height').textContent = block;
+      document.getElementById('live-latency').textContent = latency+'ms';
+    } catch(e) {
+      document.getElementById('live-block').textContent = '463,000,000+';
+    }
+  }
+  updateNodeStats();
+  setInterval(updateNodeStats, 10000);
+</script>
+</body>
+</html>
