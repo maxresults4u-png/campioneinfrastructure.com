@@ -7,13 +7,11 @@
 <title>EBIT Utility Token Dashboard — Real-Time Access & Infrastructure Credits</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=JetBrains+Mono:wght@400;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#050608;--bg2:#0a0c12;--card:#0f1116;--border:#1b1f2a;--accent:#00e0ff;--accent2:#00b8d6;--green:#00ff88;--gold:#fbbf24;--text:#ffffff;--muted:#a0a4b3;--dim:#2a2d3a;}
+:root{--bg:#050608;--bg2:#0a0c12;--card:#0f1116;--border:#1b1f2a;--accent:#00e0ff;--accent2:#00b8d6;--green:#00ff88;--gold:#fbbf24;--arb:#818cf8;--text:#ffffff;--muted:#a0a4b3;--dim:#2a2d3a;}
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;}
 body::before{content:'';position:fixed;inset:0;background:radial-gradient(circle at 20% 20%,rgba(0,224,255,0.04) 0,transparent 60%),radial-gradient(circle at 80% 80%,rgba(0,255,136,0.03) 0,transparent 60%);pointer-events:none;z-index:0;}
-
-/* NAV */
 header{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:rgba(5,6,8,0.95);border-bottom:1px solid var(--border);}
 .nav{max-width:1200px;margin:0 auto;padding:14px 40px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
 .nav-logo-wrap{display:flex;align-items:center;gap:12px;}
@@ -31,15 +29,12 @@ header{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:rg
 .btn-primary:hover{filter:brightness(1.1);transform:translateY(-1px);}
 .btn-outline{background:transparent;color:var(--accent);border-color:var(--accent2);}
 .btn-outline:hover{background:rgba(0,224,255,0.08);}
-
-/* TICKER */
 .ticker{background:rgba(0,224,255,0.04);border-bottom:1px solid var(--border);padding:8px 0;overflow:hidden;white-space:nowrap;}
-.ticker-inner{display:inline-flex;gap:50px;animation:tick 25s linear infinite;}
+.ticker-inner{display:inline-flex;gap:50px;animation:tick 30s linear infinite;}
 @keyframes tick{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 .ti{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;}
 .ti span{color:var(--accent);}
-
-/* HERO */
+.ti.arb span{color:var(--arb);}
 .hero{max-width:1200px;margin:0 auto;padding:80px 40px 60px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;position:relative;z-index:1;}
 .hero-kicker{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:4px;text-transform:uppercase;margin-bottom:16px;}
 .hero h1{font-family:'Orbitron',sans-serif;font-size:clamp(32px,4vw,52px);font-weight:900;line-height:1.1;margin-bottom:20px;}
@@ -49,8 +44,7 @@ header{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:rg
 .hero-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;}
 .tag{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);}
 .tag-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px rgba(0,224,255,0.6);}
-
-/* LOGO DISPLAY */
+.tag-dot.arb{background:var(--arb);box-shadow:0 0 8px rgba(129,140,248,0.6);}
 .logo-display{position:relative;}
 .logo-main{width:100%;aspect-ratio:1;max-width:420px;margin:0 auto;display:flex;align-items:center;justify-content:center;position:relative;}
 .logo-ring-outer{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(0,224,255,0.2);animation:spin1 20s linear infinite;}
@@ -69,18 +63,14 @@ header{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:rg
 .on3{bottom:25%;right:5%;background:#F7931A22;border:2px solid #F7931A;}
 .on4{bottom:5%;left:50%;transform:translateX(-50%);background:#2E3148;border:2px solid #8B8BFF;}
 .on5{bottom:25%;left:5%;background:#1a1a2e;border:2px solid var(--accent);}
-.on6{top:25%;left:5%;background:#2E3148;border:2px solid #a78bfa;}
-
-/* INFRASTRUCTURE SECTION */
+.on6{top:25%;left:5%;background:#1a1a30;border:2px solid #818cf8;}
 .infra-section{max-width:1200px;margin:0 auto;padding:60px 40px;position:relative;z-index:1;}
 .infra-banner{background:rgba(0,224,255,0.04);border:1px solid rgba(0,224,255,0.2);border-radius:16px;padding:40px;margin-bottom:50px;}
-.infra-banner-title{font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:3px;color:var(--accent);margin-bottom:12px;}
+.infra-banner-title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--accent);margin-bottom:12px;}
 .infra-banner h2{font-family:'Orbitron',sans-serif;font-size:clamp(22px,3vw,32px);font-weight:900;margin-bottom:16px;}
 .infra-banner p{font-size:15px;color:var(--muted);line-height:1.9;max-width:800px;}
 .infra-banner p strong{color:var(--text);}
 .infra-banner p em{color:var(--accent);font-style:normal;}
-
-/* WHITEPAPER */
 .wp-section{max-width:1200px;margin:0 auto;padding:20px 40px 80px;position:relative;z-index:1;}
 .section-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--accent);text-transform:uppercase;margin-bottom:12px;}
 .section-title{font-family:'Orbitron',sans-serif;font-size:clamp(24px,3vw,36px);font-weight:900;margin-bottom:8px;}
@@ -108,22 +98,19 @@ header{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:rg
 .rm-badge{position:absolute;top:-10px;right:12px;font-family:'JetBrains Mono',monospace;font-size:9px;padding:3px 8px;border-radius:999px;}
 .rm-badge.done{background:rgba(0,255,136,0.15);color:var(--green);border:1px solid rgba(0,255,136,0.3);}
 .rm-badge.active{background:rgba(0,224,255,0.15);color:var(--accent);border:1px solid rgba(0,224,255,0.3);}
-
-/* TOKENOMICS */
 .toko-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:20px 0;}
 .toko-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px;text-align:center;}
 .toko-val{font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900;color:var(--accent);margin-bottom:4px;}
 .toko-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;}
-
-/* CTA */
 .cta-section{background:rgba(0,224,255,0.04);border-top:1px solid rgba(0,224,255,0.15);border-bottom:1px solid rgba(0,224,255,0.15);padding:70px 40px;text-align:center;position:relative;z-index:1;}
 .cta-section h2{font-family:'Orbitron',sans-serif;font-size:clamp(24px,4vw,40px);font-weight:900;margin-bottom:14px;}
 .cta-section p{color:var(--muted);font-size:15px;margin-bottom:30px;max-width:600px;margin-left:auto;margin-right:auto;}
 .cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
-
 footer{padding:30px 40px;text-align:center;border-top:1px solid var(--border);}
 footer p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;}
-
+@keyframes coinFloat{0%,100%{transform:translateY(0) rotate(-1deg);}50%{transform:translateY(-12px) rotate(1deg);}}
+@keyframes spinRing{to{transform:rotate(360deg);}}
+@keyframes spinRingR{to{transform:rotate(-360deg);}}
 @media(max-width:900px){.hero{grid-template-columns:1fr;}.wp-grid{grid-template-columns:1fr;}.roadmap{grid-template-columns:1fr 1fr;}.toko-grid{grid-template-columns:1fr 1fr;}.nav-links{display:none;}.nav-cta{display:none;}}
 @media(max-width:600px){.roadmap{grid-template-columns:1fr;}.toko-grid{grid-template-columns:1fr 1fr;}.hero{padding:60px 20px 40px;}.infra-section,.wp-section{padding-left:20px;padding-right:20px;}}
 </style>
@@ -149,6 +136,7 @@ footer p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted
       <a href="#whitepaper">Whitepaper</a>
       <a href="#tokenomics">Tokenomics</a>
       <a href="#roadmap">Roadmap</a>
+      <a href="https://campioneinfrastructure.com/arbitrum-rpc.html" style="color:var(--arb);">⟠ Arbitrum RPC</a>
     </nav>
     <div class="nav-cta">
       <a class="btn btn-outline" href="#whitepaper">Whitepaper</a>
@@ -169,6 +157,8 @@ footer p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted
     <span class="ti">CLARITY ACT <span>READY</span></span>
     <span class="ti">STELLAR <span>HORIZON</span></span>
     <span class="ti">LIGHTNING <span>NETWORK</span></span>
+    <span class="ti arb">ARBITRUM <span>NODE LIVE</span></span>
+    <span class="ti arb">CHAIN ID <span>42161</span></span>
     <span class="ti">EBIT <span>XRPL NATIVE</span></span>
     <span class="ti">SUPPLY <span>IMMUTABLE</span></span>
     <span class="ti">AMM <span>READY</span></span>
@@ -177,40 +167,36 @@ footer p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted
     <span class="ti">COSMOS <span>INTEGRATED</span></span>
     <span class="ti">CHAINLINK <span>ORACLES</span></span>
     <span class="ti">CLARITY ACT <span>READY</span></span>
+    <span class="ti">STELLAR <span>HORIZON</span></span>
+    <span class="ti">LIGHTNING <span>NETWORK</span></span>
+    <span class="ti arb">ARBITRUM <span>NODE LIVE</span></span>
+    <span class="ti arb">CHAIN ID <span>42161</span></span>
   </div>
 </div>
-
 
 <!-- COIN SHOWCASE -->
 <div style="text-align:center;padding:50px 40px 20px;position:relative;z-index:1;">
   <div style="display:inline-block;position:relative;">
-    <!-- Glow rings behind coin -->
     <div style="position:absolute;inset:-30px;border-radius:50%;background:radial-gradient(circle,rgba(0,224,255,0.12) 0,transparent 70%);pointer-events:none;"></div>
     <div style="position:absolute;inset:-15px;border-radius:50%;border:1px solid rgba(0,224,255,0.2);animation:spinRing 20s linear infinite;pointer-events:none;"></div>
     <div style="position:absolute;inset:-5px;border-radius:50%;border:1px dashed rgba(0,255,136,0.15);animation:spinRingR 15s linear infinite;pointer-events:none;"></div>
-    <!-- Coin image -->
     <img src="ebit-logo.png" alt="EBIT Coin" style="width:180px;height:180px;border-radius:50%;display:block;filter:drop-shadow(0 0 30px rgba(0,224,255,0.4)) drop-shadow(0 0 60px rgba(0,224,255,0.2));animation:coinFloat 4s ease-in-out infinite;">
   </div>
   <div style="margin-top:24px;">
     <div style="font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;color:#ffffff;letter-spacing:4px;">EBITDA</div>
     <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent);letter-spacing:6px;margin-top:6px;">(EBIT)</div>
-    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;margin-top:8px;text-transform:uppercase;">Infrastructure-Backed · XRPL Native · ISO 20022 Aligned</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;margin-top:8px;text-transform:uppercase;">Infrastructure-Backed · XRPL Native · ISO 20022 Aligned · Arbitrum Node Live</div>
   </div>
 </div>
-<style>
-@keyframes coinFloat{0%,100%{transform:translateY(0) rotate(-1deg);}50%{transform:translateY(-12px) rotate(1deg);}}
-@keyframes spinRing{to{transform:rotate(360deg);}}
-@keyframes spinRingR{to{transform:rotate(-360deg);}}
-</style>
 
 <!-- HERO -->
 <section id="home">
 <div class="hero">
   <div>
-    <div class="hero-kicker">XRPL · MULTI-CHAIN · ISO 20022 · TELEMETRY</div>
+    <div class="hero-kicker">XRPL · MULTI-CHAIN · ISO 20022 · ARBITRUM · TELEMETRY</div>
     <h1>EBITDA <span>(EBIT)</span> —<br>Real Yield.<br>Real Infrastructure.</h1>
     <p class="hero-desc">
-      EBIT is a utility-driven, data-powered digital asset built natively on the <strong>XRP Ledger</strong> and backed by a live, production-grade multi-chain infrastructure. Unlike speculative tokens, EBIT derives its value from <strong>real operational systems</strong> — Bitcoin, Lightning, Cosmos, Stellar, Chainlink, and The Graph — all running 24/7 and generating verifiable on-chain data that powers every EBIT decision.
+      EBIT is a utility-driven, data-powered digital asset built natively on the <strong>XRP Ledger</strong> and backed by a live, production-grade multi-chain infrastructure. Unlike speculative tokens, EBIT derives its value from <strong>real operational systems</strong> — Bitcoin, Lightning, Cosmos, Stellar, Chainlink, The Graph, and a private <strong>Arbitrum Nitro node</strong> — all running 24/7 and generating verifiable on-chain data.
     </p>
     <div class="btn-row" style="display:flex;gap:12px;flex-wrap:wrap;">
       <a class="btn btn-primary" href="#whitepaper">Read Whitepaper</a>
@@ -222,6 +208,7 @@ footer p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted
       <span class="tag"><span class="tag-dot"></span>Immutable Supply</span>
       <span class="tag"><span class="tag-dot"></span>Clarity Act Ready</span>
       <span class="tag"><span class="tag-dot"></span>No Team Allocation</span>
+      <span class="tag"><span class="tag-dot arb"></span>Arbitrum Node Live</span>
     </div>
   </div>
   <div class="logo-display">
@@ -241,28 +228,33 @@ footer p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted
       <div class="orbit-node on3">₿</div>
       <div class="orbit-node on4">⚛️</div>
       <div class="orbit-node on5">🔗</div>
-      <div class="orbit-node on6">📊</div>
+      <div class="orbit-node on6">⟠</div>
     </div>
   </div>
 </div>
 </section>
 
-<!-- INFRASTRUCTURE PARAGRAPH -->
+<!-- INFRASTRUCTURE -->
 <div class="infra-section" id="infrastructure">
   <div class="infra-banner">
     <div class="infra-banner-title">How EBIT Powers the Infrastructure</div>
     <h2>The Token That Runs on Real Machines</h2>
     <p>
-      <strong>EBITDA (EBIT)</strong> is not a promise — it is a financial utility token backed by a live, production-grade blockchain infrastructure operated by <em>Campione Infrastructure</em> in the United States. Every EBIT transaction, treasury operation, and AMM adjustment is informed by real-time data flowing from seven active blockchain networks running 24 hours a day, 7 days a week.
+      <strong>EBITDA (EBIT)</strong> is not a promise — it is a financial utility token backed by a live, production-grade blockchain infrastructure operated by <em>Campione Infrastructure</em> in the United States. Every EBIT transaction, treasury operation, and AMM adjustment is informed by real-time data flowing from eight active blockchain networks running 24 hours a day, 7 days a week.
     </p>
     <br>
     <p>
-      The infrastructure includes a <strong>Bitcoin Core full node</strong> tracking live mempool activity and block data, a <strong>Lightning Network node</strong> enabling instant payment routing, an <strong>XRPL validator</strong> participating in consensus on the world's leading ISO 20022 registered payment ledger, a <strong>Cosmos Hub validator</strong> processing IBC cross-chain transfers, a <strong>Stellar Horizon API</strong> serving remittance and CBDC data flows, a <strong>Chainlink oracle node</strong> delivering tamper-proof price feeds to smart contracts, and a <strong>Graph Protocol indexer</strong> aggregating DeFi analytics from Ethereum mainnet. This is not theoretical infrastructure — <em>it is live, verified, and publicly accessible today</em> at campioneinfrastructure.com.
+      The infrastructure includes a <strong>Bitcoin Core full node</strong> tracking live mempool activity and block data, a <strong>Lightning Network node</strong> enabling instant payment routing, an <strong>XRPL validator</strong> participating in consensus on the world's leading ISO 20022 registered payment ledger, a <strong>Cosmos Hub validator</strong> processing IBC cross-chain transfers, a <strong>Stellar Horizon API</strong> serving remittance and CBDC data flows, a <strong>Chainlink oracle node</strong> delivering tamper-proof price feeds to smart contracts, a <strong>Graph Protocol indexer</strong> aggregating DeFi analytics from Ethereum mainnet, and a private <strong>Arbitrum Nitro node</strong> (Chain ID 42161) providing sub-5ms RPC access for DeFi liquidation bots and trading infrastructure. This is not theoretical infrastructure — <em>it is live, verified, and publicly accessible today</em> at campioneinfrastructure.com.
     </p>
     <br>
     <p>
-      EBIT's treasury, AMM pool, and hot wallet logic are all driven by signals from this infrastructure — Bitcoin mempool congestion, XRPL AMM pool depth, Cosmos chain state, Stellar liquidity flows, and Chainlink price deviations all trigger automated, non-discretionary operations. <strong>The token is the fuel. The infrastructure is the engine. Together they form the first ISO 20022 aligned, multi-chain financial utility token built on real operational rails.</strong>
+      EBIT's treasury, AMM pool, and hot wallet logic are all driven by signals from this infrastructure. <strong>The token is the fuel. The infrastructure is the engine. Together they form the first ISO 20022 aligned, multi-chain financial utility token built on real operational rails — now including a live Arbitrum Nitro node.</strong>
     </p>
+    <div style="margin-top:24px;">
+      <a href="https://campioneinfrastructure.com/arbitrum-rpc.html" style="display:inline-flex;align-items:center;gap:8px;background:rgba(129,140,248,0.1);border:1px solid rgba(129,140,248,0.3);color:#818cf8;padding:10px 20px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:11px;text-decoration:none;letter-spacing:1px;transition:all 0.2s;">
+        ⟠ Arbitrum RPC Service — $49/mo →
+      </a>
+    </div>
   </div>
 </div>
 
@@ -284,12 +276,12 @@ footer p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted
 
   <div class="wp-full">
     <h3>3. Solution Overview</h3>
-    <p>EBIT introduces a data-driven, automated, transparent token architecture built on XRPL AMM mechanics, multi-chain data signals, ISO-aligned event reporting, immutable supply, automated backend logic, and enterprise-grade wallet separation. EBIT is a financial utility token designed for liquidity operations, system telemetry, and transparent ecosystem behavior.</p>
+    <p>EBIT introduces a data-driven, automated, transparent token architecture built on XRPL AMM mechanics, multi-chain data signals, ISO-aligned event reporting, immutable supply, automated backend logic, and enterprise-grade wallet separation. Now expanded to include a dedicated Arbitrum Nitro node providing real-time EVM chain data for DeFi signal integration.</p>
   </div>
 
   <div class="wp-full">
     <h3>4. Industry Context and Data Layer</h3>
-    <p>The industry is shifting toward utility, transparency, automation, compliance, structured data, and multi-chain interoperability. EBIT is backed by a multi-chain infrastructure including Bitcoin, Lightning, XRPL, Cosmos, Stellar, Chainlink, The Graph, Horizon, NGINX, Docker, and PM2. This infrastructure provides real-time financial data powering liquidity decisions, AMM adjustments, treasury operations, event reporting, and system telemetry.</p>
+    <p>The industry is shifting toward utility, transparency, automation, compliance, structured data, and multi-chain interoperability. EBIT is backed by a multi-chain infrastructure including Bitcoin, Lightning, XRPL, Cosmos, Stellar, Chainlink, The Graph, Horizon, and now a dedicated <strong style="color:#818cf8;">Arbitrum Nitro node (Chain ID 42161)</strong> providing EVM-compatible DeFi data. This infrastructure provides real-time financial data powering liquidity decisions, AMM adjustments, treasury operations, event reporting, and system telemetry.</p>
   </div>
 
   <div class="section-tag" style="margin-top:40px;">Token Mechanics</div>
@@ -302,12 +294,12 @@ footer p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted
     <div class="wp-card">
       <div class="wp-card-num">5.2</div>
       <h3>Treasury Mechanics</h3>
-      <p>The Treasury wallet performs liquidity provisioning, controlled burns, supply rebalancing, and AMM deposits/withdrawals. Actions are <strong>data-driven</strong>, triggered by XRPL AMM metrics, Bitcoin mempool data, Cosmos chain state, Stellar liquidity, Chainlink oracles, and Graph analytics.</p>
+      <p>The Treasury wallet performs liquidity provisioning, controlled burns, supply rebalancing, and AMM deposits/withdrawals. Actions are <strong>data-driven</strong>, triggered by XRPL AMM metrics, Bitcoin mempool data, Cosmos chain state, Stellar liquidity, Chainlink oracles, Graph analytics, and Arbitrum DeFi signals.</p>
     </div>
     <div class="wp-card">
       <div class="wp-card-num">5.3</div>
       <h3>AMM Mechanics</h3>
-      <p>The AMM provides <strong>algorithmic pricing, automatic fee generation, liquidity rewards</strong>, and market-driven behavior. Backend systems monitor pool depth, fee generation, arbitrage windows, volatility, and liquidity imbalances.</p>
+      <p>The AMM provides <strong>algorithmic pricing, automatic fee generation, liquidity rewards</strong>, and market-driven behavior. Backend systems monitor pool depth, fee generation, arbitrage windows, volatility, and liquidity imbalances across chains including Arbitrum.</p>
     </div>
     <div class="wp-card">
       <div class="wp-card-num">5.4 / 5.5</div>
@@ -340,6 +332,7 @@ footer p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted
       <li>Ecosystem operations — automated treasury management</li>
       <li>Enterprise reporting — audit-ready, transparent on-chain records</li>
       <li>Automated system behavior — non-discretionary hot wallet logic</li>
+      <li>Arbitrum DeFi signals — real-time EVM liquidation and pool data via private Nitro node</li>
     </ul>
   </div>
 
@@ -357,10 +350,16 @@ footer p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted
       <div class="rm-title">AMM Launch</div>
       <div class="rm-desc">EBIT/XRP pool creation on XRPL AMM. Deposit 100 XRP seed liquidity.</div>
     </div>
+    <div class="rm-card done">
+      <div class="rm-badge done">COMPLETE</div>
+      <div class="rm-phase">PHASE 2B</div>
+      <div class="rm-title">Arbitrum Node Live</div>
+      <div class="rm-desc">Private Arbitrum Nitro node deployed. Chain ID 42161. Sub-5ms RPC. DeFi signal integration active.</div>
+    </div>
     <div class="rm-card">
       <div class="rm-phase">PHASE 3</div>
       <div class="rm-title">Backend Automation</div>
-      <div class="rm-desc">Hot wallet and event engine. Multi-chain data signals driving treasury logic.</div>
+      <div class="rm-desc">Hot wallet and event engine. Multi-chain data signals driving treasury logic including Arbitrum DeFi data.</div>
     </div>
     <div class="rm-card">
       <div class="rm-phase">PHASE 4</div>
@@ -370,7 +369,7 @@ footer p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted
     <div class="rm-card">
       <div class="rm-phase">PHASE 5</div>
       <div class="rm-title">Enterprise Integrations</div>
-      <div class="rm-desc">Accounting system connectors and institutional dashboards.</div>
+      <div class="rm-desc">Accounting system connectors and institutional dashboards. Arbitrum RPC API subscriptions.</div>
     </div>
     <div class="rm-card">
       <div class="rm-phase">PHASE 6</div>
@@ -386,21 +385,22 @@ footer p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted
 
   <div class="wp-full">
     <h3>11. Conclusion</h3>
-    <p>EBIT is a utility-driven, data-powered, ISO-aligned digital asset backed by a live multi-chain infrastructure operated in the United States. It is engineered for transparency, automation, and long-term stability. EBIT represents the next generation of digital assets: <strong>financial utilities with real-time data intelligence, backed by real machines, running real blockchains, right now.</strong></p>
+    <p>EBIT is a utility-driven, data-powered, ISO-aligned digital asset backed by a live multi-chain infrastructure operated in the United States — now including a dedicated Arbitrum Nitro node. It is engineered for transparency, automation, and long-term stability. EBIT represents the next generation of digital assets: <strong>financial utilities with real-time data intelligence, backed by real machines, running real blockchains, right now.</strong></p>
   </div>
 </div>
 
 <div class="cta-section">
   <h2>Ready to Get EBIT?</h2>
-  <p>Join the first infrastructure-backed, ISO 20022 aligned utility token on the XRP Ledger. Built on real machines. Powered by real data.</p>
+  <p>Join the first infrastructure-backed, ISO 20022 aligned utility token on the XRP Ledger. Built on real machines. Powered by real data. Now with Arbitrum.</p>
   <div class="cta-btns">
     <a class="btn btn-primary" href="https://campioneinfrastructure.com/product-page.html">Campione Infrastructure</a>
     <a class="btn btn-outline" href="#whitepaper">Read Full Whitepaper</a>
+    <a class="btn btn-outline" href="https://campioneinfrastructure.com/arbitrum-rpc.html" style="color:#818cf8;border-color:#818cf8;">⟠ Arbitrum RPC</a>
   </div>
 </div>
 
 <footer>
-  <p>EBITDA (EBIT) · XRPL NATIVE · ISO 20022 ALIGNED · CLARITY ACT READY · CAMPIONE INFRASTRUCTURE · LAND O LAKES, FL · USA</p>
+  <p>EBITDA (EBIT) · XRPL NATIVE · ISO 20022 ALIGNED · CLARITY ACT READY · ARBITRUM NODE LIVE · CAMPIONE INFRASTRUCTURE · LAND O LAKES, FL · USA</p>
 </footer>
 
 </body>
