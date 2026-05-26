@@ -128,6 +128,7 @@ footer{border-top:1px solid var(--border);padding:10px 28px;display:flex;justify
   <div class="tab" onclick="showTab('chainlink')">🔗 CHAINLINK</div>
   <div class="tab" onclick="showTab('nodes')">🖥 NODES</div>
   <div class="tab" onclick="showTab('admin')">🔑 ADMIN</div>
+  <div class="tab" onclick="showTab('borrowers')">💧 BORROWERS</div>
 </div>
 
 <!-- OVERVIEW -->
@@ -445,7 +446,74 @@ footer{border-top:1px solid var(--border);padding:10px 28px;display:flex;justify
     <div id="issue-result" style="display:none;margin-top:12px;padding:12px;border-radius:4px;font-family:var(--mono);font-size:11px;"></div>
   </div>
 </div>
-
+<!-- BORROWERS -->
+<div class="panel" id="panel-borrowers">
+  <div class="grid g12">
+    <div class="card c3">
+      <div class="ct">💧 POSITIONS</div>
+      <div class="bcenter"><div class="bignum" id="bh-total">—</div><div class="bsub">TRACKED WALLETS</div></div>
+    </div>
+    <div class="card c3 cr">
+      <div class="ct">⚠ CRITICAL</div>
+      <div class="bcenter"><div class="bignum r" id="bh-critical">—</div><div class="bsub">HEALTH &lt; 1.25</div></div>
+    </div>
+    <div class="card c3 cb">
+      <div class="ct">💰 TOTAL DEBT</div>
+      <div class="bcenter"><div class="bignum b" id="bh-debt">—</div><div class="bsub">USD EQUIVALENT</div></div>
+    </div>
+    <div class="card c3 cg">
+      <div class="ct">🏦 COLLATERAL</div>
+      <div class="bcenter"><div class="bignum g" id="bh-coll">—</div><div class="bsub">USD EQUIVALENT</div></div>
+    </div>
+    <div class="card c12">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <div class="ct" style="margin:0;">💧 BORROWER HEALTH — AAVE V3 LIVE</div>
+        <button onclick="bhLoad()" style="background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);color:var(--green);font-family:var(--mono);font-size:10px;padding:5px 12px;cursor:pointer;border-radius:4px;letter-spacing:1px;">⟳ REFRESH</button>
+      </div>
+      <div id="bh-list"><div class="empty">No wallets configured — unlock admin panel below to add wallets</div></div>
+    </div>
+    <div class="card c12">
+      <div style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;" onclick="bhToggleAdmin()">
+        <div class="ct" style="margin:0;">🔑 ADMIN — MANAGE WALLETS</div>
+        <span id="bh-arrow" style="font-family:var(--mono);font-size:12px;color:var(--muted);">▼</span>
+      </div>
+      <div id="bh-admin" style="display:none;margin-top:14px;border-top:1px solid var(--border);padding-top:14px;">
+        <div id="bh-gate">
+          <div style="display:flex;gap:10px;align-items:center;margin-bottom:6px;">
+            <input type="password" id="bh-secret" placeholder="Admin secret..." style="background:rgba(0,0,0,0.3);border:1px solid var(--border);color:var(--text);padding:8px 12px;font-family:var(--mono);font-size:11px;border-radius:4px;outline:none;flex:1;">
+            <button onclick="bhUnlock()" style="background:var(--green);color:#000;border:none;padding:8px 16px;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;border-radius:4px;letter-spacing:1px;">UNLOCK</button>
+          </div>
+          <div id="bh-gate-err" style="font-family:var(--mono);font-size:10px;color:var(--red);min-height:16px;"></div>
+        </div>
+        <div id="bh-manager" style="display:none;">
+          <div style="font-family:var(--mono);font-size:10px;color:var(--green);letter-spacing:2px;margin-bottom:12px;">ADD WALLET</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:10px;align-items:end;margin-bottom:10px;">
+            <input type="text" id="bh-label" placeholder="Label (e.g. My ETH)" style="background:rgba(0,0,0,0.3);border:1px solid var(--border);color:var(--text);padding:10px;font-family:var(--mono);font-size:11px;border-radius:4px;outline:none;">
+            <select id="bh-type" style="background:rgba(0,0,0,0.3);border:1px solid var(--border);color:var(--text);padding:10px;font-family:var(--mono);font-size:11px;border-radius:4px;outline:none;">
+              <option value="own">OWN</option>
+              <option value="client">CLIENT</option>
+            </select>
+            <input type="text" id="bh-addr" placeholder="0x wallet address" style="background:rgba(0,0,0,0.3);border:1px solid var(--border);color:var(--text);padding:10px;font-family:var(--mono);font-size:11px;border-radius:4px;outline:none;">
+            <select id="bh-proto" style="background:rgba(0,0,0,0.3);border:1px solid var(--border);color:var(--text);padding:10px;font-family:var(--mono);font-size:11px;border-radius:4px;outline:none;">
+              <option value="aave-v3-eth">Aave v3 ETH</option>
+              <option value="aave-v3-arb">Aave v3 ARB</option>
+              <option value="aave-v3-poly">Aave v3 POLY</option>
+              <option value="aave-v3-base">Aave v3 BASE</option>
+              <option value="manual">Manual</option>
+            </select>
+            <button onclick="bhAdd()" style="background:var(--blue);color:#000;border:none;padding:10px 18px;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;border-radius:4px;white-space:nowrap;">+ ADD</button>
+          </div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--green);letter-spacing:2px;margin-bottom:8px;margin-top:16px;">TRACKED WALLETS</div>
+          <div id="bh-wallet-list" style="margin-bottom:12px;"></div>
+          <div style="display:flex;gap:10px;">
+            <button onclick="bhLoad()" style="background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.3);color:var(--blue);font-family:var(--mono);font-size:11px;padding:8px 16px;cursor:pointer;border-radius:4px;flex:1;">⟳ REFRESH DATA</button>
+            <button onclick="bhClearAll()" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:var(--red);font-family:var(--mono);font-size:11px;padding:8px 16px;cursor:pointer;border-radius:4px;">CLEAR ALL</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- INCOME -->
 <div class="panel" id="panel-income">
   <div class="grid g12">
@@ -1017,6 +1085,24 @@ async function issueKey(){
 
 fa();setInterval(fa,30000);
 document.addEventListener("DOMContentLoaded", function(){ setTimeout(loadApiTab, 2000); });
+  (function(){
+  const BH_SECRET='Summertime#2026!';
+  const BH_KEY='bh_wallets_v2';
+  const AAVE={'aave-v3-eth':'https://api.thegraph.com/subgraphs/name/aave/protocol-v3','aave-v3-arb':'https://api.thegraph.com/subgraphs/name/aave/protocol-v3-arbitrum','aave-v3-poly':'https://api.thegraph.com/subgraphs/name/aave/protocol-v3-polygon','aave-v3-base':'https://api.thegraph.com/subgraphs/name/aave/protocol-v3-base'};
+  const PLBL={'aave-v3-eth':'AAVE V3 ETH','aave-v3-arb':'AAVE V3 ARB','aave-v3-poly':'AAVE V3 POLY','aave-v3-base':'AAVE V3 BASE','manual':'MANUAL'};
+  function getW(){try{return JSON.parse(localStorage.getItem(BH_KEY))||[];}catch{return[];}}
+  function saveW(w){localStorage.setItem(BH_KEY,JSON.stringify(w));}
+  async function fetchAave(addr,proto){if(proto==='manual'||!AAVE[proto])return null;const q=`{user(id:"${addr.toLowerCase()}"){healthFactor totalCollateralUSD totalDebtUSD}}`;try{const r=await fetch(AAVE[proto],{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:q})});const d=await r.json();return d?.data?.user||null;}catch{return null;}}
+  function fmtHF(hf){if(!hf)return '\u221e';const v=parseFloat(hf)/1e18;return v>100?'\u221e':v.toFixed(3);}
+  function fmt$(n){if(!n||n==0)return '$0';const v=parseFloat(n);if(v>=1e6)return '$'+(v/1e6).toFixed(2)+'M';if(v>=1e3)return '$'+(v/1e3).toFixed(1)+'K';return '$'+v.toFixed(2);}
+  function hfColor(hf){if(!hf||hf==='\u221e')return 'var(--green)';const v=parseFloat(hf);if(v<1.1)return 'var(--red)';if(v<1.5)return 'var(--gold)';return 'var(--green)';}
+  function hfStatus(hf){if(!hf||hf==='\u221e')return '\u2713 SAFE';const v=parseFloat(hf);if(v<1.1)return '\u26a0 CRITICAL';if(v<1.25)return '\u26a0 DANGER';if(v<1.5)return '\u26a1 WARNING';return '\u2713 HEALTHY';}
+  function hfBadge(hf){if(!hf||hf==='\u221e')return 'bg';const v=parseFloat(hf);if(v<1.25)return 'br';if(v<1.5)return 'bgo';return 'bg';}
+  window.bhLoad=async function(){const ws=getW();const list=document.getElementById('bh-list');if(!list)return;if(!ws.length){list.innerHTML='<div class="empty">No wallets configured \u2014 unlock admin below</div>';['bh-total','bh-critical','bh-debt','bh-coll'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='0';});return;}list.innerHTML='<div class="empty" style="color:var(--muted)">Fetching...</div>';const results=await Promise.all(ws.map(w=>fetchAave(w.address,w.protocol)));let html='',critical=0,totalDebt=0,totalColl=0;ws.forEach((w,i)=>{const d=results[i];const hf=d?fmtHF(d.healthFactor):null;const c=hf?hfColor(hf):'var(--muted)';const s=hf?hfStatus(hf):'NO DATA';const badge=hf?hfBadge(hf):'bm';const debt=d?parseFloat(d.totalDebtUSD||0):0;const coll=d?parseFloat(d.totalCollateralUSD||0):0;totalDebt+=debt;totalColl+=coll;if(hf&&parseFloat(hf)<1.25)critical++;const hfPct=hf&&parseFloat(hf)<10?Math.min(100,Math.max(0,(parseFloat(hf)-1)/3*100)):100;const isAtRisk=hf&&parseFloat(hf)<1.5&&hf!=='\u221e';let alertHtml='';if(hf&&parseFloat(hf)<1.1)alertHtml=`<div style="background:rgba(239,68,68,0.1);border-left:3px solid var(--red);padding:7px 12px;font-family:var(--mono);font-size:10px;color:var(--red);">\u26a0 LIQUIDATION IMMINENT \u2014 ${hf}</div>`;else if(hf&&parseFloat(hf)<1.25)alertHtml=`<div style="background:rgba(251,191,36,0.08);border-left:3px solid var(--gold);padding:7px 12px;font-family:var(--mono);font-size:10px;color:var(--gold);">\u26a1 DANGER ZONE \u2014 Health factor ${hf}</div>`;html+=`<div style="border-bottom:1px solid rgba(30,45,61,0.6);${isAtRisk?'border-left:2px solid '+c+';':''}">${alertHtml}<div style="display:flex;align-items:center;gap:16px;padding:12px;flex-wrap:wrap;"><div style="flex:1;min-width:140px;"><div style="font-size:13px;font-weight:600;color:var(--text);">${w.label}</div><div style="font-family:var(--mono);font-size:9px;color:var(--muted);word-break:break-all;">${w.address}</div><div style="display:flex;gap:6px;margin-top:5px;"><span class="badge bb" style="font-size:8px;">${PLBL[w.protocol]||w.protocol}</span><span class="badge ${w.type==='own'?'bg':'bp'}" style="font-size:8px;">${w.type.toUpperCase()}</span></div></div><div style="text-align:center;min-width:90px;"><div style="font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:3px;">HEALTH</div><div style="font-family:var(--head);font-size:28px;font-weight:900;color:${c};line-height:1;">${hf||'\u2014'}</div><span class="badge ${badge}" style="font-size:8px;margin-top:4px;display:inline-block;">${s}</span></div><div style="display:flex;gap:20px;flex-wrap:wrap;"><div><div style="font-family:var(--mono);font-size:9px;color:var(--muted);">COLLATERAL</div><div style="font-family:var(--head);font-size:18px;color:var(--green);">${d?fmt$(d.totalCollateralUSD):'\u2014'}</div></div><div><div style="font-family:var(--mono);font-size:9px;color:var(--muted);">DEBT</div><div style="font-family:var(--head);font-size:18px;color:var(--red);">${d?fmt$(d.totalDebtUSD):'\u2014'}</div></div><div><div style="font-family:var(--mono);font-size:9px;color:var(--muted);">NET</div><div style="font-family:var(--head);font-size:18px;color:var(--blue);">${d?fmt$(coll-debt):'\u2014'}</div></div><div><div style="font-family:var(--mono);font-size:9px;color:var(--muted);">LTV</div><div style="font-family:var(--head);font-size:18px;color:${c};">${d&&coll>0?((debt/coll)*100).toFixed(1)+'%':'\u2014'}</div></div></div><div style="width:100%;padding:2px 0;"><div class="pb"><div class="pb-f" style="width:${hfPct}%;background:${c};"></div></div></div></div></div>`;});list.innerHTML=html||'<div class="empty">No data</div>';const se=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};se('bh-total',ws.length);se('bh-critical',critical);se('bh-debt',fmt$(totalDebt));se('bh-coll',fmt$(totalColl));const ce=document.getElementById('bh-critical');if(ce)ce.style.color=critical>0?'var(--red)':'var(--green)';};
+  window.bhToggleAdmin=function(){const p=document.getElementById('bh-admin');const a=document.getElementById('bh-arrow');if(!p||!a)return;const open=p.style.display==='none';p.style.display=open?'block':'none';a.textContent=open?'\u25b2':'\u25bc';};
+  window.bhUnlock=function(){const s=document.getElementById('bh-secret').value;const err=document.getElementById('bh-gate-err');if(s===BH_SECRET){document.getElementById('bh-gate').style.display='none';document.getElementById('bh-manager').style.display='block';bhRenderList();}else{if(err)err.textContent='\u2717 Incorrect secret';setTimeout(()=>{if(err)err.textContent='';},2000);}};
+  window.bhAdd=function(){const label=document.getElementById('bh-label').value.trim();const addr=document.getElementById('bh-addr').value.trim();const type=document.getElementById('bh-type').value;const proto=document.getElementById('bh-proto').value;if(!label||!addr){alert('Label and address required');return;}if(proto!=='manual'&&!addr.startsWith('0x')){alert('Enter a valid 0x address');return;}const ws=getW();ws.push({id:Date.now(),label,address:addr,type,protocol:proto});saveW(ws);document.getElementById('bh-label').value='';document.getElementById('bh-addr').value='';bhRenderList();bhLoad();};
+  window.bhRemove=function(id){saveW(getW().filter(w=>w.id!==id)
 </script>
 </body>
 </html>
