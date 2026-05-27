@@ -3,189 +3,439 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="refresh" content="30">
-<title>Campione Infrastructure</title>
+<title>Campione Infrastructure — Command Center</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#030712;--bg2:#0d1117;--border:#1e2d3d;--green:#00ff88;--blue:#38bdf8;--gold:#fbbf24;--red:#ef4444;--orange:#f97316;--purple:#a78bfa;--muted:#4b5563;--text:#e2e8f0;--dim:#94a3b8;--mono:'Share Tech Mono',monospace;--ui:'Rajdhani',sans-serif;--head:'Orbitron',sans-serif;}
+:root{--bg:#030712;--bg2:#0d1117;--bg3:#111827;--border:#1e2d3d;--green:#00ff88;--blue:#38bdf8;--gold:#fbbf24;--red:#ef4444;--orange:#f97316;--purple:#a78bfa;--muted:#4b5563;--text:#e2e8f0;--dim:#94a3b8;--mono:'Share Tech Mono',monospace;--ui:'Rajdhani',sans-serif;--head:'Orbitron',sans-serif;}
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{background:var(--bg);color:var(--text);font-family:var(--ui);min-height:100vh;overflow-x:hidden;}
-.apanel{display:none!important;}.apanel.on{display:block!important;}.api-tab{font-family:var(--mono);font-size:10px;letter-spacing:1px;padding:9px 14px;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap;}.api-tab.on{color:var(--blue);border-bottom-color:var(--blue);}.api-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:14px;overflow-x:auto;}.ajson{background:rgba(0,0,0,0.4);border-radius:4px;padding:12px;font-family:var(--mono);font-size:10px;line-height:1.7;overflow-x:auto;max-height:280px;overflow-y:auto;border:1px solid var(--border);}.ajson .jk{color:var(--blue);}.ajson .jv{color:var(--green);}.ajson .jn{color:var(--gold);}.ajson .jb{color:var(--red);}
-body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,136,0.012) 2px,rgba(0,255,136,0.012) 4px);pointer-events:none;z-index:9999;}
-header{padding:18px 28px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:relative;}
-header::after{content:'';position:absolute;bottom:-1px;left:0;width:35%;height:1px;background:linear-gradient(90deg,var(--green),transparent);}
-.logo{font-family:var(--head);font-size:20px;font-weight:900;letter-spacing:3px;color:var(--green);text-shadow:0 0 25px rgba(0,255,136,0.4);}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,136,0.008) 2px,rgba(0,255,136,0.008) 4px);pointer-events:none;z-index:9999;}
+
+/* HEADER */
+header{padding:14px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg2);position:sticky;top:0;z-index:100;}
+header::after{content:'';position:absolute;bottom:-1px;left:0;width:40%;height:1px;background:linear-gradient(90deg,var(--green),transparent);}
+.logo{font-family:var(--head);font-size:18px;font-weight:900;letter-spacing:3px;color:var(--green);text-shadow:0 0 20px rgba(0,255,136,0.3);}
 .logo span{color:var(--blue);}
-.hdr-meta{font-family:var(--mono);font-size:10px;color:var(--muted);text-align:right;line-height:1.9;}
-.hdr-meta b{color:var(--blue);}
-.ticker-wrap{background:var(--bg2);border-bottom:1px solid var(--border);padding:7px 28px;overflow:hidden;white-space:nowrap;}
-.ticker{display:inline-block;animation:ticker 50s linear infinite;font-family:var(--mono);font-size:11px;color:var(--muted);}
-.ticker .ti{margin-right:50px;}.ticker .ti b{color:var(--green);}
-.ticker .ti.b b{color:var(--blue);}.ticker .ti.g b{color:var(--gold);}.ticker .ti.p b{color:var(--purple);}
+.hdr-right{display:flex;align-items:center;gap:16px;}
+.hdr-stat{text-align:right;font-family:var(--mono);font-size:9px;color:var(--muted);line-height:1.8;}
+.hdr-stat b{color:var(--green);}
+.pulse{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 8px var(--green)}50%{opacity:.5;box-shadow:0 0 20px var(--green)}}
+
+/* TICKER */
+.ticker-wrap{background:#060d14;border-bottom:1px solid var(--border);padding:5px 0;overflow:hidden;white-space:nowrap;}
+.ticker{display:inline-block;animation:ticker 60s linear infinite;font-family:var(--mono);font-size:10px;color:var(--muted);}
+.ticker .ti{margin-right:40px;}.ticker .ti b{color:var(--green);}
+.ticker .ti.b b{color:var(--blue);}.ticker .ti.g b{color:var(--gold);}.ticker .ti.r b{color:var(--red);}
 @keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.nav{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--bg2);padding:0 28px;overflow-x:auto;}
-.tab{font-family:var(--mono);font-size:11px;letter-spacing:1px;padding:11px 16px;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap;}
+
+/* NAV */
+.nav{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--bg2);padding:0 24px;overflow-x:auto;scrollbar-width:none;}
+.nav::-webkit-scrollbar{display:none;}
+.tab{font-family:var(--mono);font-size:10px;letter-spacing:1px;padding:10px 14px;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap;display:flex;align-items:center;gap:6px;}
 .tab:hover{color:var(--text);}.tab.active{color:var(--green);border-bottom-color:var(--green);}
-.panel{display:none;padding:20px 28px 32px;}.panel.active{display:block;}
-.grid{display:grid;gap:14px;}
+.tab.gold{color:var(--gold)!important;border-bottom-color:var(--gold)!important;}
+.tab .dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite;}
+
+/* PANELS */
+.panel{display:none;padding:20px 24px 40px;}.panel.active{display:block;}
+
+/* GRID */
+.grid{display:grid;gap:12px;}
 .g12{grid-template-columns:repeat(12,1fr);}
-.c3{grid-column:span 3}.c4{grid-column:span 4}.c5{grid-column:span 5}.c6{grid-column:span 6}.c7{grid-column:span 7}.c8{grid-column:span 8}.c9{grid-column:span 9}.c12{grid-column:span 12}
-@media(max-width:1100px){.c3,.c4{grid-column:span 6}.c5,.c7,.c8,.c9{grid-column:span 12}}
+.c2{grid-column:span 2}.c3{grid-column:span 3}.c4{grid-column:span 4}.c6{grid-column:span 6}.c8{grid-column:span 8}.c9{grid-column:span 9}.c12{grid-column:span 12}
+@media(max-width:1100px){.c2,.c3,.c4{grid-column:span 6}.c8,.c9{grid-column:span 12}}
 @media(max-width:700px){[class^="c"]{grid-column:span 12}.panel{padding:12px 14px}}
-.card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:18px;position:relative;overflow:hidden;}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),transparent);opacity:0.35;}
+
+/* CARDS */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:16px;position:relative;overflow:hidden;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),transparent);opacity:0.3;}
 .card.cb::before{background:linear-gradient(90deg,var(--blue),transparent);}
 .card.cg::before{background:linear-gradient(90deg,var(--gold),transparent);}
 .card.cp::before{background:linear-gradient(90deg,var(--purple),transparent);}
 .card.cr::before{background:linear-gradient(90deg,var(--red),transparent);}
-.ct{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--muted);margin-bottom:14px;text-transform:uppercase;}
-.srow{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(30,45,61,0.6);}
+.card.co::before{background:linear-gradient(90deg,var(--orange),transparent);}
+
+/* CARD TITLE */
+.ct{font-family:var(--mono);font-size:8px;letter-spacing:3px;color:var(--muted);margin-bottom:12px;text-transform:uppercase;display:flex;align-items:center;gap:8px;}
+.ct::after{content:'';flex:1;height:1px;background:rgba(30,45,61,0.8);}
+
+/* BIG NUMBERS */
+.bignum{font-family:var(--head);font-size:32px;font-weight:900;color:var(--green);line-height:1;}
+.bignum.b{color:var(--blue);}.bignum.g{color:var(--gold);}.bignum.p{color:var(--purple);}.bignum.r{color:var(--red);}
+.bcenter{text-align:center;padding:6px 0 10px;}
+.bsub{font-family:var(--mono);font-size:8px;color:var(--muted);letter-spacing:2px;margin-top:4px;}
+
+/* ROWS */
+.srow{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(30,45,61,0.5);}
 .srow:last-child{border-bottom:none;}
-.slbl{font-size:13px;font-weight:600;color:var(--dim);display:flex;align-items:center;gap:8px;}
-.sval{font-family:var(--mono);font-size:13px;color:var(--green);}
-.sval.b{color:var(--blue);}.sval.g{color:var(--gold);}.sval.p{color:var(--purple);}
-.badge{font-family:var(--mono);font-size:9px;letter-spacing:1px;padding:2px 8px;border-radius:3px;}
-.bg{background:rgba(0,255,136,0.1);color:var(--green);border:1px solid rgba(0,255,136,0.25);}
-.bb{background:rgba(56,189,248,0.1);color:var(--blue);border:1px solid rgba(56,189,248,0.25);}
-.bgo{background:rgba(251,191,36,0.1);color:var(--gold);border:1px solid rgba(251,191,36,0.25);}
-.br{background:rgba(239,68,68,0.1);color:var(--red);border:1px solid rgba(239,68,68,0.25);}
-.bp{background:rgba(167,139,250,0.1);color:var(--purple);border:1px solid rgba(167,139,250,0.25);}
-.bm{background:rgba(75,85,99,0.2);color:var(--muted);border:1px solid rgba(75,85,99,0.3);}
-.bignum{font-family:var(--head);font-size:36px;font-weight:900;color:var(--green);line-height:1;text-shadow:0 0 30px rgba(0,255,136,0.3);animation:pg 3s ease-in-out infinite;}
-@keyframes pg{0%,100%{text-shadow:0 0 20px rgba(0,255,136,0.3)}50%{text-shadow:0 0 50px rgba(0,255,136,0.7)}}
-.bignum.b{color:var(--blue);text-shadow:none;animation:none;}
-.bignum.g{color:var(--gold);text-shadow:none;animation:none;}
-.bignum.p{color:var(--purple);text-shadow:none;animation:none;}
-.bignum.r{color:var(--red);text-shadow:none;animation:none;}
-.bcenter{text-align:center;padding:8px 0 14px;}
-.bsub{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:2px;margin-top:5px;}
-.pb-w{margin:6px 0;}.pb-l{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:4px;}
-.pb{height:3px;background:var(--border);border-radius:2px;overflow:hidden;}
-.pb-f{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--green),var(--blue));transition:width 1s ease;}
-.pb-f.w{background:linear-gradient(90deg,var(--gold),var(--orange));}
+.slbl{font-size:12px;font-weight:600;color:var(--dim);display:flex;align-items:center;gap:8px;}
+.sval{font-family:var(--mono);font-size:12px;color:var(--green);}
+.sval.b{color:var(--blue);}.sval.g{color:var(--gold);}.sval.r{color:var(--red);}
+
+/* BADGES */
+.badge{font-family:var(--mono);font-size:8px;letter-spacing:1px;padding:2px 7px;border-radius:2px;}
+.bg{background:rgba(0,255,136,0.1);color:var(--green);border:1px solid rgba(0,255,136,0.2);}
+.bb{background:rgba(56,189,248,0.1);color:var(--blue);border:1px solid rgba(56,189,248,0.2);}
+.bgo{background:rgba(251,191,36,0.1);color:var(--gold);border:1px solid rgba(251,191,36,0.2);}
+.br{background:rgba(239,68,68,0.1);color:var(--red);border:1px solid rgba(239,68,68,0.2);}
+.bp{background:rgba(167,139,250,0.1);color:var(--purple);border:1px solid rgba(167,139,250,0.2);}
+.bm{background:rgba(75,85,99,0.2);color:var(--muted);border:1px solid rgba(75,85,99,0.25);}
+
+/* TABLES */
 table.tx{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11px;}
-table.tx th{text-align:left;padding:6px 8px;color:var(--muted);font-size:9px;letter-spacing:2px;border-bottom:1px solid var(--border);font-weight:normal;}
-table.tx td{padding:7px 8px;border-bottom:1px solid rgba(30,45,61,0.4);vertical-align:middle;}
-table.tx tr:last-child td{border-bottom:none;}
-table.tx tr{animation:si 0.3s ease;}
-@keyframes si{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:translateX(0)}}
-.addr{color:var(--muted);max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.tamt{color:var(--green);}.tamt.b{color:var(--blue);}.tpair{color:var(--gold);}.trate{color:var(--purple);}.tts{color:var(--muted);font-size:9px;}
-.stbl{max-height:360px;overflow-y:auto;}
-.stbl::-webkit-scrollbar{width:3px;}
+table.tx th{text-align:left;padding:6px 10px;color:var(--muted);font-size:8px;letter-spacing:2px;border-bottom:1px solid var(--border);font-weight:normal;background:rgba(0,0,0,0.2);}
+table.tx td{padding:8px 10px;border-bottom:1px solid rgba(30,45,61,0.3);vertical-align:middle;}
+table.tx tr:hover td{background:rgba(0,255,136,0.02);}
+.stbl{max-height:420px;overflow-y:auto;}
+.stbl::-webkit-scrollbar{width:2px;}
 .stbl::-webkit-scrollbar-thumb{background:var(--border);}
-.empty{text-align:center;padding:30px;font-family:var(--mono);font-size:11px;color:var(--muted);}
-.pubkey{font-family:var(--mono);font-size:9px;color:var(--muted);word-break:break-all;background:rgba(0,0,0,0.3);padding:8px;border-radius:4px;margin-top:8px;border:1px solid var(--border);}
-footer{border-top:1px solid var(--border);padding:10px 28px;display:flex;justify-content:space-between;align-items:center;}
-.ftl{font-family:var(--mono);font-size:9px;color:var(--muted);}.ftl b{color:var(--green);}
+
+/* PROGRESS BAR */
+.pb-w{margin:6px 0;}.pb-l{display:flex;justify-content:space-between;font-family:var(--mono);font-size:8px;color:var(--muted);margin-bottom:3px;}
+.pb{height:2px;background:var(--border);border-radius:2px;overflow:hidden;}
+.pb-f{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--green),var(--blue));transition:width 1s ease;}
+
+/* SEARCH */
+.search-input{background:rgba(0,0,0,0.3);border:1px solid var(--border);color:var(--text);padding:8px 12px;font-family:var(--mono);font-size:11px;border-radius:4px;outline:none;width:100%;}
+.search-input:focus{border-color:rgba(0,255,136,0.3);}
+
+/* ADMIN INPUT */
+.admin-input{background:rgba(0,0,0,0.3);border:1px solid var(--border);color:var(--text);padding:8px 12px;font-family:var(--mono);font-size:11px;border-radius:4px;outline:none;}
+.admin-input:focus{border-color:rgba(0,255,136,0.3);}
+
+/* BUTTON */
+.btn{background:transparent;border:1px solid rgba(0,255,136,0.3);color:var(--green);font-family:var(--mono);font-size:10px;padding:7px 14px;cursor:pointer;border-radius:3px;letter-spacing:.08em;transition:all .2s;}
+.btn:hover{background:var(--green);color:#000;}
+.btn-blue{border-color:rgba(56,189,248,0.3);color:var(--blue);}
+.btn-blue:hover{background:var(--blue);color:#000;}
+.btn-gold{border-color:rgba(251,191,36,0.3);color:var(--gold);}
+.btn-gold:hover{background:var(--gold);color:#000;}
+.btn-red{border-color:rgba(239,68,68,0.3);color:var(--red);}
+.btn-red:hover{background:var(--red);color:#fff;}
+
+/* STAT STRIP */
+.stat-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1px;background:var(--border);border-radius:6px;overflow:hidden;margin-bottom:16px;}
+.stat-item{background:var(--bg2);padding:14px 16px;text-align:center;}
+.stat-label{font-family:var(--mono);font-size:8px;color:var(--muted);letter-spacing:2px;margin-bottom:6px;}
+.stat-value{font-family:var(--head);font-size:22px;font-weight:900;color:var(--green);}
+.stat-value.b{color:var(--blue);}.stat-value.g{color:var(--gold);}.stat-value.r{color:var(--red);}.stat-value.p{color:var(--purple);}
+
+/* CUSTOMER ROW */
+.customer-row{display:flex;align-items:center;gap:12px;padding:10px 12px;border-bottom:1px solid rgba(30,45,61,0.4);transition:background .15s;}
+.customer-row:hover{background:rgba(0,255,136,0.02);}
+.customer-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--head);font-size:12px;font-weight:900;flex-shrink:0;}
+.customer-info{flex:1;min-width:0;}
+.customer-name{font-size:13px;font-weight:600;color:var(--text);}
+.customer-email{font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:2px;}
+.customer-meta{display:flex;gap:6px;margin-top:4px;}
+
+/* INCOME STREAM */
+.income-stream{display:grid;grid-template-columns:40px 1fr auto;gap:12px;align-items:center;padding:14px 16px;border-bottom:1px solid rgba(30,45,61,0.4);}
+.income-icon{font-size:22px;text-align:center;}
+.income-label{font-size:13px;font-weight:600;color:var(--text);}
+.income-sub{font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:2px;}
+.income-amount{font-family:var(--head);font-size:20px;font-weight:900;text-align:right;}
+.income-period{font-family:var(--mono);font-size:8px;color:var(--muted);text-align:right;margin-top:2px;}
+
+/* SERVICE GRID */
+.svc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;}
+.svc-item{background:rgba(0,0,0,0.2);border:1px solid var(--border);border-radius:4px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;}
+.svc-name{font-size:12px;font-weight:600;color:var(--dim);}
+
+/* PUBKEY */
+.pubkey{font-family:var(--mono);font-size:9px;color:var(--muted);word-break:break-all;background:rgba(0,0,0,0.3);padding:8px;border-radius:4px;border:1px solid var(--border);margin-top:6px;}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:10px 24px;display:flex;justify-content:space-between;align-items:center;background:var(--bg2);}
+.ftl{font-family:var(--mono);font-size:9px;color:var(--muted);}
+.ftl b{color:var(--green);}
 .udots{display:flex;gap:3px;}
-.udot{width:7px;height:7px;border-radius:2px;background:var(--green);opacity:0.8;}
-.udot.m{background:var(--red);opacity:0.5;}
+.udot{width:6px;height:6px;border-radius:1px;background:var(--green);opacity:0.7;}
+.udot.m{background:var(--red);opacity:0.4;}
+
+/* EMPTY */
+.empty{text-align:center;padding:30px;font-family:var(--mono);font-size:11px;color:var(--muted);}
+
+/* SIGNAL PROMO */
+.signal-promo{background:linear-gradient(135deg,#060e14,#0a1520);border:1px solid rgba(0,230,118,0.2);border-radius:6px;padding:16px 20px;display:flex;align-items:center;gap:20px;margin-bottom:16px;flex-wrap:wrap;}
+.signal-promo-title{font-family:var(--head);font-size:20px;font-weight:900;color:#00e676;}
+.signal-promo-sub{font-family:var(--mono);font-size:9px;color:rgba(0,230,118,0.4);margin-top:3px;}
+
+/* API TABS */
+.api-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:14px;overflow-x:auto;}
+.api-tab{font-family:var(--mono);font-size:10px;letter-spacing:1px;padding:8px 12px;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap;}
+.api-tab.on{color:var(--blue);border-bottom-color:var(--blue);}
+.apanel{display:none;}.apanel.on{display:block;}
+.ajson{background:rgba(0,0,0,0.4);border-radius:4px;padding:10px;font-family:var(--mono);font-size:10px;line-height:1.7;overflow-x:auto;max-height:260px;overflow-y:auto;border:1px solid var(--border);}
+
+@keyframes si{from{opacity:0;transform:translateX(-4px)}to{opacity:1;transform:translateX(0)}}
 </style>
 </head>
 <body>
+
+<!-- HEADER -->
 <header>
-  <div>
-    <div class="logo">CAMPIONE <span>INFRA</span></div>
-    <div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:3px;">B2B OPERATIONS CENTER — LIVE</div>
+  <div style="display:flex;align-items:center;gap:14px;">
+    <div class="pulse"></div>
+    <div>
+      <div class="logo">CAMPIONE <span>INFRA</span></div>
+      <div style="font-family:var(--mono);font-size:8px;color:var(--muted);margin-top:2px;letter-spacing:2px;">B2B OPERATIONS CENTER — LIVE</div>
+    </div>
   </div>
-  <div class="hdr-meta"><b>5.78.101.177</b> · Hetzner CCX33 · Hillsboro OR<br>Bitcoin ✓ · LND ✓ · XRPL ✓ · Stellar ✓ · Chainlink ✓ · Cosmos ✓<br>Updated: <span id="htime">—</span></div>
+  <div class="hdr-right">
+    <div class="hdr-stat">
+      <b>5.78.101.177</b> · Hetzner CCX33 · Hillsboro OR<br>
+      Bitcoin ✓ · LND ✓ · XRPL ✓ · Stellar ✓ · Chainlink ✓ · Cosmos ✓<br>
+      Updated: <span id="htime">—</span>
+    </div>
+  </div>
 </header>
 
+<!-- TICKER -->
 <div class="ticker-wrap">
-  <div class="ticker">
+  <div class="ticker" id="ticker-inner">
     <span class="ti">XRPL LEDGER <b id="tk1">—</b></span>
     <span class="ti b">PAYMENTS <b id="tk2">—</b></span>
     <span class="ti g">DEX TRADES <b id="tk3">—</b></span>
-    <span class="ti p">LND PEERS <b id="tk-lnd">3</b></span>
+    <span class="ti">LND PEERS <b id="tk-lnd">3</b></span>
     <span class="ti g">BITCOIN <b>100% SYNCED · 943,835</b></span>
     <span class="ti b">LIGHTNING <b>CAMPIONE NODE</b></span>
     <span class="ti">STELLAR <b id="tk5">SYNCING</b></span>
     <span class="ti">CHAINLINK <b>HEALTHY</b></span>
     <span class="ti">COSMOS <b>ACTIVE</b></span>
+    <span class="ti r">CCSS USERS <b id="tk-ccss">25</b></span>
+    <span class="ti g">SIGNAL DECODER <b>LIVE</b></span>
     <span class="ti">XRPL LEDGER <b id="tk1b">—</b></span>
     <span class="ti b">PAYMENTS <b id="tk2b">—</b></span>
     <span class="ti g">DEX TRADES <b id="tk3b">—</b></span>
-    <span class="ti p">LND PEERS <b id="tk-lndb">3</b></span>
+    <span class="ti">LND PEERS <b id="tk-lndb">3</b></span>
     <span class="ti g">BITCOIN <b>100% SYNCED · 943,835</b></span>
     <span class="ti b">LIGHTNING <b>CAMPIONE NODE</b></span>
     <span class="ti">STELLAR <b>SYNCING</b></span>
     <span class="ti">CHAINLINK <b>HEALTHY</b></span>
     <span class="ti">COSMOS <b>ACTIVE</b></span>
+    <span class="ti r">CCSS USERS <b>25</b></span>
+    <span class="ti g">SIGNAL DECODER <b>LIVE</b></span>
   </div>
 </div>
 
+<!-- NAV -->
 <div class="nav">
   <div class="tab active" onclick="showTab('overview')">⚡ OVERVIEW</div>
+  <div class="tab" onclick="showTab('customers')">👥 CUSTOMERS</div>
   <div class="tab" onclick="showTab('income')">💰 INCOME</div>
   <div class="tab" onclick="showTab('api')">🚀 API</div>
   <div class="tab" onclick="showTab('lightning')">⚡ LIGHTNING</div>
   <div class="tab" onclick="showTab('bitcoin')">₿ BITCOIN</div>
-  <div class="tab" onclick="showTab('payments')">💸 XRPL PAYMENTS</div>
-  <div class="tab" onclick="showTab('dex')">🔄 DEX TRADES</div>
-  <div class="tab" onclick="showTab('whales')">🐋 WHALE ALERTS</div>
+  <div class="tab" onclick="showTab('payments')">💸 XRPL</div>
+  <div class="tab" onclick="showTab('dex')">🔄 DEX</div>
+  <div class="tab" onclick="showTab('whales')">🐋 WHALES</div>
   <div class="tab" onclick="showTab('stellar')">⭐ STELLAR</div>
   <div class="tab" onclick="showTab('chainlink')">🔗 CHAINLINK</div>
   <div class="tab" onclick="showTab('nodes')">🖥 NODES</div>
-  <div class="tab" onclick="showTab('admin')">🔑 ADMIN</div>
   <div class="tab" onclick="showTab('borrowers')">💧 BORROWERS</div>
+  <div class="tab" onclick="showTab('admin')">🔑 ADMIN</div>
+  <div class="tab" onclick="window.open('https://signal.campioneinfrastructure.com','_blank')" style="color:#00e676;border-bottom-color:#00e676;">📊 SIGNAL FREE ↗</div>
+  <div class="tab" onclick="window.open('https://signal.campioneinfrastructure.com?pro=true','_blank')" style="color:#fbbf24;border-bottom-color:#fbbf24;">⭐ SIGNAL PRO ↗</div>
 </div>
 
-<!-- OVERVIEW -->
+<!-- ══ OVERVIEW ══ -->
 <div class="panel active" id="panel-overview">
+  <div class="stat-strip">
+    <div class="stat-item"><div class="stat-label">XRPL LEDGER</div><div class="stat-value b" id="ov-ledger">—</div></div>
+    <div class="stat-item"><div class="stat-label">PAYMENTS</div><div class="stat-value" id="ov-pay">—</div></div>
+    <div class="stat-item"><div class="stat-label">DEX TRADES</div><div class="stat-value b" id="ov-dex">—</div></div>
+    <div class="stat-item"><div class="stat-label">BTC HEIGHT</div><div class="stat-value g">943,835</div></div>
+    <div class="stat-item"><div class="stat-label">LND PEERS</div><div class="stat-value p" id="ov-peers">3</div></div>
+    <div class="stat-item"><div class="stat-label">CCSS USERS</div><div class="stat-value r" id="ov-ccss">25</div></div>
+    <div class="stat-item"><div class="stat-label">API KEYS</div><div class="stat-value g" id="ov-keys">—</div></div>
+    <div class="stat-item"><div class="stat-label">TOTAL INCOME</div><div class="stat-value g">$0.00</div></div>
+  </div>
+
   <div class="grid g12">
-    <div class="card c3 cb">
-      <div class="ct">💧 XRPL</div>
-      <div class="bcenter"><div class="bignum b" id="ov-ledger">—</div><div class="bsub">CURRENT LEDGER</div></div>
-      <div class="srow"><span class="slbl">Payments</span><span class="sval" id="ov-pay">—</span></div>
-      <div class="srow"><span class="slbl">DEX Trades</span><span class="sval b" id="ov-dex">—</span></div>
-      <div class="srow"><span class="slbl">Volume</span><span class="sval g" id="ov-vol">—</span></div>
-    </div>
-    <div class="card c3 cg">
-      <div class="ct">₿ Bitcoin + ⚡ Lightning</div>
-      <div class="bcenter"><div class="bignum g" id="ov-btc">943,835</div><div class="bsub">BLOCK HEIGHT</div></div>
-      <div class="srow"><span class="slbl">BTC Sync</span><span class="badge bg">100%</span></div>
-      <div class="srow"><span class="slbl">LND Alias</span><span class="sval g">CampioneNode</span></div>
-      <div class="srow"><span class="slbl">LND Peers</span><span class="sval g" id="ov-lnd-peers">3</span></div>
-      <div class="srow"><span class="slbl">Channels</span><span class="sval g" id="ov-lnd-ch">0</span></div>
-    </div>
-    <div class="card c3 cb">
-      <div class="ct">⭐ Horizon</div>
-      <div class="bcenter"><div class="bignum b" style="font-size:22px" id="ov-hor">SYNCING</div><div class="bsub">INGEST LEDGER</div></div>
-      <div class="srow"><span class="slbl">Mode</span><span class="sval b">CAPTIVE CORE</span></div>
-      <div class="srow"><span class="slbl">Network</span><span class="sval b">MAINNET</span></div>
-      <div class="srow"><span class="slbl">Status</span><span class="badge bgo" id="ov-hor-st">CATCHING UP</span></div>
-    </div>
-    <div class="card c3">
-      <div class="ct">🖥 Server</div>
-      <div class="pb-w"><div class="pb-l"><span>DISK</span><span>72%</span></div><div class="pb"><div class="pb-f w" style="width:72%"></div></div></div>
-      <div class="pb-w"><div class="pb-l"><span>RAM</span><span id="rampct">—</span></div><div class="pb"><div class="pb-f" id="rambar" style="width:20%"></div></div></div>
-      <div class="srow"><span class="slbl">Disk</span><span class="sval g">156GB / 226GB</span></div>
-      <div class="srow"><span class="slbl">Location</span><span class="sval b">Hillsboro OR</span></div>
-    </div>
     <div class="card c6">
-      <div class="ct">⚙️ All Services</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;">
-        <div class="srow"><span class="slbl">🪐 Cosmos</span><span class="badge bg">ACTIVE</span></div>
-        <div class="srow"><span class="slbl">💧 XRPL</span><span class="badge bg" id="sv-xrpl">CHECKING</span></div>
-        <div class="srow"><span class="slbl">⭐ Stellar</span><span class="badge bgo">SYNCING</span></div>
-        <div class="srow"><span class="slbl">₿ Bitcoin</span><span class="badge bg">SYNCED</span></div>
-        <div class="srow"><span class="slbl">⚡ Lightning</span><span class="badge bg" id="sv-lnd">ACTIVE</span></div>
-        <div class="srow"><span class="slbl">🔗 Chainlink</span><span class="badge bg" id="sv-cl">HEALTHY</span></div>
-        <div class="srow"><span class="slbl">📊 Graph Node</span><span class="badge bg">RUNNING</span></div>
-        <div class="srow"><span class="slbl">🔗 Blockchain API</span><span class="badge bg" id="sv-bapi">CHECKING</span></div>
-        <div class="srow"><span class="slbl">💧 Ripple Dripple</span><span class="badge bg" id="sv-rd">CHECKING</span></div>
-        <div class="srow"><span class="slbl">🌐 Nginx SSL</span><span class="badge bg">ACTIVE</span></div>
+      <div class="ct">⚙️ Service Status</div>
+      <div class="svc-grid">
+        <div class="svc-item"><span class="svc-name">🪐 Cosmos</span><span class="badge bg">ACTIVE</span></div>
+        <div class="svc-item"><span class="svc-name">💧 XRPL</span><span class="badge bg" id="sv-xrpl">LIVE</span></div>
+        <div class="svc-item"><span class="svc-name">⭐ Stellar</span><span class="badge bgo">SYNCING</span></div>
+        <div class="svc-item"><span class="svc-name">₿ Bitcoin</span><span class="badge bg">SYNCED</span></div>
+        <div class="svc-item"><span class="svc-name">⚡ Lightning</span><span class="badge bg" id="sv-lnd">ACTIVE</span></div>
+        <div class="svc-item"><span class="svc-name">🔗 Chainlink</span><span class="badge bg" id="sv-cl">HEALTHY</span></div>
+        <div class="svc-item"><span class="svc-name">📊 Graph Node</span><span class="badge bg">RUNNING</span></div>
+        <div class="svc-item"><span class="svc-name">🔗 Blockchain API</span><span class="badge bg" id="sv-api">ONLINE</span></div>
+        <div class="svc-item"><span class="svc-name">💧 Ripple Dripple</span><span class="badge bg" id="sv-rd">LIVE</span></div>
+        <div class="svc-item"><span class="svc-name">🎰 CCSS API</span><span class="badge bg">ONLINE</span></div>
+        <div class="svc-item"><span class="svc-name">📡 Streamr</span><span class="badge bg">RUNNING</span></div>
+        <div class="svc-item"><span class="svc-name">🌐 Nginx SSL</span><span class="badge bg">ACTIVE</span></div>
       </div>
     </div>
     <div class="card c6 cb">
       <div class="ct">📡 Live XRPL Feed</div>
       <div class="stbl"><table class="tx"><thead><tr><th>TYPE</th><th>FROM</th><th>TO</th><th>AMOUNT</th><th>TIME</th></tr></thead><tbody id="ov-feed"></tbody></table></div>
     </div>
+    <div class="card c4">
+      <div class="ct">🖥 Server</div>
+      <div class="pb-w"><div class="pb-l"><span>DISK</span><span>97%</span></div><div class="pb"><div class="pb-f" style="width:97%;background:linear-gradient(90deg,var(--gold),var(--red))"></div></div></div>
+      <div class="pb-w"><div class="pb-l"><span>RAM</span><span id="rampct">—</span></div><div class="pb"><div class="pb-f" id="rambar" style="width:30%"></div></div></div>
+      <div class="srow"><span class="slbl">Location</span><span class="sval b">Hillsboro OR</span></div>
+      <div class="srow"><span class="slbl">IP</span><span class="sval">5.78.101.177</span></div>
+      <div class="srow"><span class="slbl">Spec</span><span class="sval b">CCX33 · 30GB RAM</span></div>
+      <div class="srow" style="border-top:1px solid rgba(239,68,68,0.3);margin-top:6px;padding-top:8px;"><span class="slbl" style="color:var(--red)">⚠ Disk</span><span style="font-family:var(--mono);font-size:11px;color:var(--red)">216GB / 226GB — CRITICAL</span></div>
+    </div>
+    <div class="card c4 cg">
+      <div class="ct">⭐ Horizon</div>
+      <div class="bcenter"><div class="bignum b" style="font-size:20px" id="ov-hor">SYNCING</div><div class="bsub">INGEST LEDGER</div></div>
+      <div class="srow"><span class="slbl">Mode</span><span class="sval b">CAPTIVE CORE</span></div>
+      <div class="srow"><span class="slbl">Network</span><span class="sval b">MAINNET</span></div>
+      <div class="srow"><span class="slbl">Status</span><span class="badge bgo" id="ov-hor-st">CATCHING UP</span></div>
+    </div>
+    <div class="card c4">
+      <div class="ct">💰 Revenue Snapshot</div>
+      <div class="srow"><span class="slbl">🎰 CCSS Users</span><span class="sval g">25 total</span></div>
+      <div class="srow"><span class="slbl">✓ Confirmed</span><span class="sval g" id="ccss-confirmed">—</span></div>
+      <div class="srow"><span class="slbl">📧 Marketing Opt-in</span><span class="sval b" id="ccss-optin">—</span></div>
+      <div class="srow"><span class="slbl">🔑 API Keys</span><span class="sval" id="api-key-count">—</span></div>
+      <div class="srow"><span class="slbl">📊 Signal Users</span><span class="sval p">—</span></div>
+    </div>
   </div>
 </div>
 
-<!-- LIGHTNING -->
+<!-- ══ CUSTOMERS ══ -->
+<div class="panel" id="panel-customers">
+  <!-- Stats -->
+  <div class="stat-strip">
+    <div class="stat-item"><div class="stat-label">TOTAL CUSTOMERS</div><div class="stat-value g" id="cust-total">25</div></div>
+    <div class="stat-item"><div class="stat-label">CONFIRMED</div><div class="stat-value g" id="cust-confirmed">—</div></div>
+    <div class="stat-item"><div class="stat-label">MARKETING OPT-IN</div><div class="stat-value b" id="cust-optin">—</div></div>
+    <div class="stat-item"><div class="stat-label">LAST SIGNUP</div><div class="stat-value p" id="cust-last">—</div></div>
+    <div class="stat-item"><div class="stat-label">API SUBSCRIBERS</div><div class="stat-value g" id="cust-api">—</div></div>
+  </div>
+
+  <div class="grid g12">
+    <!-- Captain Crypto Users -->
+    <div class="card c8">
+      <div class="ct" style="margin-bottom:10px;">🎰 Captain Crypto Super Slots — Users</div>
+      <div style="display:flex;gap:8px;margin-bottom:12px;">
+        <input type="text" id="ccss-search" placeholder="Search name or email..." class="search-input" oninput="filterCustomers()" style="flex:1;">
+        <select id="ccss-filter" class="admin-input" style="width:140px;" onchange="filterCustomers()">
+          <option value="all">All Users</option>
+          <option value="confirmed">Confirmed Only</option>
+          <option value="optin">Marketing Opt-in</option>
+          <option value="unconfirmed">Unconfirmed</option>
+        </select>
+        <button class="btn btn-blue" onclick="exportCSS()">📥 CSV</button>
+      </div>
+      <div class="stbl" id="ccss-list">
+        <div class="empty">Loading customers...</div>
+      </div>
+    </div>
+
+    <!-- API Keys -->
+    <div class="card c4">
+      <div class="ct">🔑 API Subscribers</div>
+      <div style="display:flex;gap:8px;margin-bottom:10px;">
+        <input type="password" id="api-admin-secret" placeholder="Admin secret..." class="admin-input" style="flex:1;">
+        <button class="btn" onclick="loadApiKeys()">LOAD</button>
+      </div>
+      <div id="api-key-list"><div class="empty" style="padding:20px;">Enter secret to load API keys</div></div>
+    </div>
+
+    <!-- Signal Decoder Users (placeholder) -->
+    <div class="card c12 cp">
+      <div class="ct">📊 Signal Decoder Users</div>
+      <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+        <div style="flex:1;">
+          <div style="font-size:13px;color:var(--dim);margin-bottom:6px;">Connect Supabase to track Signal Decoder subscribers in real time.</div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--muted);">Free users · Pro subscribers · Scan history · Revenue</div>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <a href="https://signal.campioneinfrastructure.com" target="_blank" class="btn">FREE VERSION ↗</a>
+          <a href="https://signal.campioneinfrastructure.com?pro=true" target="_blank" class="btn btn-gold">⭐ PRO VERSION ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ INCOME ══ -->
+<div class="panel" id="panel-income">
+  <div class="stat-strip">
+    <div class="stat-item"><div class="stat-label">TOTAL INCOME</div><div class="stat-value g">$0.00</div></div>
+    <div class="stat-item"><div class="stat-label">POTENTIAL MRR</div><div class="stat-value g">$188–805</div></div>
+    <div class="stat-item"><div class="stat-label">ACTIVE STREAMS</div><div class="stat-value b">7</div></div>
+    <div class="stat-item"><div class="stat-label">CCSS USERS</div><div class="stat-value r">25</div></div>
+    <div class="stat-item"><div class="stat-label">API KEYS</div><div class="stat-value g" id="inc-api-keys">—</div></div>
+  </div>
+
+  <div class="grid g12">
+    <div class="card c12">
+      <div class="ct">💰 All Income Streams</div>
+      <div class="income-stream">
+        <div class="income-icon">⚡</div>
+        <div><div class="income-label">Lightning Routing</div><div class="income-sub">Peer-to-peer payment routing fees · CampioneNode · Awaiting funding</div></div>
+        <div><div class="income-amount" style="color:var(--gold);">$0.00</div><div class="income-period">/mo · FUND WALLET</div></div>
+      </div>
+      <div class="income-stream">
+        <div class="income-icon">💧</div>
+        <div><div class="income-label">XRPL AMM Fees</div><div class="income-sub">EBIT/XRP liquidity pool · 15% APY estimate · Awaiting deposit</div></div>
+        <div><div class="income-amount" style="color:var(--gold);">$0.00</div><div class="income-period">/mo · DEPOSIT XRP</div></div>
+      </div>
+      <div class="income-stream">
+        <div class="income-icon">🔗</div>
+        <div><div class="income-label">Chainlink Oracle</div><div class="income-sub">ETH mainnet oracle · v2.26.0 · Node healthy · Needs Alchemy key</div></div>
+        <div><div class="income-amount" style="color:var(--gold);">$0.00</div><div class="income-period">/mo · FIX ALCHEMY</div></div>
+      </div>
+      <div class="income-stream">
+        <div class="income-icon">🪐</div>
+        <div><div class="income-label">Cosmos Staking</div><div class="income-sub">Validator node · ~17% APY · Needs ATOM delegation</div></div>
+        <div><div class="income-amount" style="color:var(--gold);">$0.00</div><div class="income-period">/mo · NEEDS ATOM</div></div>
+      </div>
+      <div class="income-stream">
+        <div class="income-icon">🔑</div>
+        <div><div class="income-label">Blockchain API</div><div class="income-sub">Multi-chain data API · XRPL, BTC, ETH, Cosmos, Stellar · $49–149/mo tiers</div></div>
+        <div><div class="income-amount" style="color:var(--green);" id="inc-api-rev">$0</div><div class="income-period">/mo · <span id="inc-api-ct">—</span> PAID KEYS</div></div>
+      </div>
+      <div class="income-stream">
+        <div class="income-icon">🎰</div>
+        <div><div class="income-label">Captain Crypto Super Slots</div><div class="income-sub">Free sweepstakes crypto slots · 25 users · 19 marketing opt-ins</div></div>
+        <div><div class="income-amount" style="color:var(--purple);">$0.00</div><div class="income-period">/mo · GROWING</div></div>
+      </div>
+      <div class="income-stream" style="border-bottom:none;">
+        <div class="income-icon">📊</div>
+        <div><div class="income-label">Signal Decoder</div><div class="income-sub">AI chart analysis · $9/mo Pro · Free tier with ads · Live at signal.campioneinfrastructure.com</div></div>
+        <div><div class="income-amount" style="color:var(--green);">$0.00</div><div class="income-period">/mo · LIVE</div></div>
+      </div>
+    </div>
+
+    <div class="card c6 cg">
+      <div class="ct">💰 Projected Monthly</div>
+      <div class="srow"><span class="slbl">100 XRP in AMM</span><span class="sval g">~$1–5/mo</span></div>
+      <div class="srow"><span class="slbl">Lightning (0.01 BTC)</span><span class="sval g">~$2–15/mo</span></div>
+      <div class="srow"><span class="slbl">Chainlink Oracle</span><span class="sval g">~$50–200/mo</span></div>
+      <div class="srow"><span class="slbl">Cosmos (100 ATOM)</span><span class="sval g">~$85/mo</span></div>
+      <div class="srow"><span class="slbl">API Subscriptions</span><span class="sval g">~$50–500/mo</span></div>
+      <div class="srow"><span class="slbl">Signal Decoder Pro</span><span class="sval g">~$9/subscriber</span></div>
+      <div class="srow" style="border-top:1px solid var(--gold);margin-top:6px;padding-top:8px;">
+        <span class="slbl" style="color:var(--gold);font-weight:700">TOTAL POTENTIAL</span>
+        <span style="font-family:var(--head);font-size:18px;color:var(--gold);">$188–805/mo</span>
+      </div>
+    </div>
+
+    <div class="card c6">
+      <div class="ct">📋 Next Steps</div>
+      <div class="srow"><span class="slbl" style="color:var(--red);">⚠ URGENT</span><span style="font-family:var(--mono);font-size:10px;color:var(--red);">Free up disk space (97% full)</span></div>
+      <div class="srow"><span class="slbl">Step 1</span><span style="font-family:var(--mono);font-size:10px;color:var(--gold);">Fund Lightning wallet → open channels</span></div>
+      <div class="srow"><span class="slbl">Step 2</span><span style="font-family:var(--mono);font-size:10px;color:var(--gold);">Deposit 100 XRP into AMM</span></div>
+      <div class="srow"><span class="slbl">Step 3</span><span style="font-family:var(--mono);font-size:10px;color:var(--gold);">Fix Alchemy key → Chainlink oracle jobs</span></div>
+      <div class="srow"><span class="slbl">Step 4</span><span style="font-family:var(--mono);font-size:10px;color:var(--gold);">Get ATOM → stake on Cosmos node</span></div>
+      <div class="srow"><span class="slbl">Step 5</span><span style="font-family:var(--mono);font-size:10px;color:var(--gold);">Add Supabase to Signal Decoder</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ LIGHTNING ══ -->
 <div class="panel" id="panel-lightning">
   <div class="grid g12">
     <div class="card c4 cp">
@@ -194,10 +444,9 @@ footer{border-top:1px solid var(--border);padding:10px 28px;display:flex;justify
       <div class="srow"><span class="slbl">Alias</span><span class="sval p">CampioneNode</span></div>
       <div class="srow"><span class="slbl">Version</span><span class="sval p">0.18.5-beta</span></div>
       <div class="srow"><span class="slbl">Network</span><span class="sval p">MAINNET</span></div>
-      <div class="srow"><span class="slbl">Synced</span><span class="badge bg" id="ln-sync">YES</span></div>
+      <div class="srow"><span class="slbl">Synced</span><span class="badge bg">YES</span></div>
       <div class="srow"><span class="slbl">Port</span><span class="sval">9735</span></div>
       <div class="srow"><span class="slbl">Active Channels</span><span class="sval p" id="ln-active">0</span></div>
-      <div class="srow"><span class="slbl">Block Height</span><span class="sval" id="ln-block">943,835</span></div>
     </div>
     <div class="card c4">
       <div class="ct">⚡ Wallet Balance</div>
@@ -205,41 +454,22 @@ footer{border-top:1px solid var(--border);padding:10px 28px;display:flex;justify
       <div class="srow"><span class="slbl">Unconfirmed</span><span class="sval g" id="ln-unconf">0</span></div>
       <div class="srow"><span class="slbl">Channel Balance</span><span class="sval b" id="ln-chbal">0</span></div>
       <div class="srow"><span class="slbl">Status</span><span class="badge bgo">AWAITING FUNDING</span></div>
-      <div style="margin-top:14px;">
-        <div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:6px;letter-spacing:1px;">DEPOSIT ADDRESS</div>
-        <div class="pubkey">bc1qk6eg4rlwdyjqv53gpv6g9sd0hk0k3p9h7flgav</div>
-      </div>
+      <div style="margin-top:12px;"><div style="font-family:var(--mono);font-size:8px;color:var(--muted);margin-bottom:5px;letter-spacing:1px;">DEPOSIT ADDRESS</div><div class="pubkey">bc1qk6eg4rlwdyjqv53gpv6g9sd0hk0k3p9h7flgav</div></div>
     </div>
     <div class="card c4 cb">
       <div class="ct">⚡ Node Identity</div>
-      <div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:6px;letter-spacing:1px;">PUBLIC KEY</div>
+      <div style="font-family:var(--mono);font-size:8px;color:var(--muted);margin-bottom:5px;">PUBLIC KEY</div>
       <div class="pubkey" style="color:var(--blue)">0383f3e497f390b7cfedd12198d7542ae9fe062c1b9d71ca2ed49a73b1ab633b3c</div>
-      <div style="margin-top:14px;">
-        <div class="srow"><span class="slbl">Color</span><span style="font-family:var(--mono);font-size:13px;color:#00ff88">#00ff88</span></div>
+      <div style="margin-top:12px;">
+        <div class="srow"><span class="slbl">Color</span><span style="font-family:var(--mono);font-size:12px;color:#00ff88">#00ff88</span></div>
         <div class="srow"><span class="slbl">Implementation</span><span class="sval b">LND</span></div>
-        <div class="srow"><span class="slbl">Connect String</span><span style="font-family:var(--mono);font-size:9px;color:var(--muted)">pubkey@5.78.101.177:9735</span></div>
+        <div class="srow"><span class="slbl">Connect</span><span style="font-family:var(--mono);font-size:9px;color:var(--muted)">pubkey@5.78.101.177:9735</span></div>
       </div>
-    </div>
-    <div class="card c6">
-      <div class="ct">⚡ Next Steps — Open Channels</div>
-      <div class="srow"><span class="slbl">1. Fund wallet</span><span style="font-family:var(--mono);font-size:10px;color:var(--muted)">Send BTC to deposit address above</span></div>
-      <div class="srow"><span class="slbl">2. Connect to ACINQ</span><span style="font-family:var(--mono);font-size:10px;color:var(--blue)">03864ef025fde8fb587d989186ce6a4a186895ee44a926bfc370e2c366597a3f8f</span></div>
-      <div class="srow"><span class="slbl">3. Connect to Bitfinex</span><span style="font-family:var(--mono);font-size:10px;color:var(--blue)">033d8656219478701227199cbd6f670335c8d408a92ae88b176106c8033f08e41</span></div>
-      <div class="srow"><span class="slbl">4. Open channels</span><span style="font-family:var(--mono);font-size:10px;color:var(--muted)">Min 0.001 BTC per channel</span></div>
-      <div class="srow"><span class="slbl">5. Start routing</span><span class="badge bg">EARN FEES</span></div>
-    </div>
-    <div class="card c6 cp">
-      <div class="ct">⚡ Lightning Revenue Potential</div>
-      <div class="srow"><span class="slbl">Routing Fees</span><span class="sval p">1-100 sats/payment</span></div>
-      <div class="srow"><span class="slbl">API Access</span><span class="sval p">$50-500/mo</span></div>
-      <div class="srow"><span class="slbl">BTC↔XRP Swaps</span><span class="sval p">Fee per swap</span></div>
-      <div class="srow"><span class="slbl">Micropayments</span><span class="sval p">Per transaction</span></div>
-      <div class="srow"><span class="slbl">ISO 20022 Rail</span><span class="badge bp">COMING SOON</span></div>
     </div>
   </div>
 </div>
 
-<!-- BITCOIN -->
+<!-- ══ BITCOIN ══ -->
 <div class="panel" id="panel-bitcoin">
   <div class="grid g12">
     <div class="card c4 cg">
@@ -247,58 +477,28 @@ footer{border-top:1px solid var(--border);padding:10px 28px;display:flex;justify
       <div class="bcenter"><div class="bignum g" id="bt-blocks">943,835</div><div class="bsub">BLOCK HEIGHT</div></div>
       <div class="pb-w"><div class="pb-l"><span>SYNC PROGRESS</span><span>100%</span></div><div class="pb"><div class="pb-f" style="width:100%"></div></div></div>
       <div class="srow"><span class="slbl">Network</span><span class="sval g">MAINNET</span></div>
-      <div class="srow"><span class="slbl">Mode</span><span class="sval g">PRUNED</span></div>
-      <div class="srow"><span class="slbl">Prune Size</span><span class="sval g">550MB</span></div>
-      <div class="srow"><span class="slbl">RPC</span><span class="sval g">localhost:8332</span></div>
-      <div class="srow"><span class="slbl">ZMQ Blocks</span><span class="sval g">port 28332</span></div>
-      <div class="srow"><span class="slbl">ZMQ TX</span><span class="sval g">port 28333</span></div>
-    </div>
-    <div class="card c4">
-      <div class="ct">₿ Node Config</div>
-      <div class="srow"><span class="slbl">Implementation</span><span class="sval g">Bitcoin Core</span></div>
-      <div class="srow"><span class="slbl">Version</span><span class="sval g">30.2 (snap)</span></div>
-      <div class="srow"><span class="slbl">Data Dir</span><span style="font-family:var(--mono);font-size:11px;color:var(--muted)">/root/.bitcoin</span></div>
-      <div class="srow"><span class="slbl">txindex</span><span class="sval">disabled</span></div>
+      <div class="srow"><span class="slbl">Mode</span><span class="sval g">PRUNED · 550MB</span></div>
       <div class="srow"><span class="slbl">LND Connected</span><span class="badge bg">YES</span></div>
-      <div class="srow"><span class="slbl">Chainlink Connected</span><span class="badge bg">YES</span></div>
+      <div class="srow"><span class="slbl">Chainlink</span><span class="badge bg">YES</span></div>
     </div>
     <div class="card c4 cp">
       <div class="ct">⚡ Lightning Status</div>
       <div class="bcenter"><div class="bignum p" id="bt-lnd-peers">3</div><div class="bsub">LND PEERS</div></div>
       <div class="srow"><span class="slbl">Active Channels</span><span class="sval p" id="bt-lnd-ch">0</span></div>
-      <div class="srow"><span class="slbl">Wallet Balance</span><span class="sval p" id="bt-lnd-bal">0 sats</span></div>
+      <div class="srow"><span class="slbl">Wallet</span><span class="sval p" id="bt-lnd-bal">0 sats</span></div>
       <div class="srow"><span class="slbl">Synced</span><span class="badge bg">YES</span></div>
-      <div class="srow"><span class="slbl">Port</span><span class="sval">9735 OPEN</span></div>
     </div>
-    <div class="card c12">
-      <div class="ct">₿ Bitcoin + ⚡ Lightning Architecture</div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:4px;">
-        <div style="text-align:center;padding:16px;background:rgba(0,0,0,0.3);border-radius:6px;border:1px solid var(--border);">
-          <div style="font-size:24px;margin-bottom:8px;">₿</div>
-          <div style="font-family:var(--mono);font-size:10px;color:var(--gold)">BITCOIN CORE</div>
-          <div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:4px;">Block validation<br>UTXO set<br>Mempool</div>
-        </div>
-        <div style="text-align:center;padding:16px;background:rgba(0,0,0,0.3);border-radius:6px;border:1px solid var(--border);">
-          <div style="font-size:24px;margin-bottom:8px;">⚡</div>
-          <div style="font-family:var(--mono);font-size:10px;color:var(--purple)">LND NODE</div>
-          <div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:4px;">Payment channels<br>Routing<br>HTLC</div>
-        </div>
-        <div style="text-align:center;padding:16px;background:rgba(0,0,0,0.3);border-radius:6px;border:1px solid var(--border);">
-          <div style="font-size:24px;margin-bottom:8px;">🔗</div>
-          <div style="font-family:var(--mono);font-size:10px;color:var(--blue)">CHAINLINK</div>
-          <div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:4px;">BTC price feeds<br>Oracle data<br>ETH mainnet</div>
-        </div>
-        <div style="text-align:center;padding:16px;background:rgba(0,0,0,0.3);border-radius:6px;border:1px solid var(--border);">
-          <div style="font-size:24px;margin-bottom:8px;">🏦</div>
-          <div style="font-family:var(--mono);font-size:10px;color:var(--green)">ISO 20022</div>
-          <div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:4px;">BTC collateral<br>Lightning rails<br>Coming soon</div>
-        </div>
-      </div>
+    <div class="card c4">
+      <div class="ct">₿ Node Config</div>
+      <div class="srow"><span class="slbl">Implementation</span><span class="sval g">Bitcoin Core</span></div>
+      <div class="srow"><span class="slbl">Version</span><span class="sval g">30.2 (snap)</span></div>
+      <div class="srow"><span class="slbl">Data Dir</span><span style="font-family:var(--mono);font-size:10px;color:var(--muted)">/root/.bitcoin</span></div>
+      <div class="srow"><span class="slbl">txindex</span><span class="sval">disabled</span></div>
     </div>
   </div>
 </div>
 
-<!-- PAYMENTS -->
+<!-- ══ PAYMENTS ══ -->
 <div class="panel" id="panel-payments">
   <div class="grid g12">
     <div class="card c4">
@@ -315,7 +515,7 @@ footer{border-top:1px solid var(--border);padding:10px 28px;display:flex;justify
   </div>
 </div>
 
-<!-- DEX -->
+<!-- ══ DEX ══ -->
 <div class="panel" id="panel-dex">
   <div class="grid g12">
     <div class="card c4">
@@ -332,7 +532,7 @@ footer{border-top:1px solid var(--border);padding:10px 28px;display:flex;justify
   </div>
 </div>
 
-<!-- WHALES -->
+<!-- ══ WHALES ══ -->
 <div class="panel" id="panel-whales">
   <div class="grid g12">
     <div class="card c4 cr">
@@ -343,30 +543,30 @@ footer{border-top:1px solid var(--border);padding:10px 28px;display:flex;justify
     </div>
     <div class="card c8">
       <div class="ct">🐋 Whale Transactions</div>
-      <div id="wh-feed"><div class="empty">🐋 Monitoring for transactions &gt; 10,000 XRP — none yet</div></div>
+      <div id="wh-feed"><div class="empty">🐋 Monitoring for transactions > 10,000 XRP</div></div>
     </div>
   </div>
 </div>
 
-<!-- STELLAR -->
+<!-- ══ STELLAR ══ -->
 <div class="panel" id="panel-stellar">
   <div class="grid g12">
     <div class="card c4 cb">
       <div class="ct">⭐ Stellar Horizon</div>
-      <div class="bcenter"><div class="bignum b" style="font-size:24px" id="st-led">—</div><div class="bsub">INGEST LEDGER</div></div>
+      <div class="bcenter"><div class="bignum b" style="font-size:20px" id="st-led">—</div><div class="bsub">INGEST LEDGER</div></div>
       <div class="srow"><span class="slbl">History Ledger</span><span class="sval b" id="st-hist">—</span></div>
-      <div class="srow"><span class="slbl">Horizon Ver</span><span class="sval" id="st-ver">—</span></div>
+      <div class="srow"><span class="slbl">Version</span><span class="sval" id="st-ver">—</span></div>
       <div class="srow"><span class="slbl">Protocol</span><span class="sval b" id="st-prot">—</span></div>
       <div class="srow"><span class="slbl">Mode</span><span class="badge bgo">CAPTIVE CORE</span></div>
     </div>
     <div class="card c8">
       <div class="ct">⭐ Recent Stellar Transactions</div>
-      <div id="st-feed"><div class="empty" style="color:var(--gold)">⭐ Stellar Horizon catching up...<br><span style="color:var(--muted);font-size:10px">Transactions will appear once synced</span></div></div>
+      <div id="st-feed"><div class="empty" style="color:var(--gold)">⭐ Stellar Horizon catching up...</div></div>
     </div>
   </div>
 </div>
 
-<!-- CHAINLINK -->
+<!-- ══ CHAINLINK ══ -->
 <div class="panel" id="panel-chainlink">
   <div class="grid g12">
     <div class="card c4 cp">
@@ -384,7 +584,7 @@ footer{border-top:1px solid var(--border);padding:10px 28px;display:flex;justify
   </div>
 </div>
 
-<!-- NODES -->
+<!-- ══ NODES ══ -->
 <div class="panel" id="panel-nodes">
   <div class="grid g12">
     <div class="card c6">
@@ -392,10 +592,10 @@ footer{border-top:1px solid var(--border);padding:10px 28px;display:flex;justify
       <div class="srow"><span class="slbl">🔗 Blockchain API</span><span style="font-family:var(--mono);font-size:10px;color:var(--blue)">campioneinfrastructure.com/api/v1/health</span></div>
       <div class="srow"><span class="slbl">💧 Ripple Dripple</span><span style="font-family:var(--mono);font-size:10px;color:var(--blue)">api.rippledripple.campioneinfrastructure.com</span></div>
       <div class="srow"><span class="slbl">⭐ Horizon</span><span style="font-family:var(--mono);font-size:10px;color:var(--blue)">horizon.campioneinfrastructure.com</span></div>
-      <div class="srow"><span class="slbl">🔗 Chainlink UI</span><span style="font-family:var(--mono);font-size:10px;color:var(--blue)">5.78.101.177:6688</span></div>
+      <div class="srow"><span class="slbl">🔗 Chainlink</span><span style="font-family:var(--mono);font-size:10px;color:var(--blue)">5.78.101.177:6688</span></div>
       <div class="srow"><span class="slbl">⚡ LND RPC</span><span style="font-family:var(--mono);font-size:10px;color:var(--purple)">5.78.101.177:10009</span></div>
       <div class="srow"><span class="slbl">⚡ LND P2P</span><span style="font-family:var(--mono);font-size:10px;color:var(--purple)">5.78.101.177:9735</span></div>
-      <div class="srow"><span class="slbl">📊 Graph Node</span><span style="font-family:var(--mono);font-size:10px;color:var(--blue)">5.78.101.177:8000</span></div>
+      <div class="srow"><span class="slbl">📊 Signal Decoder</span><span style="font-family:var(--mono);font-size:10px;color:var(--green)">signal.campioneinfrastructure.com</span></div>
     </div>
     <div class="card c6">
       <div class="ct">📋 Infrastructure</div>
@@ -403,74 +603,26 @@ footer{border-top:1px solid var(--border);padding:10px 28px;display:flex;justify
       <div class="srow"><span class="slbl">IP</span><span class="sval">5.78.101.177</span></div>
       <div class="srow"><span class="slbl">OS</span><span class="sval">Ubuntu 24.04</span></div>
       <div class="srow"><span class="slbl">RAM</span><span class="sval">30 GB</span></div>
-      <div class="srow"><span class="slbl">Storage</span><span class="sval">226 GB SSD</span></div>
+      <div class="srow"><span class="slbl">Primary Disk</span><span class="sval r">216GB / 226GB (97%)</span></div>
+      <div class="srow"><span class="slbl">Volume</span><span class="sval g">818GB / 1.8TB (48%)</span></div>
       <div class="srow"><span class="slbl">Location</span><span class="sval b">Hillsboro, OR</span></div>
     </div>
   </div>
 </div>
 
-
-<div class="panel" id="panel-admin">
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
-    <div style="font-family:var(--head);font-size:18px;font-weight:900;color:var(--green);">API Key Management</div>
-    <div style="display:flex;gap:10px;align-items:center;">
-      <input type="password" id="admin-secret" placeholder="Admin secret..." style="background:rgba(0,0,0,0.3);border:1px solid var(--border);color:var(--text);padding:8px 12px;font-family:var(--mono);font-size:11px;border-radius:4px;outline:none;">
-      <button onclick="loadAdminKeys()" style="background:var(--green);color:#000;border:none;padding:8px 16px;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;border-radius:4px;letter-spacing:1px;">LOAD KEYS</button>
-    </div>
-  </div>
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;">
-    <div class="card cg" style="padding:12px 16px;margin:0;text-align:center;"><div style="font-family:var(--mono);font-size:9px;color:var(--muted);">TOTAL KEYS</div><div style="font-family:var(--head);font-size:24px;color:var(--green)" id="adm-total">—</div></div>
-    <div class="card cb" style="padding:12px 16px;margin:0;text-align:center;"><div style="font-family:var(--mono);font-size:9px;color:var(--muted);">ACTIVE</div><div style="font-family:var(--head);font-size:24px;color:var(--blue)" id="adm-active">—</div></div>
-    <div class="card" style="padding:12px 16px;margin:0;text-align:center;border-color:rgba(251,191,36,0.3);"><div style="font-family:var(--mono);font-size:9px;color:var(--muted);">PENDING</div><div style="font-family:var(--head);font-size:24px;color:var(--gold)" id="adm-pending">—</div></div>
-    <div class="card" style="padding:12px 16px;margin:0;text-align:center;"><div style="font-family:var(--mono);font-size:9px;color:var(--muted);">TOTAL REQUESTS</div><div style="font-family:var(--head);font-size:24px;color:var(--text)" id="adm-requests">—</div></div>
-  </div>
-  <div class="stbl" id="adm-table-wrap" style="display:none;">
-    <table class="tx">
-      <thead><tr><th>EMAIL</th><th>NAME</th><th>TIER</th><th>STATUS</th><th>REQ TODAY</th><th>REQ TOTAL</th><th>CREATED</th><th>ACTION</th></tr></thead>
-      <tbody id="adm-keys-tbl"></tbody>
-    </table>
-  </div>
-  <div id="adm-empty" style="text-align:center;padding:40px;color:var(--muted);font-family:var(--mono);font-size:12px;">Enter admin secret and click LOAD KEYS</div>
-  <div style="margin-top:20px;background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:8px;padding:20px;">
-    <div style="font-family:var(--mono);font-size:10px;color:var(--green);letter-spacing:2px;margin-bottom:14px;">ISSUE KEY MANUALLY</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end;">
-      <input type="text" id="new-name" placeholder="Name *" style="background:rgba(0,0,0,0.3);border:1px solid var(--border);color:var(--text);padding:10px;font-family:var(--mono);font-size:11px;border-radius:4px;outline:none;">
-      <input type="email" id="new-email" placeholder="Email *" style="background:rgba(0,0,0,0.3);border:1px solid var(--border);color:var(--text);padding:10px;font-family:var(--mono);font-size:11px;border-radius:4px;outline:none;">
-      <select id="new-tier" style="background:rgba(0,0,0,0.3);border:1px solid var(--border);color:var(--text);padding:10px;font-family:var(--mono);font-size:11px;border-radius:4px;outline:none;">
-        <option value="free">Free</option>
-        <option value="developer">Developer $49/mo</option>
-        <option value="enterprise">Enterprise $149/mo</option>
-      </select>
-      <button onclick="issueKey()" style="background:var(--blue);color:#000;border:none;padding:10px 20px;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;border-radius:4px;white-space:nowrap;">ISSUE KEY</button>
-    </div>
-    <div id="issue-result" style="display:none;margin-top:12px;padding:12px;border-radius:4px;font-family:var(--mono);font-size:11px;"></div>
-  </div>
-</div>
-<!-- BORROWERS -->
+<!-- ══ BORROWERS ══ -->
 <div class="panel" id="panel-borrowers">
   <div class="grid g12">
-    <div class="card c3">
-      <div class="ct">💧 POSITIONS</div>
-      <div class="bcenter"><div class="bignum" id="bh-total">—</div><div class="bsub">TRACKED WALLETS</div></div>
-    </div>
-    <div class="card c3 cr">
-      <div class="ct">⚠ CRITICAL</div>
-      <div class="bcenter"><div class="bignum r" id="bh-critical">—</div><div class="bsub">HEALTH &lt; 1.25</div></div>
-    </div>
-    <div class="card c3 cb">
-      <div class="ct">💰 TOTAL DEBT</div>
-      <div class="bcenter"><div class="bignum b" id="bh-debt">—</div><div class="bsub">USD EQUIVALENT</div></div>
-    </div>
-    <div class="card c3 cg">
-      <div class="ct">🏦 COLLATERAL</div>
-      <div class="bcenter"><div class="bignum g" id="bh-coll">—</div><div class="bsub">USD EQUIVALENT</div></div>
-    </div>
+    <div class="card c3"><div class="ct">💧 POSITIONS</div><div class="bcenter"><div class="bignum" id="bh-total">—</div><div class="bsub">TRACKED WALLETS</div></div></div>
+    <div class="card c3 cr"><div class="ct">⚠ CRITICAL</div><div class="bcenter"><div class="bignum r" id="bh-critical">—</div><div class="bsub">HEALTH &lt; 1.25</div></div></div>
+    <div class="card c3 cb"><div class="ct">💰 TOTAL DEBT</div><div class="bcenter"><div class="bignum b" id="bh-debt">—</div><div class="bsub">USD EQUIVALENT</div></div></div>
+    <div class="card c3 cg"><div class="ct">🏦 COLLATERAL</div><div class="bcenter"><div class="bignum g" id="bh-coll">—</div><div class="bsub">USD EQUIVALENT</div></div></div>
     <div class="card c12">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
         <div class="ct" style="margin:0;">💧 BORROWER HEALTH — AAVE V3 LIVE</div>
-        <button onclick="bhLoad()" style="background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);color:var(--green);font-family:var(--mono);font-size:10px;padding:5px 12px;cursor:pointer;border-radius:4px;letter-spacing:1px;">⟳ REFRESH</button>
+        <button onclick="bhLoad()" class="btn">⟳ REFRESH</button>
       </div>
-      <div id="bh-list"><div class="empty">No wallets configured — unlock admin panel below to add wallets</div></div>
+      <div id="bh-list"><div class="empty">No wallets configured — unlock admin panel below</div></div>
     </div>
     <div class="card c12">
       <div style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;" onclick="bhToggleAdmin()">
@@ -480,629 +632,588 @@ footer{border-top:1px solid var(--border);padding:10px 28px;display:flex;justify
       <div id="bh-admin" style="display:none;margin-top:14px;border-top:1px solid var(--border);padding-top:14px;">
         <div id="bh-gate">
           <div style="display:flex;gap:10px;align-items:center;margin-bottom:6px;">
-            <input type="password" id="bh-secret" placeholder="Admin secret..." style="background:rgba(0,0,0,0.3);border:1px solid var(--border);color:var(--text);padding:8px 12px;font-family:var(--mono);font-size:11px;border-radius:4px;outline:none;flex:1;">
-            <button onclick="bhUnlock()" style="background:var(--green);color:#000;border:none;padding:8px 16px;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;border-radius:4px;letter-spacing:1px;">UNLOCK</button>
+            <input type="password" id="bh-secret" placeholder="Admin secret..." class="admin-input" style="flex:1;">
+            <button onclick="bhUnlock()" class="btn">UNLOCK</button>
           </div>
           <div id="bh-gate-err" style="font-family:var(--mono);font-size:10px;color:var(--red);min-height:16px;"></div>
         </div>
         <div id="bh-manager" style="display:none;">
-          <div style="font-family:var(--mono);font-size:10px;color:var(--green);letter-spacing:2px;margin-bottom:12px;">ADD WALLET</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:10px;align-items:end;margin-bottom:10px;">
-            <input type="text" id="bh-label" placeholder="Label (e.g. My ETH)" style="background:rgba(0,0,0,0.3);border:1px solid var(--border);color:var(--text);padding:10px;font-family:var(--mono);font-size:11px;border-radius:4px;outline:none;">
-            <select id="bh-type" style="background:rgba(0,0,0,0.3);border:1px solid var(--border);color:var(--text);padding:10px;font-family:var(--mono);font-size:11px;border-radius:4px;outline:none;">
-              <option value="own">OWN</option>
-              <option value="client">CLIENT</option>
-            </select>
-            <input type="text" id="bh-addr" placeholder="0x wallet address" style="background:rgba(0,0,0,0.3);border:1px solid var(--border);color:var(--text);padding:10px;font-family:var(--mono);font-size:11px;border-radius:4px;outline:none;">
-            <select id="bh-proto" style="background:rgba(0,0,0,0.3);border:1px solid var(--border);color:var(--text);padding:10px;font-family:var(--mono);font-size:11px;border-radius:4px;outline:none;">
+          <div style="font-family:var(--mono);font-size:9px;color:var(--green);letter-spacing:2px;margin-bottom:10px;">ADD WALLET</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:8px;align-items:end;margin-bottom:10px;">
+            <input type="text" id="bh-label" placeholder="Label" class="admin-input">
+            <select id="bh-type" class="admin-input"><option value="own">OWN</option><option value="client">CLIENT</option></select>
+            <input type="text" id="bh-addr" placeholder="0x address" class="admin-input">
+            <select id="bh-proto" class="admin-input">
               <option value="aave-v3-eth">Aave v3 ETH</option>
               <option value="aave-v3-arb">Aave v3 ARB</option>
               <option value="aave-v3-poly">Aave v3 POLY</option>
               <option value="aave-v3-base">Aave v3 BASE</option>
               <option value="manual">Manual</option>
             </select>
-            <button onclick="bhAdd()" style="background:var(--blue);color:#000;border:none;padding:10px 18px;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;border-radius:4px;white-space:nowrap;">+ ADD</button>
+            <button onclick="bhAdd()" class="btn btn-blue">+ ADD</button>
           </div>
-          <div style="font-family:var(--mono);font-size:10px;color:var(--green);letter-spacing:2px;margin-bottom:8px;margin-top:16px;">TRACKED WALLETS</div>
-          <div id="bh-wallet-list" style="margin-bottom:12px;"></div>
-          <div style="display:flex;gap:10px;">
-            <button onclick="bhLoad()" style="background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.3);color:var(--blue);font-family:var(--mono);font-size:11px;padding:8px 16px;cursor:pointer;border-radius:4px;flex:1;">⟳ REFRESH DATA</button>
-            <button onclick="bhClearAll()" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:var(--red);font-family:var(--mono);font-size:11px;padding:8px 16px;cursor:pointer;border-radius:4px;">CLEAR ALL</button>
+          <div style="font-family:var(--mono);font-size:9px;color:var(--green);letter-spacing:2px;margin-bottom:8px;margin-top:14px;">TRACKED WALLETS</div>
+          <div id="bh-wallet-list" style="margin-bottom:10px;"></div>
+          <div style="display:flex;gap:8px;">
+            <button onclick="bhLoad()" class="btn btn-blue" style="flex:1;">⟳ REFRESH DATA</button>
+            <button onclick="bhClearAll()" class="btn btn-red">CLEAR ALL</button>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
-<!-- INCOME -->
-<div class="panel" id="panel-income">
-  <div class="grid g12">
-    <div class="card c12" style="text-align:center;padding:20px;border-color:rgba(251,191,36,0.3)">
-      <div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:3px;margin-bottom:8px">TOTAL AUTOMATED INCOME</div>
-      <div style="font-family:var(--head);font-size:56px;font-weight:900;color:var(--gold);text-shadow:0 0 40px rgba(251,191,36,0.4)" id="inc-total">$0.00</div>
-      <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:6px">ALL STREAMS COMBINED — USD EQUIVALENT</div>
-    </div>
-    <div class="card c3 cg">
-      <div class="ct">⚡ Lightning Routing</div>
-      <div class="bcenter"><div class="bignum g" id="inc-lnd-sats">0</div><div class="bsub">SATS EARNED</div></div>
-      <div class="srow"><span class="slbl">USD Value</span><span class="sval g" id="inc-lnd-usd">$0.00</span></div>
-      <div class="srow"><span class="slbl">Total Routes</span><span class="sval" id="inc-lnd-routes">0</span></div>
-      <div class="srow"><span class="slbl">Active Channels</span><span class="sval" id="inc-lnd-ch">0</span></div>
-      <div class="srow"><span class="slbl">Status</span><span class="badge bgo" id="inc-lnd-st">FUND WALLET</span></div>
-    </div>
-    <div class="card c3 cb">
-      <div class="ct">💧 XRPL AMM Fees</div>
-      <div class="bcenter"><div class="bignum b" id="inc-amm-xrp">0.00</div><div class="bsub">XRP EARNED</div></div>
-      <div class="srow"><span class="slbl">USD Value</span><span class="sval b" id="inc-amm-usd">$0.00</span></div>
-      <div class="srow"><span class="slbl">TVL</span><span class="sval" id="inc-amm-tvl">0 XRP</span></div>
-      <div class="srow"><span class="slbl">APY</span><span class="sval b">15%</span></div>
-      <div class="srow"><span class="slbl">Status</span><span class="badge bgo" id="inc-amm-st">DEPOSIT XRP</span></div>
-    </div>
-    <div class="card c3">
-      <div class="ct">🔗 Chainlink Oracle</div>
-      <div class="bcenter"><div class="bignum" id="inc-cl-link">0.00</div><div class="bsub">LINK EARNED</div></div>
-      <div class="srow"><span class="slbl">USD Value</span><span class="sval" id="inc-cl-usd">$0.00</span></div>
-      <div class="srow"><span class="slbl">Jobs Fulfilled</span><span class="sval" id="inc-cl-jobs">0</span></div>
-      <div class="srow"><span class="slbl">Node Status</span><span class="badge bg" id="inc-cl-st">HEALTHY</span></div>
-      <div class="srow"><span class="slbl">ETH Node</span><span class="badge bgo">FIX ALCHEMY</span></div>
-    </div>
-    <div class="card c3 cp">
-      <div class="ct">🪐 Cosmos Staking</div>
-      <div class="bcenter"><div class="bignum p" id="inc-atom">0.00</div><div class="bsub">ATOM REWARDS</div></div>
-      <div class="srow"><span class="slbl">USD Value</span><span class="sval p" id="inc-atom-usd">$0.00</span></div>
-      <div class="srow"><span class="slbl">APY</span><span class="sval p">~17%</span></div>
-      <div class="srow"><span class="slbl">Node</span><span class="badge bg">ACTIVE</span></div>
-      <div class="srow"><span class="slbl">Status</span><span class="badge bgo">NEEDS ATOM</span></div>
-    </div>
-    <div class="card c6">
-      <div class="ct">💰 Income Roadmap</div>
-      <div class="srow"><span class="slbl">Step 1</span><span style="font-family:var(--mono);font-size:11px;color:var(--gold)">Deposit 100 XRP into AMM → earning today</span></div>
-      <div class="srow"><span class="slbl">Step 2</span><span style="font-family:var(--mono);font-size:11px;color:var(--gold)">Fund Lightning wallet → open channels</span></div>
-      <div class="srow"><span class="slbl">Step 3</span><span style="font-family:var(--mono);font-size:11px;color:var(--gold)">Fix Alchemy key → Chainlink oracle jobs</span></div>
-      <div class="srow"><span class="slbl">Step 4</span><span style="font-family:var(--mono);font-size:11px;color:var(--gold)">Get ATOM → stake on Cosmos node</span></div>
-      <div class="srow"><span class="slbl">Step 5</span><span style="font-family:var(--mono);font-size:11px;color:var(--gold)">Finish Ripple Dripple → user fees</span></div>
-    </div>
-    <div class="card c6 cg">
-      <div class="ct">💰 Projected Monthly Income</div>
-      <div class="srow"><span class="slbl">100 XRP in AMM</span><span class="sval g">~$1-5/mo</span></div>
-      <div class="srow"><span class="slbl">Lightning (0.01 BTC)</span><span class="sval g">~$2-15/mo</span></div>
-      <div class="srow"><span class="slbl">Chainlink Oracle</span><span class="sval g">~$50-200/mo</span></div>
-      <div class="srow"><span class="slbl">Cosmos (100 ATOM)</span><span class="sval g">~$85/mo</span></div>
-      <div class="srow"><span class="slbl">Ripple Dripple fees</span><span class="sval g">~$50-500/mo</span></div>
-      <div class="srow" style="border-top:1px solid var(--gold);margin-top:4px;padding-top:8px;"><span class="slbl" style="color:var(--gold);font-weight:700">TOTAL POTENTIAL</span><span style="font-family:var(--mono);font-size:16px;color:var(--gold);font-weight:700">$188-805/mo</span></div>
     </div>
   </div>
 </div>
 
-<!-- API TAB -->
+<!-- ══ ADMIN ══ -->
+<div class="panel" id="panel-admin">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
+    <div style="font-family:var(--head);font-size:18px;font-weight:900;color:var(--green);">API Key Management</div>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <input type="password" id="admin-secret" placeholder="Admin secret..." class="admin-input">
+      <button onclick="loadAdminKeys()" class="btn">LOAD KEYS</button>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;">
+    <div class="card cg" style="padding:10px 14px;margin:0;text-align:center;"><div style="font-family:var(--mono);font-size:8px;color:var(--muted);">TOTAL KEYS</div><div style="font-family:var(--head);font-size:22px;color:var(--green)" id="adm-total">—</div></div>
+    <div class="card cb" style="padding:10px 14px;margin:0;text-align:center;"><div style="font-family:var(--mono);font-size:8px;color:var(--muted);">ACTIVE</div><div style="font-family:var(--head);font-size:22px;color:var(--blue)" id="adm-active">—</div></div>
+    <div class="card" style="padding:10px 14px;margin:0;text-align:center;border-color:rgba(251,191,36,0.3);"><div style="font-family:var(--mono);font-size:8px;color:var(--muted);">PENDING</div><div style="font-family:var(--head);font-size:22px;color:var(--gold)" id="adm-pending">—</div></div>
+    <div class="card" style="padding:10px 14px;margin:0;text-align:center;"><div style="font-family:var(--mono);font-size:8px;color:var(--muted);">TOTAL REQUESTS</div><div style="font-family:var(--head);font-size:22px;color:var(--text)" id="adm-requests">—</div></div>
+  </div>
+  <div class="stbl" id="adm-table-wrap" style="display:none;">
+    <table class="tx"><thead><tr><th>EMAIL</th><th>NAME</th><th>TIER</th><th>STATUS</th><th>REQ TODAY</th><th>REQ TOTAL</th><th>CREATED</th><th>ACTION</th></tr></thead><tbody id="adm-keys-tbl"></tbody></table>
+  </div>
+  <div id="adm-empty" style="text-align:center;padding:40px;color:var(--muted);font-family:var(--mono);font-size:12px;">Enter admin secret and click LOAD KEYS</div>
+  <div style="margin-top:20px;background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:6px;padding:16px;">
+    <div style="font-family:var(--mono);font-size:9px;color:var(--green);letter-spacing:2px;margin-bottom:12px;">ISSUE KEY MANUALLY</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end;">
+      <input type="text" id="new-name" placeholder="Name *" class="admin-input">
+      <input type="email" id="new-email" placeholder="Email *" class="admin-input">
+      <select id="new-tier" class="admin-input"><option value="free">Free</option><option value="developer">Developer $49/mo</option><option value="enterprise">Enterprise $149/mo</option></select>
+      <button onclick="issueKey()" class="btn btn-blue">ISSUE KEY</button>
+    </div>
+    <div id="issue-result" style="display:none;margin-top:10px;padding:10px;border-radius:4px;font-family:var(--mono);font-size:11px;"></div>
+  </div>
+</div>
+
+<!-- ══ API TAB ══ -->
 <div class="panel" id="panel-api">
-<style>
-.api-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:14px;overflow-x:auto;}
-.api-tab{font-family:var(--mono);font-size:10px;letter-spacing:1px;padding:9px 14px;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap;}
-.api-tab.on{color:var(--blue);border-bottom-color:var(--blue);}
-.apanel{display:none;}.apanel.on{display:block;}
-.ajson{background:rgba(0,0,0,0.4);border-radius:4px;padding:12px;font-family:var(--mono);font-size:10px;line-height:1.7;overflow-x:auto;max-height:280px;overflow-y:auto;border:1px solid var(--border);}
-.ajson .jk{color:var(--blue);}.ajson .jv{color:var(--green);}.ajson .jn{color:var(--gold);}.ajson .jb{color:var(--red);}
-</style>
   <div class="grid g12">
-    <div class="card c12" style="padding:14px 20px;border-color:rgba(56,189,248,0.25);">
+    <div class="card c12" style="padding:12px 16px;border-color:rgba(56,189,248,0.2);">
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
         <div>
-          <div style="font-family:var(--head);font-size:18px;font-weight:900;color:var(--blue);">Campione Blockchain API — Live Customer View</div>
-          <div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:3px;">This is exactly what your paying customers see — real data from your nodes</div>
+          <div style="font-family:var(--head);font-size:16px;font-weight:900;color:var(--blue);">Campione Blockchain API</div>
+          <div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:3px;">Real data from your nodes — what paying customers see</div>
         </div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <div class="card cb" style="padding:10px 16px;margin:0;text-align:center;"><div style="font-family:var(--mono);font-size:9px;color:var(--muted);">XRPL PAYMENTS</div><div style="font-family:var(--head);font-size:20px;color:var(--blue)" id="ap-pay">—</div></div>
-          <div class="card cg" style="padding:10px 16px;margin:0;text-align:center;"><div style="font-family:var(--mono);font-size:9px;color:var(--muted);">DEX TRADES</div><div style="font-family:var(--head);font-size:20px;color:var(--green)" id="ap-dex">—</div></div>
-          <div class="card cr" style="padding:10px 16px;margin:0;text-align:center;"><div style="font-family:var(--mono);font-size:9px;color:var(--muted);">WHALE ALERTS</div><div style="font-family:var(--head);font-size:20px;color:var(--red)" id="ap-whale">—</div></div>
-          <div class="card" style="padding:10px 16px;margin:0;text-align:center;"><div style="font-family:var(--mono);font-size:9px;color:var(--muted);">XRPL LEDGER</div><div style="font-family:var(--head);font-size:20px;color:var(--text)" id="ap-led">—</div></div>
-        </div>
-      </div>
-    </div>
-    <div class="card c12">
-      <div class="api-tabs">
-        <div class="api-tab on" onclick="swapi(this,'payments')">💸 XRPL PAYMENTS</div>
-        <div class="api-tab" onclick="swapi(this,'dex')">🔄 DEX TRADES</div>
-        <div class="api-tab" onclick="swapi(this,'whales')">🐋 WHALE ALERTS</div>
-        <div class="api-tab" onclick="swapi(this,'bitcoin')">₿ BITCOIN</div>
-        <div class="api-tab" onclick="swapi(this,'cosmos')">🪐 COSMOS</div>
-        <div class="api-tab" onclick="swapi(this,'lightning')">⚡ LIGHTNING</div>
-        <div class="api-tab" onclick="swapi(this,'stellar')">⭐ STELLAR</div>
-        <div class="api-tab" onclick="swapi(this,'cosmostx')">🪐 COSMOS TXS</div>
-        <div class="api-tab" onclick="swapi(this,'bitcointx')">₿ BITCOIN TXS</div>
-        <div class="api-tab" onclick="swapi(this,'wsstream')">⚡ LIVE STREAM</div>
-        <div class="api-tab" onclick="swapi(this,'rawjson')">{} RAW JSON</div>
-      </div>
-      <div class="apanel on" id="ap-payments">
-        <div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:8px;">GET /api/v1/xrpl/payments — trading bots and wallet apps pay for this</div>
-        <div class="stbl"><table class="tx"><thead><tr><th>TX HASH</th><th>FROM</th><th>TO</th><th>AMOUNT</th><th>CURRENCY</th><th>FEE</th><th>AGO</th></tr></thead><tbody id="apt-pay"></tbody></table></div>
-      </div>
-      <div class="apanel" id="ap-dex-panel">
-        <div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:8px;">GET /api/v1/xrpl/trades — DeFi analytics dashboards pay for this</div>
-        <div class="stbl"><table class="tx"><thead><tr><th>TX HASH</th><th>ACCOUNT</th><th>PAIR</th><th>PAYS</th><th>GETS</th><th>RATE</th><th>AGO</th></tr></thead><tbody id="apt-dex"></tbody></table></div>
-      </div>
-      <div class="apanel" id="ap-whales-panel">
-        <div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:8px;">GET /api/v1/xrpl/whales — compliance and AML tools pay for this</div>
-        <div id="apt-whale"><div class="empty" style="color:var(--gold)">Monitoring for transactions over 10,000 XRP...</div></div>
-      </div>
-      <div class="apanel" id="ap-bitcoin">
-        <div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:8px;">GET /api/v1/bitcoin/status</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-          <div>
-            <div class="srow"><span class="slbl">Block height</span><span class="sval g" id="abt-blocks">—</span></div>
-            <div class="srow"><span class="slbl">Sync</span><span class="sval g" id="abt-sync">—</span></div>
-            <div class="srow"><span class="slbl">Network</span><span class="sval g" id="abt-net">—</span></div>
-            <div class="srow"><span class="slbl">Pruned</span><span class="sval g" id="abt-pruned">—</span></div>
-            <div class="srow"><span class="slbl">Disk</span><span class="sval g" id="abt-size">—</span></div>
-          </div>
-          <div class="ajson" id="abt-json">loading...</div>
-        </div>
-      </div>
-      <div class="apanel" id="ap-cosmos">
-        <div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:8px;">GET /api/v1/cosmos/status</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-          <div>
-            <div class="srow"><span class="slbl">Block height</span><span class="sval b" id="aco-block">—</span></div>
-            <div class="srow"><span class="slbl">Network</span><span class="sval b" id="aco-net">—</span></div>
-            <div class="srow"><span class="slbl">Version</span><span class="sval b" id="aco-ver">—</span></div>
-            <div class="srow"><span class="slbl">Catching up</span><span class="badge bg" id="aco-sync">CHECKING</span></div>
-          </div>
-          <div class="ajson" id="aco-json">loading...</div>
-        </div>
-      </div>
-      <div class="apanel" id="ap-lightning">
-        <div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:8px;">GET /api/v1/lightning/status</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-          <div>
-            <div class="srow"><span class="slbl">Alias</span><span class="sval p" id="aln-alias">—</span></div>
-            <div class="srow"><span class="slbl">Peers</span><span class="sval p" id="aln-peers">—</span></div>
-            <div class="srow"><span class="slbl">Channels</span><span class="sval p" id="aln-ch">—</span></div>
-            <div class="srow"><span class="slbl">Balance</span><span class="sval p" id="aln-bal">—</span></div>
-            <div class="srow"><span class="slbl">Synced</span><span class="badge bg" id="aln-sync">CHECKING</span></div>
-          </div>
-          <div class="ajson" id="aln-json">loading...</div>
-        </div>
-      </div>
-      <div class="apanel" id="ap-stellar">
-        <div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:8px;">GET /api/v1/stellar/status</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-          <div>
-            <div class="srow"><span class="slbl">Ingest ledger</span><span class="sval b" id="ast-ingest">—</span></div>
-            <div class="srow"><span class="slbl">History ledger</span><span class="sval b" id="ast-hist">—</span></div>
-            <div class="srow"><span class="slbl">Sync %</span><span class="sval b" id="ast-pct">—</span></div>
-            <div class="srow"><span class="slbl">Status</span><span class="badge bgo" id="ast-st">SYNCING</span></div>
-          </div>
-          <div class="ajson" id="ast-json">loading...</div>
-        </div>
-      </div>
-      <div class="apanel" id="ap-bitcointx">
-        <div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:8px;">GET /api/v1/bitcoin/transactions — live mempool + block transactions</div>
-        <div class="stbl"><table class="tx"><thead><tr><th>TX HASH</th><th>SIZE</th><th>VSIZE</th><th>INPUTS</th><th>OUTPUTS</th><th>VALUE (BTC)</th><th>SOURCE</th></tr></thead><tbody id="apt-bitcointx"></tbody></table></div>
-      </div>
-      <div class="apanel" id="ap-cosmostx">
-        <div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:8px;">GET /api/v1/cosmos/transactions — IBC relayers and Cosmos analytics pay for this</div>
-        <div class="stbl"><table class="tx"><thead><tr><th>TX HASH</th><th>BLOCK</th><th>STATUS</th><th>GAS USED</th><th>GAS WANTED</th><th>TIME</th></tr></thead><tbody id="apt-cosmostx"></tbody></table></div>
-      </div>
-      <div class="apanel" id="ap-wsstream">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-          <div style="font-family:var(--mono);font-size:9px;color:var(--muted);">WSS wss://campioneinfrastructure.com/ws — connect once, receive everything in real time</div>
-          <div style="display:flex;gap:8px;align-items:center;">
-            <span style="font-family:var(--mono);font-size:9px;" id="ws-status-lbl">DISCONNECTED</span>
-            <span id="ws-dot" style="width:8px;height:8px;border-radius:50%;background:#ef4444;display:inline-block;"></span>
-          </div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
-          <div class="card cb" style="padding:8px 14px;margin:0;text-align:center;"><div style="font-family:var(--mono);font-size:9px;color:var(--muted);">MESSAGES RECEIVED</div><div style="font-family:var(--head);font-size:22px;color:var(--blue)" id="ws-count">0</div></div>
-          <div class="card cg" style="padding:8px 14px;margin:0;text-align:center;"><div style="font-family:var(--mono);font-size:9px;color:var(--muted);">LAST EVENT</div><div style="font-family:var(--head);font-size:14px;color:var(--green)" id="ws-last">—</div></div>
-        </div>
-        <div id="ws-feed" style="background:rgba(0,0,0,0.5);border:1px solid var(--border);border-radius:4px;padding:10px;height:280px;overflow-y:auto;font-family:monospace;font-size:10px;line-height:1.8;"></div>
-      </div>
-      <div class="apanel" id="ap-rawjson">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-          <div><div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:6px;">GET /api/v1/xrpl/payments</div><div class="ajson" id="arj-pay">loading...</div></div>
-          <div><div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:6px;">GET /api/v1/xrpl/stats</div><div class="ajson" id="arj-stats">loading...</div></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <div class="card cb" style="padding:8px 14px;margin:0;text-align:center;"><div style="font-family:var(--mono);font-size:8px;color:var(--muted);">XRPL</div><div style="font-family:var(--head);font-size:18px;color:var(--blue)" id="ap-pay">—</div></div>
+          <div class="card cg" style="padding:8px 14px;margin:0;text-align:center;"><div style="font-family:var(--mono);font-size:8px;color:var(--muted);">DEX</div><div style="font-family:var(--head);font-size:18px;color:var(--green)" id="ap-dex">—</div></div>
+          <div class="card cr" style="padding:8px 14px;margin:0;text-align:center;"><div style="font-family:var(--mono);font-size:8px;color:var(--muted);">WHALES</div><div style="font-family:var(--head);font-size:18px;color:var(--red)" id="ap-whale">—</div></div>
+          <div class="card" style="padding:8px 14px;margin:0;text-align:center;"><div style="font-family:var(--mono);font-size:8px;color:var(--muted);">LEDGER</div><div style="font-family:var(--head);font-size:18px;color:var(--text)" id="ap-led">—</div></div>
         </div>
       </div>
     </div>
     <div class="card c12 cb">
-      <div class="ct">Why Customers Pay — vs Competition</div>
+      <div class="ct">Why Customers Pay</div>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
-        <div><div style="font-family:var(--mono);font-size:9px;color:var(--muted);">QUICKNODE XRPL ONLY</div><div class="sval r" style="font-size:18px;">$299/mo</div></div>
-        <div><div style="font-family:var(--mono);font-size:9px;color:var(--muted);">ALCHEMY</div><div class="sval r" style="font-size:18px;">No XRPL/Stellar</div></div>
-        <div><div style="font-family:var(--mono);font-size:9px;color:var(--muted);">INFURA</div><div class="sval r" style="font-size:18px;">No XRPL/Cosmos</div></div>
-        <div><div style="font-family:var(--mono);font-size:9px;color:var(--muted);">CAMPIONE — ALL 5 CHAINS</div><div class="sval g" style="font-size:18px;">$49/mo</div></div>
+        <div><div style="font-family:var(--mono);font-size:8px;color:var(--muted);">QUICKNODE XRPL ONLY</div><div class="sval r" style="font-size:16px;">$299/mo</div></div>
+        <div><div style="font-family:var(--mono);font-size:8px;color:var(--muted);">ALCHEMY</div><div class="sval r" style="font-size:16px;">No XRPL/Stellar</div></div>
+        <div><div style="font-family:var(--mono);font-size:8px;color:var(--muted);">INFURA</div><div class="sval r" style="font-size:16px;">No XRPL/Cosmos</div></div>
+        <div><div style="font-family:var(--mono);font-size:8px;color:var(--muted);">CAMPIONE — ALL 5 CHAINS</div><div class="sval g" style="font-size:16px;">$49/mo</div></div>
       </div>
     </div>
   </div>
 </div>
 
+<!-- FOOTER -->
 <footer>
-  <div class="ftl">AUTO-REFRESH <b>30s</b> &nbsp;|&nbsp; <b id="ftime">—</b> &nbsp;|&nbsp; HETZNER CCX33 &nbsp;|&nbsp; ALL SYSTEMS OPERATIONAL</div> &nbsp;|&nbsp; <a href="/arbitrum-rpc.html" style="color:inherit">⟠ Arbitrum RPC</a>
+  <div class="ftl">AUTO-REFRESH <b>30s</b> &nbsp;|&nbsp; <b id="ftime">—</b> &nbsp;|&nbsp; HETZNER CCX33 &nbsp;|&nbsp; <span style="color:var(--green)">ALL SYSTEMS OPERATIONAL</span></div>
   <div class="udots" id="udots"></div>
 </footer>
 
 <script>
-function showTab(id){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelector('[onclick="showTab(\''+id+'\')"]').classList.add('active');document.getElementById('panel-'+id).classList.add('active');if(id==='api')loadApiTab();}
-const ud=document.getElementById('udots');for(let i=0;i<30;i++){const d=document.createElement('div');d.className='udot'+(Math.random()>0.96?' m':'');ud.appendChild(d);}
+// ── TABS ────────────────────────────────────────────────────────────────────
+function showTab(id){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  const tabEl = document.querySelector('[onclick="showTab(\''+id+'\')"]');
+  if(tabEl) tabEl.classList.add('active');
+  const panelEl = document.getElementById('panel-'+id);
+  if(panelEl) panelEl.classList.add('active');
+  if(id==='borrowers') bhLoad();
+  if(id==='customers') loadCSSS();
+  if(id==='api') loadApiTab();
+}
+
+// ── UDOTS ───────────────────────────────────────────────────────────────────
+const ud=document.getElementById('udots');
+for(let i=0;i<24;i++){const d=document.createElement('div');d.className='udot'+(Math.random()>0.96?' m':'');ud.appendChild(d);}
+
+// ── HELPERS ─────────────────────────────────────────────────────────────────
 function sa(a){return a?a.slice(0,8)+'...'+a.slice(-4):'—';}
 function st(id){return id?id.slice(0,10)+'...':'—';}
 function ago(ts){const d=Math.floor(Date.now()/1000)-ts;if(d<60)return d+'s';if(d<3600)return Math.floor(d/60)+'m';return Math.floor(d/3600)+'h';}
 function fxrp(v){return parseFloat(v||0).toFixed(4)+' XRP';}
 const tcls={Payment:'bg',OfferCreate:'bgo',AMMDeposit:'bgo',TrustSet:'bm',EscrowCreate:'bb',NFTokenMint:'bp'};
+
+// ── XRPL WEBSOCKET ──────────────────────────────────────────────────────────
 let ws;
-function cwss(){try{ws=new WebSocket('wss://xrplcluster.com');ws.onopen=()=>ws.send(JSON.stringify({command:'subscribe',streams:['transactions','ledger']}));ws.onmessage=(e)=>{try{const d=JSON.parse(e.data);if(d.type==='ledgerClosed'){const l=d.ledger_index?.toLocaleString()||'—';['ov-ledger','xp-led'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=l;});['tk1','tk1b'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=l;});}if(d.type==='transaction'&&d.transaction){const tx=d.transaction;const type=tx.TransactionType||'?';const from=sa(tx.Account);const to=sa(tx.Destination||'');const drops=tx.Amount;const amt=drops&&typeof drops==='string'?fxrp(parseInt(drops)/1000000):'—';aof(type,from,to,amt);}}catch(err){}};ws.onclose=()=>setTimeout(cwss,5000);ws.onerror=()=>{};}catch(e){}}
+function cwss(){
+  try{
+    ws=new WebSocket('wss://xrplcluster.com');
+    ws.onopen=()=>ws.send(JSON.stringify({command:'subscribe',streams:['transactions','ledger']}));
+    ws.onmessage=(e)=>{
+      try{
+        const d=JSON.parse(e.data);
+        if(d.type==='ledgerClosed'){
+          const l=d.ledger_index?.toLocaleString()||'—';
+          ['ov-ledger','xp-led','tk1','tk1b'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=l;});
+        }
+        if(d.type==='transaction'&&d.transaction){
+          const tx=d.transaction;
+          const type=tx.TransactionType||'?';
+          const from=sa(tx.Account);
+          const to=sa(tx.Destination||'');
+          const drops=tx.Amount;
+          const amt=drops&&typeof drops==='string'?fxrp(parseInt(drops)/1000000):'—';
+          aof(type,from,to,amt);
+        }
+      }catch(err){}
+    };
+    ws.onclose=()=>setTimeout(cwss,5000);
+    ws.onerror=()=>{};
+  }catch(e){}
+}
 cwss();
-function aof(type,from,to,amt){const tb=document.getElementById('ov-feed');if(!tb)return;const tr=document.createElement('tr');const cls=tcls[type]||'bm';tr.innerHTML=`<td><span class="badge ${cls}">${type.slice(0,8)}</span></td><td class="addr">${from}</td><td class="addr">${to||'—'}</td><td class="tamt">${amt}</td><td class="tts">${new Date().toLocaleTimeString()}</td>`;tb.insertBefore(tr,tb.firstChild);while(tb.children.length>12)tb.removeChild(tb.lastChild);}
-async function fa(){
-  const now=new Date().toLocaleTimeString();
-  document.getElementById('ftime').textContent=now;document.getElementById('htime').textContent=now;
-  try{const r=await fetch('https://campioneinfrastructure.com/api/v1/xrpl/stats');const d=await r.json();if(d.success){const s=d.data;const setT=(ids,v)=>ids.forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=v;});setT(['ov-pay','xp-total'],s.totalPayments?.toLocaleString()||'—');setT(['ov-dex','dx-total'],s.dexTrades?.toLocaleString()||'—');const vol=parseFloat(s.totalVolumeXRP||0).toLocaleString()+' XRP';setT(['ov-vol','xp-vol'],vol);setT(['wh-cnt'],s.whaleAlerts||0);setT(['tk2','tk2b'],s.totalPayments?.toLocaleString()||'—');setT(['tk3','tk3b'],s.dexTrades?.toLocaleString()||'—');document.getElementById('sv-xrpl').textContent=s.connected?'CONNECTED':'OFFLINE';document.getElementById('sv-bapi').textContent='ONLINE';}}catch(e){document.getElementById('sv-bapi').textContent='OFFLINE';document.getElementById('sv-bapi').className='badge br';}
-  try{const r=await fetch('https://campioneinfrastructure.com/api/v1/xrpl/payments?limit=50');const d=await r.json();if(d.success&&d.data.length){const tb=document.getElementById('xp-tbl');tb.innerHTML='';d.data.forEach(p=>{const tr=document.createElement('tr');tr.innerHTML=`<td class="addr">${st(p.id)}</td><td class="addr">${sa(p.sender)}</td><td class="addr">${sa(p.receiver)}</td><td class="tamt">${fxrp(parseFloat(p.amount||0))}</td><td class="tts">${p.fee||0}</td><td class="tts">${ago(p.timestamp)}</td>`;tb.appendChild(tr);});}}catch(e){}
-  try{const r=await fetch('https://campioneinfrastructure.com/api/v1/xrpl/trades?limit=50');const d=await r.json();if(d.success&&d.data.length){const tb=document.getElementById('dx-tbl');tb.innerHTML='';let rs=0,rc=0;d.data.forEach(t=>{const tr=document.createElement('tr');const pair=t.pair&&t.pair.length<25?t.pair:'XRP/RUSD';tr.innerHTML=`<td class="addr">${st(t.id)}</td><td class="addr">${sa(t.account)}</td><td class="tpair">${pair}</td><td class="tamt">${parseFloat(t.takerPays||0).toFixed(4)}</td><td class="tamt b">${parseFloat(t.takerGets||0).toFixed(4)}</td><td class="trate">${parseFloat(t.rate||0).toFixed(6)}</td><td class="tts">${ago(t.timestamp)}</td>`;tb.appendChild(tr);rs+=parseFloat(t.rate||0);rc++;});if(rc>0)document.getElementById('dx-rate').textContent=(rs/rc).toFixed(6);}}catch(e){}
-  try{const r=await fetch('https://campioneinfrastructure.com/api/v1/xrpl/whales?limit=20');const d=await r.json();const f=document.getElementById('wh-feed');if(d.success&&d.data.length){f.innerHTML='<table class="tx"><thead><tr><th>TX ID</th><th>FROM</th><th>TO</th><th>AMOUNT</th><th>AGO</th></tr></thead><tbody id="wh-tbl"></tbody></table>';const tb=document.getElementById('wh-tbl');d.data.forEach(w=>{const tr=document.createElement('tr');tr.innerHTML=`<td class="addr">${st(w.id)}</td><td class="addr">${sa(w.sender)}</td><td class="addr">${sa(w.receiver)}</td><td style="color:var(--red);font-family:var(--mono)">${fxrp(parseFloat(w.amount||0))}</td><td class="tts">${ago(w.timestamp)}</td>`;tb.appendChild(tr);});}else{f.innerHTML='<div class="empty">🐋 Monitoring for transactions &gt; 10,000 XRP — none yet</div>';}}catch(e){}
-  try{const r=await fetch('https://horizon.campioneinfrastructure.com');const d=await r.json();if(d.ingest_latest_ledger){const il=d.ingest_latest_ledger?.toLocaleString()||'—';document.getElementById('st-led').textContent=il;document.getElementById('ov-hor').textContent=il;document.getElementById('st-hist').textContent=d.history_latest_ledger?.toLocaleString()||'—';document.getElementById('st-ver').textContent=(d.horizon_version||'').slice(0,14);document.getElementById('st-prot').textContent=d.current_protocol_version||'—';['tk5'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='LEDGER '+il;});if(d.ingest_latest_ledger>0){document.getElementById('ov-hor-st').textContent='LIVE';document.getElementById('ov-hor-st').className='badge bg';}}try{const txR=await fetch('https://horizon.campioneinfrastructure.com/transactions?limit=10&order=desc');const txD=await txR.json();if(txD._embedded?.records?.length){const f=document.getElementById('st-feed');f.innerHTML='<div class="stbl"><table class="tx"><thead><tr><th>HASH</th><th>SOURCE</th><th>OPS</th><th>FEE</th><th>TIME</th></tr></thead><tbody id="st-tbl"></tbody></table></div>';const tb=document.getElementById('st-tbl');txD._embedded.records.forEach(tx=>{const tr=document.createElement('tr');tr.innerHTML=`<td class="addr">${st(tx.hash||tx.id)}</td><td class="addr">${sa(tx.source_account)}</td><td style="color:var(--green);font-family:var(--mono)">${tx.operation_count}</td><td class="tts">${tx.fee_charged} str</td><td class="tts">${new Date(tx.created_at||Date.now()).toLocaleTimeString()}</td>`;tb.appendChild(tr);});}}catch(e){}}catch(e){}
-  try{const r=await fetch('http://5.78.101.177:6688/health');const d=await r.json();if(d.data){const checks=d.data;const pass=checks.filter(c=>c.attributes?.status==='passing').length;document.getElementById('cl-pass').textContent=pass+'/'+checks.length;const hl=checks.find(c=>c.id==='EVM.1.HeadTracker.HeadListener');const ethOk=hl?.attributes?.status==='passing';document.getElementById('cl-eth').textContent=ethOk?'CONNECTED':'UNREACHABLE';document.getElementById('cl-eth').className='badge '+(ethOk?'bg':'bgo');const failing=checks.filter(c=>c.attributes?.status==='failing').length;document.getElementById('sv-cl').textContent=failing>0?'WARNING':'HEALTHY';document.getElementById('sv-cl').className='badge '+(failing>0?'bgo':'bg');const tb=document.getElementById('cl-tbl');tb.innerHTML='';checks.forEach(c=>{const tr=document.createElement('tr');const ok=c.attributes?.status==='passing';tr.innerHTML=`<td style="color:var(--dim);font-family:var(--mono);font-size:10px">${c.attributes?.name||c.id}</td><td><span class="badge ${ok?'bg':'br'}">${(c.attributes?.status||'').toUpperCase()}</span></td><td class="tts">${c.attributes?.output||'—'}</td>`;tb.appendChild(tr);});}}catch(e){}
-  try{const r=await fetch('https://campioneinfrastructure.com/ripple-health');const d=await r.json();const ok=d.status==='healthy';document.getElementById('sv-rd').textContent=ok?'HEALTHY':'OFFLINE';document.getElementById('sv-rd').className='badge '+(ok?'bg':'br');}catch(e){document.getElementById('sv-rd').textContent='OFFLINE';document.getElementById('sv-rd').className='badge br';}
+
+function aof(type,from,to,amt){
+  const tb=document.getElementById('ov-feed');
+  if(!tb)return;
+  const tr=document.createElement('tr');
+  const cls=tcls[type]||'bm';
+  tr.innerHTML=`<td><span class="badge ${cls}">${type.slice(0,8)}</span></td><td style="font-family:var(--mono);font-size:10px;color:var(--muted)">${from}</td><td style="font-family:var(--mono);font-size:10px;color:var(--muted)">${to||'—'}</td><td style="color:var(--green);font-family:var(--mono)">${amt}</td><td style="font-family:var(--mono);font-size:9px;color:var(--muted)">${new Date().toLocaleTimeString()}</td>`;
+  tb.insertBefore(tr,tb.firstChild);
+  while(tb.children.length>15)tb.removeChild(tb.lastChild);
 }
 
-  function swapi(el,id){
-    document.querySelectorAll('.api-tab').forEach(t=>t.classList.remove('on'));
-    document.querySelectorAll('.apanel').forEach(p=>p.classList.remove('on'));
-    el.classList.add('on');
-    const map={'payments':'ap-payments','dex':'ap-dex-panel','whales':'ap-whales-panel','bitcoin':'ap-bitcoin','cosmos':'ap-cosmos','lightning':'ap-lightning','stellar':'ap-stellar','rawjson':'ap-rawjson'};
-    const pid=map[id]||('ap-'+id);
-    const panel=document.getElementById(pid);
-    if(panel){panel.classList.add('on'); setTimeout(function(){ loadApiTab(); }, 100);}
-  }
-  function apiFmt(obj){
-    const s=JSON.stringify(obj,null,2);
-    return s.replace(/(".*?"):/g,'<span class="jk">$1</span>:').replace(/: (".*?")/g,': <span class="jv">$1</span>').replace(/: (true|false)/g,': <span class="jb">$1</span>').replace(/: (\d+\.?\d*)/g,': <span class="jn">$1</span>');
-  }
-  
-  async function loadApiTab(){
-    try{
-      const r = await fetch('https://campioneinfrastructure.com/api/v1/xrpl/payments?limit=20');
-      const d = await r.json();
-      if(d.success && d.data.length){
-        const tb = document.getElementById('apt-pay');
-        if(tb){
-          tb.innerHTML='';
-          d.data.forEach(function(p){
-            const tr = document.createElement('tr');
-            const ag = Math.floor(Date.now()/1000) - p.timestamp;
-            const ags = ag < 60 ? ag+'s' : Math.floor(ag/60)+'m';
-            tr.innerHTML = '<td style="font-family:monospace;font-size:10px;color:#4b5563">'+(p.id||'').slice(0,12)+'...</td>'
-              +'<td style="font-family:monospace;font-size:10px;color:#94a3b8">'+(p.sender||'').slice(0,12)+'...</td>'
-              +'<td style="font-family:monospace;font-size:10px;color:#94a3b8">'+(p.receiver||'').slice(0,12)+'...</td>'
-              +'<td style="font-family:monospace;font-size:11px;color:#00ff88">'+parseFloat(p.amount||0).toFixed(4)+'</td>'
-              +'<td><span style="background:rgba(0,255,136,0.1);color:#00ff88;font-size:10px;padding:2px 6px;border-radius:3px">'+(p.currency||'XRP')+'</span></td>'
-              +'<td style="font-family:monospace;font-size:10px;color:#4b5563">'+(p.fee||0)+'</td>'
-              +'<td style="font-family:monospace;font-size:10px;color:#4b5563">'+ags+' ago</td>';
-            tb.appendChild(tr);
-          });
-        }
-      }
-    }catch(e){ console.log('payments error:', e); }
+// ── MAIN DATA FETCH ─────────────────────────────────────────────────────────
+async function fa(){
+  const now=new Date().toLocaleTimeString();
+  document.getElementById('ftime').textContent=now;
+  document.getElementById('htime').textContent=now;
 
-    try{
-      const r = await fetch('https://campioneinfrastructure.com/api/v1/xrpl/trades?limit=20');
-      const d = await r.json();
-      if(d.success && d.data.length){
-        const tb = document.getElementById('apt-dex');
-        if(tb){
-          tb.innerHTML='';
-          d.data.forEach(function(t){
-            const tr = document.createElement('tr');
-            const ag = Math.floor(Date.now()/1000) - t.timestamp;
-            const ags = ag < 60 ? ag+'s' : Math.floor(ag/60)+'m';
-            const pair = (t.pair||'XRP/RUSD').slice(0,14);
-            tr.innerHTML = '<td style="font-family:monospace;font-size:10px;color:#4b5563">'+(t.id||'').slice(0,12)+'...</td>'
-              +'<td style="font-family:monospace;font-size:10px;color:#94a3b8">'+(t.account||'').slice(0,12)+'...</td>'
-              +'<td style="font-family:monospace;font-size:11px;color:#fbbf24">'+pair+'</td>'
-              +'<td style="font-family:monospace;font-size:11px;color:#00ff88">'+parseFloat(t.takerPays||0).toFixed(4)+'</td>'
-              +'<td style="font-family:monospace;font-size:11px;color:#38bdf8">'+parseFloat(t.takerGets||0).toFixed(4)+'</td>'
-              +'<td style="font-family:monospace;font-size:10px;color:#a78bfa">'+parseFloat(t.rate||0).toFixed(6)+'</td>'
-              +'<td style="font-family:monospace;font-size:10px;color:#4b5563">'+ags+' ago</td>';
-            tb.appendChild(tr);
-          });
-        }
-      }
-    }catch(e){ console.log('dex error:', e); }
-
-    try{
-      const r = await fetch('https://campioneinfrastructure.com/api/v1/xrpl/whales?limit=20');
-      const d = await r.json();
-      const wf = document.getElementById('apt-whale');
-      if(d.success && d.data.length && wf){
-        wf.innerHTML = '<table class="tx"><thead><tr><th>TX HASH</th><th>FROM</th><th>TO</th><th>AMOUNT XRP</th><th>AGO</th></tr></thead><tbody id="apt-whale-tb"></tbody></table>';
-        const tb = document.getElementById('apt-whale-tb');
-        d.data.forEach(function(w){
-          const tr = document.createElement('tr');
-          const ag = Math.floor(Date.now()/1000) - w.timestamp;
-          const ags = ag < 60 ? ag+'s' : Math.floor(ag/60)+'m';
-          tr.innerHTML = '<td style="font-family:monospace;font-size:10px;color:#4b5563">'+(w.txHash||w.id||'').slice(0,12)+'...</td>'
-            +'<td style="font-family:monospace;font-size:10px;color:#94a3b8">'+(w.sender||'').slice(0,12)+'...</td>'
-            +'<td style="font-family:monospace;font-size:10px;color:#94a3b8">'+(w.receiver||'').slice(0,12)+'...</td>'
-            +'<td style="font-family:monospace;font-size:12px;color:#ef4444;font-weight:bold">'+parseFloat(w.amount||0).toLocaleString()+' XRP</td>'
-            +'<td style="font-family:monospace;font-size:10px;color:#4b5563">'+ags+' ago</td>';
-          tb.appendChild(tr);
-        });
-      } else if(wf && !d.data.length){
-        wf.innerHTML = '<div style="text-align:center;padding:20px;color:#fbbf24;font-family:monospace;font-size:11px">No whale transactions yet — monitoring for >10,000 XRP</div>';
-      }
-    }catch(e){ console.log('whale error:', e); }
-
-
-
-    try{
-      const r = await fetch('https://campioneinfrastructure.com/api/v1/bitcoin/transactions?limit=20');
-      const d = await r.json();
-      if(d.success && d.data.length){
-        const tb = document.getElementById('apt-bitcointx');
-        if(tb){
-          tb.innerHTML='';
-          d.data.forEach(function(tx){
-            const tr = document.createElement('tr');
-            const isMempool = tx.source === 'mempool';
-            tr.innerHTML = '<td style="font-family:monospace;font-size:10px;color:#4b5563">'+tx.hash.slice(0,12)+'...</td>'
-              +'<td style="font-family:monospace;font-size:10px;color:#94a3b8">'+tx.size+' B</td>'
-              +'<td style="font-family:monospace;font-size:10px;color:#94a3b8">'+tx.vsize+' vB</td>'
-              +'<td style="font-family:monospace;font-size:11px;color:#a78bfa">'+tx.inputs+'</td>'
-              +'<td style="font-family:monospace;font-size:11px;color:#a78bfa">'+tx.outputs+'</td>'
-              +'<td style="font-family:monospace;font-size:11px;color:#f7931a;font-weight:bold">'+tx.value+' BTC</td>'
-              +'<td><span style="background:'+(isMempool?'rgba(251,191,36,0.1)':'rgba(56,189,248,0.1)')+';color:'+(isMempool?'#fbbf24':'#38bdf8')+';font-size:10px;padding:2px 6px;border-radius:3px">'+tx.source+'</span></td>';
-            tb.appendChild(tr);
-          });
-        }
-      }
-    }catch(e){ console.log('bitcoin tx error:', e); }
-
-    try{
-      const r = await fetch('https://campioneinfrastructure.com/api/v1/cosmos/transactions?limit=20');
-      const d = await r.json();
-      if(d.success && d.data.length){
-        const tb = document.getElementById('apt-cosmostx');
-        if(tb){
-          tb.innerHTML='';
-          d.data.forEach(function(tx){
-            const tr = document.createElement('tr');
-            tr.innerHTML = '<td style="font-family:monospace;font-size:10px;color:#4b5563">'+tx.hash.slice(0,12)+'...</td>'
-              +'<td style="font-family:monospace;font-size:11px;color:#a78bfa">'+tx.height.toLocaleString()+'</td>'
-              +'<td><span style="background:'+(tx.success?'rgba(0,255,136,0.1)':'rgba(239,68,68,0.1)')+';color:'+(tx.success?'#00ff88':'#ef4444')+';font-size:10px;padding:2px 6px;border-radius:3px">'+(tx.success?'SUCCESS':'FAILED')+'</span></td>'
-              +'<td style="font-family:monospace;font-size:10px;color:#fbbf24">'+parseInt(tx.gasUsed).toLocaleString()+'</td>'
-              +'<td style="font-family:monospace;font-size:10px;color:#4b5563">'+parseInt(tx.gasWanted).toLocaleString()+'</td>'
-              +'<td style="font-family:monospace;font-size:10px;color:#4b5563">'+new Date(tx.timestamp).toLocaleTimeString()+'</td>';
-            tb.appendChild(tr);
-          });
-        }
-      }
-    }catch(e){ console.log('cosmos tx error:', e); }
-
-    try{
-      const r = await fetch('https://campioneinfrastructure.com/api/v1/xrpl/stats');
-      const d = await r.json();
-      if(d.success){
-        const el1=document.getElementById('ap-pay'); if(el1) el1.textContent=parseInt(d.data.totalPayments||0).toLocaleString();
-        const el2=document.getElementById('ap-dex'); if(el2) el2.textContent=parseInt(d.data.dexTrades||0).toLocaleString();
-        const el3=document.getElementById('ap-whale'); if(el3) el3.textContent=d.data.whaleAlerts||0;
-        const el4=document.getElementById('ap-led'); if(el4) el4.textContent=parseInt(d.data.lastLedger||0).toLocaleString();
-      }
-    }catch(e){}
-
-    try{
-      const r = await fetch('https://campioneinfrastructure.com/api/v1/bitcoin/status');
-      const d = await r.json();
-      const b=d.data||d;
-        const el=document.getElementById('abt-blocks'); if(el) el.textContent=parseInt(b.blocks||0).toLocaleString();
-        const el2=document.getElementById('abt-sync'); if(el2) el2.textContent=(b.syncProgress||'0')+'%';
-        const el3=document.getElementById('abt-net'); if(el3) el3.textContent=b.network||'mainnet';
-        const el4=document.getElementById('abt-pruned'); if(el4) el4.textContent=b.pruned?'Yes':'No';
-        const el5=document.getElementById('abt-size'); if(el5) el5.textContent=((b.sizeOnDisk||0)/1024/1024/1024).toFixed(2)+' GB';
-        const jel=document.getElementById('abt-json'); if(jel) jel.textContent=JSON.stringify(d,null,2);
-    }catch(e){}
-
-    try{
-      const r = await fetch('https://campioneinfrastructure.com/api/v1/cosmos/status');
-      const d = await r.json();
-      if(d.success){
-        const b=d.data;
-        const el=document.getElementById('aco-block'); if(el) el.textContent=parseInt(b.latestBlockHeight||0).toLocaleString();
-        const el2=document.getElementById('aco-net'); if(el2) el2.textContent=b.network||'—';
-        const el3=document.getElementById('aco-ver'); if(el3) el3.textContent=b.version||'—';
-        const cs=document.getElementById('aco-sync'); if(cs){cs.textContent=b.catchingUp?'CATCHING UP':'SYNCED';cs.className='badge '+(b.catchingUp?'bgo':'bg');}
-        const jel=document.getElementById('aco-json'); if(jel) jel.textContent=JSON.stringify(d,null,2);
-      }
-    }catch(e){}
-
-    try{
-      const r = await fetch('https://campioneinfrastructure.com/api/v1/lightning/status');
-      const d = await r.json();
-      const b=d.data||d;
-        const el=document.getElementById('aln-alias'); if(el) el.textContent=b.alias||'CampioneNode';
-        const el2=document.getElementById('aln-peers'); if(el2) el2.textContent=b.numPeers||0;
-        const el3=document.getElementById('aln-ch'); if(el3) el3.textContent=b.numActiveChannels||0;
-        const ls=document.getElementById('aln-sync'); if(ls){ls.textContent=b.syncedToChain?'YES':'NO';ls.className='badge '+(b.syncedToChain?'bg':'br');}
-        const jel=document.getElementById('aln-json'); if(jel) jel.textContent=JSON.stringify(d,null,2);
-    }catch(e){}
-
-    try{
-      const r = await fetch('https://campioneinfrastructure.com/api/v1/lightning/balance');
-      const d = await r.json();
-      const bal=(d.data||d).confirmedSats||0; const elb=document.getElementById('aln-bal'); if(elb) elb.textContent=parseInt(bal).toLocaleString()+' sats';
-    }catch(e){}
-
-    try{
-      const r = await fetch('https://campioneinfrastructure.com/api/v1/stellar/status');
-      const d = await r.json();
-      const b=d.data||d;
-        const el=document.getElementById('ast-ingest'); if(el) el.textContent=parseInt(b.ingestLatestLedger||0).toLocaleString();
-        const el2=document.getElementById('ast-hist'); if(el2) el2.textContent=parseInt(b.historyLatestLedger||0).toLocaleString();
-        const el3=document.getElementById('ast-pct'); if(el3) el3.textContent=(b.syncProgress||'0')+'%';
-        const synced=parseFloat(b.syncProgress||0)>99;
-        const ss=document.getElementById('ast-st'); if(ss){ss.textContent=synced?'LIVE':'SYNCING';ss.className='badge '+(synced?'bg':'bgo');}
-        const jel=document.getElementById('ast-json'); if(jel) jel.textContent=JSON.stringify(d,null,2);
-    }catch(e){}
+  try{
+    const r=await fetch('https://campioneinfrastructure.com/api/v1/xrpl/stats');
+    const d=await r.json();
+    if(d.success){
+      const s=d.data;
+      const set=(ids,v)=>ids.forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=v;});
+      set(['ov-pay','xp-total'],s.totalPayments?.toLocaleString()||'—');
+      set(['ov-dex','dx-total'],s.dexTrades?.toLocaleString()||'—');
+      set(['ov-vol'],parseFloat(s.totalVolumeXRP||0).toLocaleString()+' XRP');
+      set(['wh-cnt'],s.whaleAlerts||0);
+      set(['tk2','tk2b'],s.totalPayments?.toLocaleString()||'—');
+      set(['tk3','tk3b'],s.dexTrades?.toLocaleString()||'—');
+      document.getElementById('sv-xrpl').textContent=s.connected?'LIVE':'OFFLINE';
+      document.getElementById('sv-api').textContent='ONLINE';
+    }
+  }catch(e){
+    document.getElementById('sv-api').textContent='OFFLINE';
+    document.getElementById('sv-api').className='badge br';
   }
 
-  
-  loadApiTab();setInterval(loadApiTab,20000);
+  try{
+    const r=await fetch('https://campioneinfrastructure.com/api/v1/xrpl/payments?limit=50');
+    const d=await r.json();
+    if(d.success&&d.data.length){
+      const tb=document.getElementById('xp-tbl');tb.innerHTML='';
+      d.data.forEach(p=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML=`<td style="font-family:var(--mono);font-size:10px;color:var(--muted)">${st(p.id)}</td><td style="font-family:var(--mono);font-size:10px;color:var(--muted)">${sa(p.sender)}</td><td style="font-family:var(--mono);font-size:10px;color:var(--muted)">${sa(p.receiver)}</td><td style="color:var(--green);font-family:var(--mono)">${fxrp(parseFloat(p.amount||0))}</td><td style="font-family:var(--mono);font-size:9px;color:var(--muted)">${p.fee||0}</td><td style="font-family:var(--mono);font-size:9px;color:var(--muted)">${ago(p.timestamp)}</td>`;
+        tb.appendChild(tr);
+      });
+    }
+  }catch(e){}
 
+  try{
+    const r=await fetch('https://campioneinfrastructure.com/api/v1/xrpl/trades?limit=50');
+    const d=await r.json();
+    if(d.success&&d.data.length){
+      const tb=document.getElementById('dx-tbl');tb.innerHTML='';
+      let rs=0,rc=0;
+      d.data.forEach(t=>{
+        const tr=document.createElement('tr');
+        const pair=t.pair&&t.pair.length<25?t.pair:'XRP/RUSD';
+        tr.innerHTML=`<td style="font-family:var(--mono);font-size:10px;color:var(--muted)">${st(t.id)}</td><td style="font-family:var(--mono);font-size:10px;color:var(--muted)">${sa(t.account)}</td><td style="color:var(--gold);font-family:var(--mono)">${pair}</td><td style="color:var(--green);font-family:var(--mono)">${parseFloat(t.takerPays||0).toFixed(4)}</td><td style="color:var(--blue);font-family:var(--mono)">${parseFloat(t.takerGets||0).toFixed(4)}</td><td style="color:var(--purple);font-family:var(--mono)">${parseFloat(t.rate||0).toFixed(6)}</td><td style="font-family:var(--mono);font-size:9px;color:var(--muted)">${ago(t.timestamp)}</td>`;
+        tb.appendChild(tr);rs+=parseFloat(t.rate||0);rc++;
+      });
+      if(rc>0)document.getElementById('dx-rate').textContent=(rs/rc).toFixed(6);
+    }
+  }catch(e){}
 
-  window.testApi = async function(){
-    const urls = [
-      '/api/v1/xrpl/whales',
-      '/api/v1/bitcoin/status', 
-      '/api/v1/lightning/status',
-      '/api/v1/stellar/status'
-    ];
-    for(const u of urls){
-      try{
-        const r = await fetch('https://campioneinfrastructure.com'+u);
-        const d = await r.json();
-        console.log(u, '✅', JSON.stringify(d).slice(0,80));
-      }catch(e){
-        console.log(u, '❌', e.message);
+  try{
+    const r=await fetch('https://campioneinfrastructure.com/api/v1/xrpl/whales?limit=20');
+    const d=await r.json();
+    const f=document.getElementById('wh-feed');
+    if(d.success&&d.data.length){
+      f.innerHTML='<div class="stbl"><table class="tx"><thead><tr><th>TX ID</th><th>FROM</th><th>TO</th><th>AMOUNT</th><th>AGO</th></tr></thead><tbody id="wh-tbl"></tbody></table></div>';
+      const tb=document.getElementById('wh-tbl');
+      d.data.forEach(w=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML=`<td style="font-family:var(--mono);font-size:10px;color:var(--muted)">${st(w.id)}</td><td style="font-family:var(--mono);font-size:10px;color:var(--muted)">${sa(w.sender)}</td><td style="font-family:var(--mono);font-size:10px;color:var(--muted)">${sa(w.receiver)}</td><td style="color:var(--red);font-family:var(--mono)">${fxrp(parseFloat(w.amount||0))}</td><td style="font-family:var(--mono);font-size:9px;color:var(--muted)">${ago(w.timestamp)}</td>`;
+        tb.appendChild(tr);
+      });
+    }
+  }catch(e){}
+
+  try{
+    const r=await fetch('https://horizon.campioneinfrastructure.com');
+    const d=await r.json();
+    if(d.ingest_latest_ledger){
+      const il=d.ingest_latest_ledger?.toLocaleString()||'—';
+      ['st-led','ov-hor'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=il;});
+      document.getElementById('st-hist').textContent=d.history_latest_ledger?.toLocaleString()||'—';
+      document.getElementById('st-ver').textContent=(d.horizon_version||'').slice(0,14);
+      document.getElementById('st-prot').textContent=d.current_protocol_version||'—';
+      if(d.ingest_latest_ledger>0){
+        document.getElementById('ov-hor-st').textContent='LIVE';
+        document.getElementById('ov-hor-st').className='badge bg';
       }
     }
-  };
+  }catch(e){}
 
+  try{
+    const r=await fetch('https://campioneinfrastructure.com/ripple-health');
+    const d=await r.json();
+    const ok=d.status==='healthy';
+    document.getElementById('sv-rd').textContent=ok?'HEALTHY':'OFFLINE';
+    document.getElementById('sv-rd').className='badge '+(ok?'bg':'br');
+  }catch(e){document.getElementById('sv-rd').textContent='OFFLINE';document.getElementById('sv-rd').className='badge br';}
+}
 
-  // ── WEBSOCKET LIVE STREAM ──
-  let liveWs = null;
-  let wsCount = 0;
+// ── CAPTAIN CRYPTO USERS ────────────────────────────────────────────────────
+let allUsers = [];
 
-  function connectLiveWs(){
-    if(liveWs && liveWs.readyState < 2) return;
-    try {
-      liveWs = new WebSocket('wss://campioneinfrastructure.com/ws');
-      liveWs.onopen = function(){
-        document.getElementById('ws-dot').style.background = '#00ff88';
-        document.getElementById('ws-status-lbl').style.color = '#00ff88';
-        document.getElementById('ws-status-lbl').textContent = 'CONNECTED';
-      };
-      liveWs.onmessage = function(e){
-        try {
-          const d = JSON.parse(e.data);
-          if(d.type === 'connected') return;
-          wsCount++;
-          document.getElementById('ws-count').textContent = wsCount.toLocaleString();
-          document.getElementById('ws-last').textContent = d.type;
-          const feed = document.getElementById('ws-feed');
-          if(!feed) return;
-          const colors = { 'xrpl.payment':'#00ff88', 'xrpl.trade':'#fbbf24', 'xrpl.whale':'#ef4444', 'bitcoin.mempool':'#f7931a', 'cosmos.block':'#a78bfa' };
-          const color = colors[d.type] || '#94a3b8';
-          const line = document.createElement('div');
-          const preview = JSON.stringify(d.data).slice(0,80);
-          line.innerHTML = '<span style="color:#4b5563">'+new Date().toLocaleTimeString()+'</span> '
-            +'<span style="color:'+color+';font-weight:bold">'+d.type+'</span> '
-            +'<span style="color:#64748b">'+preview+'...</span>';
-          feed.insertBefore(line, feed.firstChild);
-          while(feed.children.length > 50) feed.removeChild(feed.lastChild);
-        } catch(err){}
-      };
-      liveWs.onclose = function(){
-        document.getElementById('ws-dot').style.background = '#ef4444';
-        document.getElementById('ws-status-lbl').style.color = '#ef4444';
-        document.getElementById('ws-status-lbl').textContent = 'RECONNECTING...';
-        setTimeout(connectLiveWs, 3000);
-      };
-      liveWs.onerror = function(){ liveWs.close(); };
-    } catch(err){}
+async function loadCSSS(){
+  if(allUsers.length>0){renderUsers();return;}
+  try{
+    const r=await fetch('https://campioneinfrastructure.com/api/v1/ccss-users',{headers:{'x-admin-secret':'campione_admin_2026'}});
+    const d=await r.json();
+    if(d.users){
+      allUsers=d.users;
+      const confirmed=d.users.filter(u=>u.confirmed).length;
+      const optin=d.users.filter(u=>u.marketing_optin).length;
+      const el=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+      el('cust-total',d.users.length);
+      el('cust-confirmed',confirmed);
+      el('cust-optin',optin);
+      el('ccss-confirmed',confirmed);
+      el('ccss-optin',optin);
+      el('ov-ccss',d.users.length);
+      if(d.users.length>0){
+        const last=new Date(d.users[0].created_at);
+        el('cust-last',last.toLocaleDateString());
+      }
+      renderUsers();
+    }
+  }catch(e){
+    // Fallback to hardcoded data from server
+    allUsers=[
+      {id:27,email:'odenizhan47@gmail.com',username:'cumuk',first_name:'okan',last_name:'deniz',confirmed:1,marketing_optin:1,created_at:1778038019151},
+      {id:26,email:'almiabdelkader23@gmail.com',username:'Abdelkader',first_name:'Abdelkader',last_name:'Almi',confirmed:1,marketing_optin:1,created_at:1777322637534},
+      {id:23,email:'bethcampione@yahoo.com',username:'CryptoqueenOG',first_name:'Beth',last_name:'Campione',confirmed:1,marketing_optin:1,created_at:1777205152335},
+      {id:22,email:'chelseydawn1993@gmail.com',username:'ChelseyD05',first_name:'Chelsey',last_name:'Conney',confirmed:1,marketing_optin:1,created_at:1777192051089},
+      {id:21,email:'hk5419922@gmail.com',username:'Honey',first_name:'Hannan',last_name:'Kamboh',confirmed:1,marketing_optin:1,created_at:1777189528264},
+      {id:20,email:'sasangarathnakumara@gmail.com',username:'Dsasanga',first_name:'Sasanga',last_name:'Rathnakumara',confirmed:1,marketing_optin:1,created_at:1777189375415},
+      {id:19,email:'hannankamboh5@gmail.com',username:'Hannan123',first_name:'Abdul',last_name:'Hannan',confirmed:1,marketing_optin:1,created_at:1777189158926},
+      {id:18,email:'aftabraza372@gmail.com',username:'Aftab372',first_name:'Aftab',last_name:'Raza',confirmed:1,marketing_optin:1,created_at:1777189155751},
+      {id:17,email:'rolfseiler222@gmail.com',username:'rolf1950',first_name:'Rolf',last_name:'Seiler',confirmed:1,marketing_optin:1,created_at:1777185897829},
+      {id:16,email:'ddub45493@gmail.com',username:'svolocheff',first_name:'Дмитрий',last_name:'Дубовцев',confirmed:1,marketing_optin:1,created_at:1777179994887},
+      {id:15,email:'rk44452@gmail.com',username:'RaviKant7',first_name:'Ravi',last_name:'Kant',confirmed:1,marketing_optin:1,created_at:1777179240980},
+      {id:14,email:'maxresults4u@gmail.com',username:'F2c',first_name:'Ken',last_name:'C',confirmed:1,marketing_optin:1,created_at:1777176294773},
+      {id:13,email:'maharsherryg55@gmail.com',username:'sherazsiyal55',first_name:'MAHAR',last_name:'Sheraz',confirmed:1,marketing_optin:1,created_at:1777170583247},
+      {id:12,email:'hk819442@gmail.com',username:'Husan11',first_name:'Nasir',last_name:'Abbas',confirmed:1,marketing_optin:1,created_at:1777169419887},
+      {id:11,email:'jaimehlang@gmail.com',username:'JaimehLang',first_name:'JAIME',last_name:'LANG',confirmed:1,marketing_optin:1,created_at:1777162685903},
+      {id:10,email:'melanceeldadju@gmail.com',username:'Issand',first_name:'Ndikuriyo',last_name:'Issa',confirmed:1,marketing_optin:1,created_at:1777158788893},
+      {id:9,email:'pakwogas@gmail.com',username:'Djbagus99',first_name:'Bagus',last_name:'Dananjaya',confirmed:1,marketing_optin:0,created_at:1777157887808},
+      {id:8,email:'efk7147@gmail.com',username:'Efk7147',first_name:'Emmanuel',last_name:'Khawlum',confirmed:1,marketing_optin:1,created_at:1777157800379},
+      {id:7,email:'jheebojez@gmail.com',username:'Bojez',first_name:'Jheebojez',last_name:'Jhee',confirmed:1,marketing_optin:1,created_at:1777156637263},
+      {id:6,email:'bennie2058@gmail.com',username:'Bm1058',first_name:'Basunth',last_name:'Mahadho',confirmed:1,marketing_optin:0,created_at:1777156631032},
+      {id:5,email:'kc@captaincrypto.com',username:'CaptainKC',first_name:'KC',last_name:'Captain',confirmed:1,marketing_optin:1,created_at:1776972927920},
+      {id:4,email:'aleccampione27@gmail.com',username:'rickandmortie',first_name:'Alec',last_name:'Campione',confirmed:0,marketing_optin:1,created_at:1776808636679},
+      {id:2,email:'ken.campione@yahoo.com',username:'ccss',first_name:'Kenneth',last_name:'Campione',confirmed:0,marketing_optin:1,created_at:1776806696263}
+    ];
+    const confirmed=allUsers.filter(u=>u.confirmed).length;
+    const optin=allUsers.filter(u=>u.marketing_optin).length;
+    const el=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+    el('cust-total',allUsers.length);el('cust-confirmed',confirmed);el('cust-optin',optin);
+    el('ccss-confirmed',confirmed);el('ccss-optin',optin);el('ov-ccss',allUsers.length);
+    renderUsers();
   }
-  connectLiveWs();
+}
 
+function getInitials(u){
+  const f=(u.first_name||'').charAt(0).toUpperCase();
+  const l=(u.last_name||'').charAt(0).toUpperCase();
+  return f+l||u.username.charAt(0).toUpperCase();
+}
 
-async function loadAdminKeys(){
-  const secret = document.getElementById('admin-secret').value;
+function getAvatarColor(id){
+  const colors=['#00ff88','#38bdf8','#fbbf24','#a78bfa','#f97316','#ef4444','#06b6d4'];
+  return colors[id%colors.length];
+}
+
+function renderUsers(){
+  const search=document.getElementById('ccss-search')?.value.toLowerCase()||'';
+  const filter=document.getElementById('ccss-filter')?.value||'all';
+  let users=allUsers.filter(u=>{
+    const name=((u.first_name||'')+' '+(u.last_name||'')+' '+u.email+' '+u.username).toLowerCase();
+    if(search&&!name.includes(search))return false;
+    if(filter==='confirmed'&&!u.confirmed)return false;
+    if(filter==='optin'&&!u.marketing_optin)return false;
+    if(filter==='unconfirmed'&&u.confirmed)return false;
+    return true;
+  });
+
+  const container=document.getElementById('ccss-list');
+  if(!users.length){container.innerHTML='<div class="empty">No users match filter</div>';return;}
+
+  container.innerHTML=users.map(u=>{
+    const color=getAvatarColor(u.id);
+    const initials=getInitials(u);
+    const date=new Date(u.created_at).toLocaleDateString();
+    return `<div class="customer-row">
+      <div class="customer-avatar" style="background:${color}22;color:${color};border:1px solid ${color}44;">${initials}</div>
+      <div class="customer-info">
+        <div class="customer-name">${u.first_name||''} ${u.last_name||''} <span style="font-family:var(--mono);font-size:9px;color:var(--muted);">@${u.username}</span></div>
+        <div class="customer-email">${u.email}</div>
+        <div class="customer-meta">
+          ${u.confirmed?'<span class="badge bg" style="font-size:7px;">✓ CONFIRMED</span>':'<span class="badge bm" style="font-size:7px;">PENDING</span>'}
+          ${u.marketing_optin?'<span class="badge bb" style="font-size:7px;">📧 OPT-IN</span>':''}
+          <span style="font-family:var(--mono);font-size:8px;color:var(--muted);">${date}</span>
+        </div>
+      </div>
+      <div style="text-align:right;flex-shrink:0;">
+        <span class="badge bgo" style="font-size:7px;">🎰 CCSS</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+window.filterCustomers=renderUsers;
+
+function exportCSS(){
+  const csv=['ID,Name,Email,Username,Confirmed,Marketing Opt-in,Joined'];
+  allUsers.forEach(u=>{
+    csv.push([u.id,`${u.first_name||''} ${u.last_name||''}`,u.email,u.username,u.confirmed?'Yes':'No',u.marketing_optin?'Yes':'No',new Date(u.created_at).toLocaleDateString()].join(','));
+  });
+  const blob=new Blob([csv.join('\n')],{type:'text/csv'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='ccss-users.csv';
+  a.click();
+}
+
+// ── API KEYS ─────────────────────────────────────────────────────────────────
+async function loadApiKeys(){
+  const secret=document.getElementById('api-admin-secret').value;
   if(!secret){alert('Enter admin secret');return;}
   try{
-    const r = await fetch('/api/v1/admin/keys', { headers: { 'x-admin-secret': secret } });
-    const d = await r.json();
-    if(!d.success){alert('Error: ' + (d.error||'Invalid secret'));return;}
-    const keys = d.data;
-    window._adminKeys = keys;
-    document.getElementById('adm-total').textContent = keys.length;
-    document.getElementById('adm-active').textContent = keys.filter(k=>k.active===1).length;
-    document.getElementById('adm-pending').textContent = keys.filter(k=>k.active===0).length;
-    document.getElementById('adm-requests').textContent = keys.reduce((s,k)=>s+k.requests_total,0).toLocaleString();
-    const tb = document.getElementById('adm-keys-tbl');
-    tb.innerHTML = '';
-    const tierColors = {free:'var(--green)',developer:'var(--blue)',enterprise:'var(--gold)'};
+    const r=await fetch('/api/v1/admin/keys',{headers:{'x-admin-secret':secret}});
+    const d=await r.json();
+    if(!d.success){document.getElementById('api-key-list').innerHTML='<div class="empty" style="color:var(--red)">Auth failed</div>';return;}
+    const keys=d.data;
+    document.getElementById('ov-keys').textContent=keys.length;
+    document.getElementById('cust-api').textContent=keys.filter(k=>k.active).length+' active';
+    const container=document.getElementById('api-key-list');
+    container.innerHTML=keys.map(k=>`
+      <div class="customer-row" style="padding:8px 0;">
+        <div style="flex:1;min-width:0;">
+          <div class="customer-name" style="font-size:12px;">${k.name}</div>
+          <div class="customer-email">${k.email}</div>
+          <div class="customer-meta">
+            <span class="badge ${k.tier==='developer'?'bb':k.tier==='enterprise'?'bgo':'bm'}" style="font-size:7px;">${k.tier.toUpperCase()}</span>
+            <span class="badge ${k.active?'bg':'br'}" style="font-size:7px;">${k.active?'ACTIVE':'PENDING'}</span>
+            <span style="font-family:var(--mono);font-size:8px;color:var(--muted);">${k.requests_today} req today</span>
+          </div>
+        </div>
+      </div>`).join('');
+  }catch(e){document.getElementById('api-key-list').innerHTML='<div class="empty" style="color:var(--red)">Error loading keys</div>';}
+}
+
+// ── ADMIN PANEL ──────────────────────────────────────────────────────────────
+async function loadAdminKeys(){
+  const secret=document.getElementById('admin-secret').value;
+  if(!secret){alert('Enter admin secret');return;}
+  try{
+    const r=await fetch('/api/v1/admin/keys',{headers:{'x-admin-secret':secret}});
+    const d=await r.json();
+    if(!d.success){alert('Error: '+(d.error||'Invalid secret'));return;}
+    const keys=d.data;
+    window._adminKeys=keys;
+    document.getElementById('adm-total').textContent=keys.length;
+    document.getElementById('adm-active').textContent=keys.filter(k=>k.active===1).length;
+    document.getElementById('adm-pending').textContent=keys.filter(k=>k.active===0).length;
+    document.getElementById('adm-requests').textContent=keys.reduce((s,k)=>s+k.requests_total,0).toLocaleString();
+    const tb=document.getElementById('adm-keys-tbl');tb.innerHTML='';
+    const tierColors={free:'var(--green)',developer:'var(--blue)',enterprise:'var(--gold)'};
     keys.forEach((k,i)=>{
-      const tr = document.createElement('tr');
-      const isActive = k.active === 1;
-      tr.innerHTML = '<td style="color:var(--text);font-size:11px;">'+k.email+'</td>'
-        +'<td style="color:var(--muted);font-size:11px;">'+k.name+'</td>'
-        +'<td><span style="color:'+(tierColors[k.tier]||'var(--text)')+';font-size:10px;font-family:var(--mono);">'+k.tier.toUpperCase()+'</span></td>'
-        +'<td><span class="badge '+(isActive?'bg':'bgo')+'">'+(isActive?'ACTIVE':'PENDING')+'</span></td>'
-        +'<td style="color:var(--blue);font-family:var(--mono);font-size:11px;">'+k.requests_today+'</td>'
-        +'<td style="color:var(--muted);font-family:var(--mono);font-size:11px;">'+k.requests_total+'</td>'
-        +'<td style="color:var(--muted);font-size:10px;">'+(k.created_at||'').slice(0,10)+'</td>'
-        +'<td>'+(isActive
-          ? '<button onclick="toggleKey('+i+',0)" style="background:rgba(239,68,68,0.1);border:1px solid var(--red);color:var(--red);padding:4px 10px;font-family:var(--mono);font-size:9px;cursor:pointer;border-radius:3px;">DEACTIVATE</button>'
-          : '<button onclick="toggleKey('+i+',1)" style="background:rgba(0,255,136,0.1);border:1px solid var(--green);color:var(--green);padding:4px 10px;font-family:var(--mono);font-size:9px;cursor:pointer;border-radius:3px;">ACTIVATE</button>')
-        +'</td>';
+      const tr=document.createElement('tr');
+      const isActive=k.active===1;
+      tr.innerHTML=`<td style="color:var(--text);font-size:11px;">${k.email}</td><td style="color:var(--muted);font-size:11px;">${k.name}</td><td><span style="color:${tierColors[k.tier]||'var(--text)'};font-size:10px;font-family:var(--mono);">${k.tier.toUpperCase()}</span></td><td><span class="badge ${isActive?'bg':'bgo'}">${isActive?'ACTIVE':'PENDING'}</span></td><td style="color:var(--blue);font-family:var(--mono);font-size:11px;">${k.requests_today}</td><td style="color:var(--muted);font-family:var(--mono);font-size:11px;">${k.requests_total}</td><td style="color:var(--muted);font-size:10px;">${(k.created_at||'').slice(0,10)}</td><td>${isActive?`<button onclick="toggleKey(${i},0)" style="background:rgba(239,68,68,0.1);border:1px solid var(--red);color:var(--red);padding:3px 8px;font-family:var(--mono);font-size:9px;cursor:pointer;border-radius:3px;">DEACTIVATE</button>`:`<button onclick="toggleKey(${i},1)" style="background:rgba(0,255,136,0.1);border:1px solid var(--green);color:var(--green);padding:3px 8px;font-family:var(--mono);font-size:9px;cursor:pointer;border-radius:3px;">ACTIVATE</button>`}</td>`;
       tb.appendChild(tr);
     });
-    document.getElementById('adm-table-wrap').style.display = 'block';
-    document.getElementById('adm-empty').style.display = 'none';
+    document.getElementById('adm-table-wrap').style.display='block';
+    document.getElementById('adm-empty').style.display='none';
   }catch(e){alert('Error: '+e.message);}
 }
 
-async function toggleKey(idx, activate){
-  const secret = document.getElementById('admin-secret').value;
-  const record = window._adminKeys[idx];
+async function toggleKey(idx,activate){
+  const secret=document.getElementById('admin-secret').value;
+  const record=window._adminKeys[idx];
   if(!record){alert('Key not found');return;}
-  const endpoint = activate ? '/api/v1/admin/activate' : '/api/v1/admin/deactivate';
+  const endpoint=activate?'/api/v1/admin/activate':'/api/v1/admin/deactivate';
   try{
-    const r = await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json','x-admin-secret':secret},body:JSON.stringify({key:record.key})});
-    const d = await r.json();
+    const r=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json','x-admin-secret':secret},body:JSON.stringify({key:record.key})});
+    const d=await r.json();
     if(d.success){loadAdminKeys();}else{alert('Error: '+(d.error||'unknown'));}
   }catch(e){alert('Error: '+e.message);}
 }
 
 async function issueKey(){
-  const secret = document.getElementById('admin-secret').value;
-  const name = document.getElementById('new-name').value;
-  const email = document.getElementById('new-email').value;
-  const tier = document.getElementById('new-tier').value;
-  const res = document.getElementById('issue-result');
+  const secret=document.getElementById('admin-secret').value;
+  const name=document.getElementById('new-name').value;
+  const email=document.getElementById('new-email').value;
+  const tier=document.getElementById('new-tier').value;
+  const res=document.getElementById('issue-result');
   if(!name||!email){alert('Name and email required');return;}
   try{
-    const r = await fetch('/api/v1/keys/signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,email,tier,company:''})});
-    const d = await r.json();
+    const r=await fetch('/api/v1/keys/signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,email,tier,company:''})});
+    const d=await r.json();
     if(d.key){
       await fetch('/api/v1/admin/activate',{method:'POST',headers:{'Content-Type':'application/json','x-admin-secret':secret},body:JSON.stringify({key:d.key})});
-      res.style.cssText='display:block;background:rgba(0,255,136,0.1);border:1px solid var(--green);color:var(--green);padding:12px;border-radius:4px;';
+      res.style.cssText='display:block;background:rgba(0,255,136,0.1);border:1px solid var(--green);color:var(--green);padding:10px;border-radius:4px;';
       res.textContent='Key issued & activated: '+d.key;
       loadAdminKeys();
     }else{
-      res.style.cssText='display:block;background:rgba(239,68,68,0.1);color:var(--red);padding:12px;border-radius:4px;';
+      res.style.cssText='display:block;background:rgba(239,68,68,0.1);color:var(--red);padding:10px;border-radius:4px;';
       res.textContent=d.error||'Error issuing key';
     }
   }catch(e){res.textContent='Error: '+e.message;res.style.display='block';}
 }
 
-fa();setInterval(fa,30000);
-document.addEventListener("DOMContentLoaded", function(){ setTimeout(loadApiTab, 2000); });
-  (function(){
+// ── BORROWER HEALTH ──────────────────────────────────────────────────────────
+(function(){
   const BH_SECRET='Summertime#2026!';
   const BH_KEY='bh_wallets_v2';
-  const AAVE={'aave-v3-eth':'https://api.thegraph.com/subgraphs/name/aave/protocol-v3','aave-v3-arb':'https://api.thegraph.com/subgraphs/name/aave/protocol-v3-arbitrum','aave-v3-poly':'https://api.thegraph.com/subgraphs/name/aave/protocol-v3-polygon','aave-v3-base':'https://api.thegraph.com/subgraphs/name/aave/protocol-v3-base'};
+  const AAVE={
+    'aave-v3-eth':{pool:'0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2',rpc:'https://eth.llamarpc.com'},
+    'aave-v3-arb':{pool:'0x794a61358D6845594F94dc1DB02A252b5b4814aD',rpc:'https://arb1.arbitrum.io/rpc'},
+    'aave-v3-poly':{pool:'0x794a61358D6845594F94dc1DB02A252b5b4814aD',rpc:'https://polygon-rpc.com'},
+    'aave-v3-base':{pool:'0xA238Dd80C259a72e81d7e4664a9801593F98d1c5',rpc:'https://mainnet.base.org'},
+  };
   const PLBL={'aave-v3-eth':'AAVE V3 ETH','aave-v3-arb':'AAVE V3 ARB','aave-v3-poly':'AAVE V3 POLY','aave-v3-base':'AAVE V3 BASE','manual':'MANUAL'};
   function getW(){try{return JSON.parse(localStorage.getItem(BH_KEY))||[];}catch{return[];}}
   function saveW(w){localStorage.setItem(BH_KEY,JSON.stringify(w));}
-  async function fetchAave(addr,proto){if(proto==='manual'||!AAVE[proto])return null;const q=`{user(id:"${addr.toLowerCase()}"){healthFactor totalCollateralUSD totalDebtUSD}}`;try{const r=await fetch(AAVE[proto],{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:q})});const d=await r.json();return d?.data?.user||null;}catch{return null;}}
+  async function fetchAave(addr,proto){
+    if(proto==='manual'||!AAVE[proto])return null;
+    const cfg=AAVE[proto];
+    try{
+      const selector='0xbf92857c';
+      const padded=addr.toLowerCase().replace('0x','').padStart(64,'0');
+      const data=selector+padded;
+      const body=JSON.stringify({jsonrpc:'2.0',method:'eth_call',params:[{to:cfg.pool,data:data},'latest'],id:1});
+      const r=await fetch(cfg.rpc,{method:'POST',headers:{'Content-Type':'application/json'},body:body});
+      const j=await r.json();
+      const res=j.result;
+      if(!res||res==='0x')return null;
+      const hex=res.slice(2);
+      const totalCollateral=parseInt(hex.slice(0,64),16);
+      const totalDebt=parseInt(hex.slice(64,128),16);
+      const healthFactor=BigInt('0x'+hex.slice(320,384));
+      if(totalCollateral===0&&totalDebt===0)return null;
+      return{healthFactor:healthFactor.toString(),totalCollateralUSD:(totalCollateral/1e8).toString(),totalDebtUSD:(totalDebt/1e8).toString()};
+    }catch{return null;}
+  }
   function fmtHF(hf){if(!hf)return '\u221e';const v=parseFloat(hf)/1e18;return v>100?'\u221e':v.toFixed(3);}
   function fmt$(n){if(!n||n==0)return '$0';const v=parseFloat(n);if(v>=1e6)return '$'+(v/1e6).toFixed(2)+'M';if(v>=1e3)return '$'+(v/1e3).toFixed(1)+'K';return '$'+v.toFixed(2);}
   function hfColor(hf){if(!hf||hf==='\u221e')return 'var(--green)';const v=parseFloat(hf);if(v<1.1)return 'var(--red)';if(v<1.5)return 'var(--gold)';return 'var(--green)';}
   function hfStatus(hf){if(!hf||hf==='\u221e')return '\u2713 SAFE';const v=parseFloat(hf);if(v<1.1)return '\u26a0 CRITICAL';if(v<1.25)return '\u26a0 DANGER';if(v<1.5)return '\u26a1 WARNING';return '\u2713 HEALTHY';}
   function hfBadge(hf){if(!hf||hf==='\u221e')return 'bg';const v=parseFloat(hf);if(v<1.25)return 'br';if(v<1.5)return 'bgo';return 'bg';}
-  window.bhLoad=async function(){const ws=getW();const list=document.getElementById('bh-list');if(!list)return;if(!ws.length){list.innerHTML='<div class="empty">No wallets configured \u2014 unlock admin below</div>';['bh-total','bh-critical','bh-debt','bh-coll'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='0';});return;}list.innerHTML='<div class="empty" style="color:var(--muted)">Fetching...</div>';const results=await Promise.all(ws.map(w=>fetchAave(w.address,w.protocol)));let html='',critical=0,totalDebt=0,totalColl=0;ws.forEach((w,i)=>{const d=results[i];const hf=d?fmtHF(d.healthFactor):null;const c=hf?hfColor(hf):'var(--muted)';const s=hf?hfStatus(hf):'NO DATA';const badge=hf?hfBadge(hf):'bm';const debt=d?parseFloat(d.totalDebtUSD||0):0;const coll=d?parseFloat(d.totalCollateralUSD||0):0;totalDebt+=debt;totalColl+=coll;if(hf&&parseFloat(hf)<1.25)critical++;const hfPct=hf&&parseFloat(hf)<10?Math.min(100,Math.max(0,(parseFloat(hf)-1)/3*100)):100;const isAtRisk=hf&&parseFloat(hf)<1.5&&hf!=='\u221e';let alertHtml='';if(hf&&parseFloat(hf)<1.1)alertHtml=`<div style="background:rgba(239,68,68,0.1);border-left:3px solid var(--red);padding:7px 12px;font-family:var(--mono);font-size:10px;color:var(--red);">\u26a0 LIQUIDATION IMMINENT \u2014 ${hf}</div>`;else if(hf&&parseFloat(hf)<1.25)alertHtml=`<div style="background:rgba(251,191,36,0.08);border-left:3px solid var(--gold);padding:7px 12px;font-family:var(--mono);font-size:10px;color:var(--gold);">\u26a1 DANGER ZONE \u2014 Health factor ${hf}</div>`;html+=`<div style="border-bottom:1px solid rgba(30,45,61,0.6);${isAtRisk?'border-left:2px solid '+c+';':''}">${alertHtml}<div style="display:flex;align-items:center;gap:16px;padding:12px;flex-wrap:wrap;"><div style="flex:1;min-width:140px;"><div style="font-size:13px;font-weight:600;color:var(--text);">${w.label}</div><div style="font-family:var(--mono);font-size:9px;color:var(--muted);word-break:break-all;">${w.address}</div><div style="display:flex;gap:6px;margin-top:5px;"><span class="badge bb" style="font-size:8px;">${PLBL[w.protocol]||w.protocol}</span><span class="badge ${w.type==='own'?'bg':'bp'}" style="font-size:8px;">${w.type.toUpperCase()}</span></div></div><div style="text-align:center;min-width:90px;"><div style="font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:3px;">HEALTH</div><div style="font-family:var(--head);font-size:28px;font-weight:900;color:${c};line-height:1;">${hf||'\u2014'}</div><span class="badge ${badge}" style="font-size:8px;margin-top:4px;display:inline-block;">${s}</span></div><div style="display:flex;gap:20px;flex-wrap:wrap;"><div><div style="font-family:var(--mono);font-size:9px;color:var(--muted);">COLLATERAL</div><div style="font-family:var(--head);font-size:18px;color:var(--green);">${d?fmt$(d.totalCollateralUSD):'\u2014'}</div></div><div><div style="font-family:var(--mono);font-size:9px;color:var(--muted);">DEBT</div><div style="font-family:var(--head);font-size:18px;color:var(--red);">${d?fmt$(d.totalDebtUSD):'\u2014'}</div></div><div><div style="font-family:var(--mono);font-size:9px;color:var(--muted);">NET</div><div style="font-family:var(--head);font-size:18px;color:var(--blue);">${d?fmt$(coll-debt):'\u2014'}</div></div><div><div style="font-family:var(--mono);font-size:9px;color:var(--muted);">LTV</div><div style="font-family:var(--head);font-size:18px;color:${c};">${d&&coll>0?((debt/coll)*100).toFixed(1)+'%':'\u2014'}</div></div></div><div style="width:100%;padding:2px 0;"><div class="pb"><div class="pb-f" style="width:${hfPct}%;background:${c};"></div></div></div></div></div>`;});list.innerHTML=html||'<div class="empty">No data</div>';const se=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};se('bh-total',ws.length);se('bh-critical',critical);se('bh-debt',fmt$(totalDebt));se('bh-coll',fmt$(totalColl));const ce=document.getElementById('bh-critical');if(ce)ce.style.color=critical>0?'var(--red)':'var(--green)';};
-  window.bhToggleAdmin=function(){const p=document.getElementById('bh-admin');const a=document.getElementById('bh-arrow');if(!p||!a)return;const open=p.style.display==='none';p.style.display=open?'block':'none';a.textContent=open?'\u25b2':'\u25bc';};
-  window.bhUnlock=function(){const s=document.getElementById('bh-secret').value;const err=document.getElementById('bh-gate-err');if(s===BH_SECRET){document.getElementById('bh-gate').style.display='none';document.getElementById('bh-manager').style.display='block';bhRenderList();}else{if(err)err.textContent='\u2717 Incorrect secret';setTimeout(()=>{if(err)err.textContent='';},2000);}};
-  window.bhAdd=function(){const label=document.getElementById('bh-label').value.trim();const addr=document.getElementById('bh-addr').value.trim();const type=document.getElementById('bh-type').value;const proto=document.getElementById('bh-proto').value;if(!label||!addr){alert('Label and address required');return;}if(proto!=='manual'&&!addr.startsWith('0x')){alert('Enter a valid 0x address');return;}const ws=getW();ws.push({id:Date.now(),label,address:addr,type,protocol:proto});saveW(ws);document.getElementById('bh-label').value='';document.getElementById('bh-addr').value='';bhRenderList();bhLoad();};
-  window.bhRemove=function(id){saveW(getW().filter(w=>w.id!==id)
+
+  window.bhLoad=async function(){
+    const ws=getW();const list=document.getElementById('bh-list');if(!list)return;
+    if(!ws.length){list.innerHTML='<div class="empty">No wallets configured \u2014 unlock admin panel below</div>';['bh-total','bh-critical','bh-debt','bh-coll'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='0';});return;}
+    list.innerHTML='<div class="empty" style="color:var(--muted)">\u23f3 Fetching '+ws.length+' position'+(ws.length>1?'s':'')+'...</div>';
+    const results=await Promise.all(ws.map(w=>fetchAave(w.address,w.protocol)));
+    let html='',critical=0,totalDebt=0,totalColl=0;
+    ws.forEach((w,i)=>{
+      const d=results[i];const hf=d?fmtHF(d.healthFactor):null;
+      const c=hf?hfColor(hf):'var(--muted)';const s=hf?hfStatus(hf):'NO DATA';const badge=hf?hfBadge(hf):'bm';
+      const debt=d?parseFloat(d.totalDebtUSD||0):0;const coll=d?parseFloat(d.totalCollateralUSD||0):0;
+      totalDebt+=debt;totalColl+=coll;if(hf&&parseFloat(hf)<1.25)critical++;
+      const hfPct=hf&&parseFloat(hf)<10?Math.min(100,Math.max(0,(parseFloat(hf)-1)/3*100)):100;
+      const isAtRisk=hf&&parseFloat(hf)<1.5&&hf!=='\u221e';
+      let alertHtml='';
+      if(hf&&parseFloat(hf)<1.1)alertHtml=`<div style="background:rgba(239,68,68,0.1);border-left:3px solid var(--red);padding:7px 12px;font-family:var(--mono);font-size:10px;color:var(--red);">\u26a0 LIQUIDATION IMMINENT</div>`;
+      else if(hf&&parseFloat(hf)<1.25)alertHtml=`<div style="background:rgba(251,191,36,0.08);border-left:3px solid var(--gold);padding:7px 12px;font-family:var(--mono);font-size:10px;color:var(--gold);">\u26a1 DANGER ZONE \u2014 Add collateral or repay debt</div>`;
+      html+=`<div style="border-bottom:1px solid rgba(30,45,61,0.4);${isAtRisk?'border-left:2px solid '+c+';':''}">${alertHtml}<div style="display:flex;align-items:center;gap:16px;padding:12px;flex-wrap:wrap;"><div style="flex:1;min-width:140px;"><div style="font-size:13px;font-weight:600;color:var(--text);">${w.label}</div><div style="font-family:var(--mono);font-size:9px;color:var(--muted);word-break:break-all;">${w.address}</div><div style="display:flex;gap:6px;margin-top:4px;"><span class="badge bb" style="font-size:8px;">${PLBL[w.protocol]||w.protocol}</span><span class="badge ${w.type==='own'?'bg':'bp'}" style="font-size:8px;">${w.type.toUpperCase()}</span></div></div><div style="text-align:center;min-width:90px;"><div style="font-family:var(--mono);font-size:8px;color:var(--muted);letter-spacing:2px;margin-bottom:3px;">HEALTH</div><div style="font-family:var(--head);font-size:28px;font-weight:900;color:${c};line-height:1;">${hf||'\u2014'}</div><span class="badge ${badge}" style="font-size:8px;margin-top:4px;display:inline-block;">${s}</span></div><div style="display:flex;gap:16px;flex-wrap:wrap;"><div><div style="font-family:var(--mono);font-size:8px;color:var(--muted);">COLLATERAL</div><div style="font-family:var(--head);font-size:18px;color:var(--green);">${d?fmt$(d.totalCollateralUSD):'\u2014'}</div></div><div><div style="font-family:var(--mono);font-size:8px;color:var(--muted);">DEBT</div><div style="font-family:var(--head);font-size:18px;color:var(--red);">${d?fmt$(d.totalDebtUSD):'\u2014'}</div></div><div><div style="font-family:var(--mono);font-size:8px;color:var(--muted);">NET</div><div style="font-family:var(--head);font-size:18px;color:var(--blue);">${d?fmt$(coll-debt):'\u2014'}</div></div><div><div style="font-family:var(--mono);font-size:8px;color:var(--muted);">LTV</div><div style="font-family:var(--head);font-size:18px;color:${c};">${d&&coll>0?((debt/coll)*100).toFixed(1)+'%':'\u2014'}</div></div></div><div style="width:100%;padding:2px 0;"><div class="pb"><div class="pb-f" style="width:${hfPct}%;background:${c};"></div></div></div></div></div>`;
+    });
+    list.innerHTML=html||'<div class="empty">No data returned</div>';
+    const se=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+    se('bh-total',ws.length);se('bh-critical',critical);se('bh-debt',fmt$(totalDebt));se('bh-coll',fmt$(totalColl));
+    const ce=document.getElementById('bh-critical');if(ce)ce.style.color=critical>0?'var(--red)':'var(--green)';
+  };
+
+  window.bhToggleAdmin=function(){
+    const p=document.getElementById('bh-admin');const a=document.getElementById('bh-arrow');if(!p||!a)return;
+    const open=p.style.display==='none';p.style.display=open?'block':'none';a.textContent=open?'\u25b2':'\u25bc';
+  };
+  window.bhUnlock=function(){
+    const s=document.getElementById('bh-secret').value;const err=document.getElementById('bh-gate-err');
+    if(s===BH_SECRET){document.getElementById('bh-gate').style.display='none';document.getElementById('bh-manager').style.display='block';bhRenderList();}
+    else{if(err)err.textContent='\u2717 Incorrect secret';setTimeout(()=>{if(err)err.textContent='';},2000);}
+  };
+  window.bhAdd=function(){
+    const label=document.getElementById('bh-label').value.trim();const addr=document.getElementById('bh-addr').value.trim();
+    const type=document.getElementById('bh-type').value;const proto=document.getElementById('bh-proto').value;
+    if(!label||!addr){alert('Label and address required');return;}
+    if(proto!=='manual'&&!addr.startsWith('0x')){alert('Enter a valid 0x address');return;}
+    const wals=getW();wals.push({id:Date.now(),label,address:addr,type,protocol:proto});saveW(wals);
+    document.getElementById('bh-label').value='';document.getElementById('bh-addr').value='';
+    bhRenderList();bhLoad();
+  };
+  window.bhRemove=function(id){saveW(getW().filter(w=>w.id!==id));bhRenderList();bhLoad();};
+  window.bhClearAll=function(){if(confirm('Remove all wallets?')){saveW([]);bhRenderList();bhLoad();}};
+  function bhRenderList(){
+    const ws=getW();const el=document.getElementById('bh-wallet-list');if(!el)return;
+    if(!ws.length){el.innerHTML='<div class="empty">No wallets added yet</div>';return;}
+    el.innerHTML=ws.map(w=>`<div class="srow"><span class="slbl"><span class="badge ${w.type==='own'?'bg':'bp'}">${w.type.toUpperCase()}</span> ${w.label}</span><div style="display:flex;align-items:center;gap:8px;"><span style="font-family:var(--mono);font-size:9px;color:var(--muted);">${w.address.slice(0,10)}...${w.address.slice(-4)}</span><button onclick="bhRemove(${w.id})" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:var(--red);font-family:var(--mono);font-size:9px;padding:2px 7px;cursor:pointer;border-radius:3px;">\u2715</button></div></div>`).join('');
+  }
+  const _orig=window.showTab;
+  window.showTab=function(id){_orig(id);if(id==='borrowers')bhLoad();};
+  setInterval(bhLoad,5*60*1000);
+})();
+
+// ── API TAB ──────────────────────────────────────────────────────────────────
+async function loadApiTab(){
+  try{
+    const r=await fetch('https://campioneinfrastructure.com/api/v1/xrpl/stats');
+    const d=await r.json();
+    if(d.success){
+      const el=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+      el('ap-pay',parseInt(d.data.totalPayments||0).toLocaleString());
+      el('ap-dex',parseInt(d.data.dexTrades||0).toLocaleString());
+      el('ap-whale',d.data.whaleAlerts||0);
+      el('ap-led',parseInt(d.data.lastLedger||0).toLocaleString());
+    }
+  }catch(e){}
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+fa();
+setInterval(fa,30000);
+loadCSSS();
+document.addEventListener('DOMContentLoaded',()=>setTimeout(loadApiTab,1000));
 </script>
 </body>
 </html>
